@@ -1,10 +1,17 @@
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:flutter/material.dart';
+import '../../utils/variables.dart';
 import 'login_page_model.dart';
+
 export 'login_page_model.dart';
 
 class LoginPageWidget extends StatefulWidget {
@@ -28,6 +35,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     _model.loginEmailFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+    getToken();
   }
 
   @override
@@ -35,6 +43,19 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  getToken() async {
+    token = await FirebaseMessaging.instance.getToken() ?? "";
+    print('FlutterFire Messaging Token: $token');
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      var build = await deviceInfoPlugin.androidInfo;
+      deviceId = build.androidId; //UUID for Android
+    } else if (Platform.isIOS) {
+      var data = await deviceInfoPlugin.iosInfo;
+      deviceId = data.identifierForVendor; //UUID for iOS
+    }
   }
 
   @override
@@ -47,7 +68,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
         body: SafeArea(
           top: true,
           child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(20.0, 35.0, 20.0, 0.0),
+            padding:
+                const EdgeInsetsDirectional.fromSTEB(20.0, 35.0, 20.0, 0.0),
             child: Container(
               width: double.infinity,
               height: double.infinity,
@@ -120,8 +142,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     Align(
                       alignment: const AlignmentDirectional(-0.99, -0.76),
                       child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 45.0, 0.0, 0.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 45.0, 0.0, 0.0),
                         child: Text(
                           'સાઇન ઇન',
                           style:
@@ -138,8 +160,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     Align(
                       alignment: const AlignmentDirectional(0.0, -0.66),
                       child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 12.0, 0.0, 0.0),
                         child: Text(
                           'સાઇન ઇન કરો અને તાજી ખબર, મુખ્ય સમાચાર અને વધુને ક્યારેય ચૂકશો નહીં.',
                           textAlign: TextAlign.start,
@@ -156,8 +178,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     Align(
                       alignment: const AlignmentDirectional(-0.99, -0.43),
                       child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 50.0, 0.0, 0.0),
                         child: Text(
                           'ઇમેઇલ',
                           style:
@@ -282,8 +304,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                   height: 45.0,
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       16.0, 0.0, 16.0, 0.0),
-                                  iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding:
+                                      const EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 0.0),
                                   color: const Color(0xFF5374FF),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
@@ -303,8 +326,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          0.0, 25.0, 0.0, 0.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -322,7 +345,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                 ],
                               ),
                               Align(
-                                alignment: const AlignmentDirectional(-0.02, 0.04),
+                                alignment:
+                                    const AlignmentDirectional(-0.02, 0.04),
                                 child: Container(
                                   width: 150.0,
                                   height: 25.0,
@@ -335,9 +359,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       width: 1.0,
                                     ),
                                   ),
-                                  alignment: const AlignmentDirectional(0.0, 0.0),
+                                  alignment:
+                                      const AlignmentDirectional(0.0, 0.0),
                                   child: Align(
-                                    alignment: const AlignmentDirectional(0.0, 0.0),
+                                    alignment:
+                                        const AlignmentDirectional(0.0, 0.0),
                                     child: Text(
                                       'તમારું એકાઉન્ટ નથી?',
                                       textAlign: TextAlign.center,
