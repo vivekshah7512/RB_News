@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "769005976479",
+    "project_id": "rb-news-93757",
+    "storage_bucket": "rb-news-93757.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769005976479:android:6c5abf22fc93b6b4c79baa",
+        "android_client_info": {
+          "package_name": "com.rbnews"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYSUtP-2nIkdrKYeHUpfsYg98-pnwEazA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
