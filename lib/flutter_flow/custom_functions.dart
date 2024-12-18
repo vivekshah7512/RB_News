@@ -64,3 +64,8 @@ int getDivideVars(
   // Otherwise, return the rounded integer
   return result.round();
 }
+
+String? newCustomFunction() {
+  // Return the list as a comma-separated string
+  return "";
+}

@@ -1,8 +1,12 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:webviewx_plus/webviewx_plus.dart';
 import 'news_filter_popup_model.dart';
 export 'news_filter_popup_model.dart';
 
@@ -41,6 +45,7 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
     DebugFlutterFlowModelContext.maybeOf(context)
         ?.parentModelCallback
         ?.call(_model);
+    context.watch<FFAppState>();
 
     return Container(
       width: double.infinity,
@@ -64,205 +69,227 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                         letterSpacing: 0.0,
                       ),
                 ),
-                Text(
-                  'બધા સાફ કરો',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        color: Color(0xFF5374FF),
-                        letterSpacing: 0.0,
-                      ),
+                InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    FFAppState().selectedNewsCategory = [];
+                    safeSetState(() {});
+                  },
+                  child: Text(
+                    'બધા સાફ કરો',
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: Color(0xFF5374FF),
+                          letterSpacing: 0.0,
+                        ),
+                  ),
                 ),
               ],
             ),
             Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                ListView(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'તાજા સમાચાર',
-                          style:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
+                FutureBuilder<ApiCallResponse>(
+                  future: RBNewsAPIGroup.newsCategoriesListCall.call(
+                    authToken: FFAppState().authTokenAPI,
+                  ),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              FlutterFlowTheme.of(context).primary,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    final listViewNewsCategoriesListResponse = snapshot.data!;
+                    _model.debugBackendQueries[
+                            'RBNewsAPIGroup.newsCategoriesListCall_statusCode_ListView_cconploo'] =
+                        debugSerializeParam(
+                      listViewNewsCategoriesListResponse.statusCode,
+                      ParamType.int,
+                      link:
+                          'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsFilterPopup',
+                      name: 'int',
+                      nullable: false,
+                    );
+                    _model.debugBackendQueries[
+                            'RBNewsAPIGroup.newsCategoriesListCall_responseBody_ListView_cconploo'] =
+                        debugSerializeParam(
+                      listViewNewsCategoriesListResponse.bodyText,
+                      ParamType.String,
+                      link:
+                          'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsFilterPopup',
+                      name: 'String',
+                      nullable: false,
+                    );
+                    debugLogWidgetClass(_model);
+
+                    return Builder(
+                      builder: (context) {
+                        final categoryListArray =
+                            RBNewsAPIGroup.newsCategoriesListCall
+                                .newsCategoryArray(
+                                  listViewNewsCategoriesListResponse.jsonBody,
+                                )
+                                .toList();
+                        _model.debugGeneratorVariables[
+                                'categoryListArray${categoryListArray.length > 100 ? ' (first 100)' : ''}'] =
+                            debugSerializeParam(
+                          categoryListArray.take(100),
+                          ParamType.JSON,
+                          link:
+                              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsFilterPopup',
+                          name: 'dynamic',
+                          nullable: false,
+                        );
+                        debugLogWidgetClass(_model);
+
+                        return ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: categoryListArray.length,
+                          itemBuilder: (context, categoryListArrayIndex) {
+                            final categoryListArrayItem =
+                                categoryListArray[categoryListArrayIndex];
+                            return Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  getJsonField(
+                                    categoryListArrayItem,
+                                    r'''$.newsCategoryName''',
+                                  ).toString(),
+                                  style: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0.0,
+                                      ),
+                                ),
+                                Theme(
+                                  data: ThemeData(
+                                    checkboxTheme: CheckboxThemeData(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                      ),
+                                    ),
+                                    unselectedWidgetColor: Color(0xFFB4B5B9),
                                   ),
-                        ),
-                        Theme(
-                          data: ThemeData(
-                            checkboxTheme: CheckboxThemeData(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                            ),
-                            unselectedWidgetColor: Color(0xFFB4B5B9),
-                          ),
-                          child: Checkbox(
-                            value: _model.checkboxValue1 ??= false,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.checkboxValue1 = newValue!);
-                            },
-                            side: BorderSide(
-                              width: 2,
-                              color: Color(0xFFB4B5B9),
-                            ),
-                            activeColor: Color(0xFF5374FF),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'ક્રાઇમ સમાચાર',
-                          style:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
+                                  child: Checkbox(
+                                    value: _model.checkboxValueMap1[
+                                        categoryListArrayItem] ??= FFAppState()
+                                            .selectedNewsCategory
+                                            .contains(getJsonField(
+                                              categoryListArrayItem,
+                                              r'''$.newsCategoryID''',
+                                            )) ==
+                                        true,
+                                    onChanged: (newValue) async {
+                                      safeSetState(() => _model
+                                              .checkboxValueMap1[
+                                          categoryListArrayItem] = newValue!);
+                                      if (newValue!) {
+                                        _model.selectedCatIds = await actions
+                                            .selectedNewsCategories(
+                                          getJsonField(
+                                            categoryListArrayItem,
+                                            r'''$.newsCategoryID''',
+                                          ).toString(),
+                                          true,
+                                          getJsonField(
+                                            categoryListArrayItem,
+                                            r'''$.newsCategoryName''',
+                                          ).toString(),
+                                        );
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return WebViewAware(
+                                              child: AlertDialog(
+                                                title: Text(
+                                                    'Selectected Categories'),
+                                                content: Text(
+                                                    _model.selectedCatIds!),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+
+                                        safeSetState(() {});
+                                      } else {
+                                        _model.selectedCatIdsCopy =
+                                            await actions
+                                                .selectedNewsCategories(
+                                          getJsonField(
+                                            categoryListArrayItem,
+                                            r'''$.newsCategoryID''',
+                                          ).toString(),
+                                          false,
+                                          getJsonField(
+                                            categoryListArrayItem,
+                                            r'''$.newsCategoryName''',
+                                          ).toString(),
+                                        );
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return WebViewAware(
+                                              child: AlertDialog(
+                                                title: Text(
+                                                    'Selectected Categories'),
+                                                content: Text(
+                                                    _model.selectedCatIdsCopy!),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+
+                                        safeSetState(() {});
+                                      }
+                                    },
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Color(0xFFB4B5B9),
+                                    ),
+                                    activeColor: Color(0xFF5374FF),
                                   ),
-                        ),
-                        Theme(
-                          data: ThemeData(
-                            checkboxTheme: CheckboxThemeData(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                            ),
-                            unselectedWidgetColor: Color(0xFFB4B5B9),
-                          ),
-                          child: Checkbox(
-                            value: _model.checkboxValue2 ??= false,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.checkboxValue2 = newValue!);
-                            },
-                            side: BorderSide(
-                              width: 2,
-                              color: Color(0xFFB4B5B9),
-                            ),
-                            activeColor: Color(0xFF5374FF),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'ગામ સમાચાર',
-                          style:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
-                        ),
-                        Theme(
-                          data: ThemeData(
-                            checkboxTheme: CheckboxThemeData(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                            ),
-                            unselectedWidgetColor: Color(0xFFB4B5B9),
-                          ),
-                          child: Checkbox(
-                            value: _model.checkboxValue3 ??= true,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.checkboxValue3 = newValue!);
-                            },
-                            side: BorderSide(
-                              width: 2,
-                              color: Color(0xFFB4B5B9),
-                            ),
-                            activeColor: Color(0xFF5374FF),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'રાજકીય સમાચાર',
-                          style:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
-                        ),
-                        Theme(
-                          data: ThemeData(
-                            checkboxTheme: CheckboxThemeData(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                            ),
-                            unselectedWidgetColor: Color(0xFFB4B5B9),
-                          ),
-                          child: Checkbox(
-                            value: _model.checkboxValue4 ??= true,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.checkboxValue4 = newValue!);
-                            },
-                            side: BorderSide(
-                              width: 2,
-                              color: Color(0xFFB4B5B9),
-                            ),
-                            activeColor: Color(0xFF5374FF),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'સ્થાનિક સમાચાર',
-                          style:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
-                        ),
-                        Theme(
-                          data: ThemeData(
-                            checkboxTheme: CheckboxThemeData(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                            ),
-                            unselectedWidgetColor: Color(0xFFB4B5B9),
-                          ),
-                          child: Checkbox(
-                            value: _model.checkboxValue5 ??= true,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.checkboxValue5 = newValue!);
-                            },
-                            side: BorderSide(
-                              width: 2,
-                              color: Color(0xFFB4B5B9),
-                            ),
-                            activeColor: Color(0xFF5374FF),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),

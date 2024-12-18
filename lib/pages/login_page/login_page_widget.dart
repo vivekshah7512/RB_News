@@ -1,7 +1,9 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -81,6 +83,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
     DebugFlutterFlowModelContext.maybeOf(context)
         ?.parentModelCallback
         ?.call(_model);
+    context.watch<FFAppState>();
 
     return GestureDetector(
       onTap: () {
@@ -110,7 +113,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Align(
-                          alignment: AlignmentDirectional(-0.99, -0.99),
+                          alignment: AlignmentDirectional(-0.99, -1.0),
                           child: FlutterFlowIconButton(
                             borderColor: Color(0xFFE6E6E6),
                             borderRadius: 12.0,
@@ -141,22 +144,29 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                           ),
                         ),
                         Opacity(
-                          opacity: 0.0,
+                          opacity: 0.8,
                           child: Align(
-                            alignment: AlignmentDirectional(-0.99, -0.99),
+                            alignment: AlignmentDirectional(-0.99, -1.0),
                             child: FlutterFlowIconButton(
                               borderColor: Color(0xFFE6E6E6),
                               borderRadius: 12.0,
                               borderWidth: 1.0,
                               buttonSize: 40.0,
-                              fillColor: Colors.white,
                               icon: Icon(
-                                Icons.chevron_left_rounded,
-                                color: Color(0xFF808080),
+                                Icons.navigate_next_rounded,
+                                color: FlutterFlowTheme.of(context).primaryText,
                                 size: 24.0,
                               ),
-                              onPressed: () {
-                                print('IconButton pressed ...');
+                              onPressed: () async {
+                                context.goNamed(
+                                  'HomePage',
+                                  queryParameters: {
+                                    'hintFlag': serializeParam(
+                                      0,
+                                      ParamType.int,
+                                    ),
+                                  }.withoutNulls,
+                                );
                               },
                             ),
                           ),
@@ -320,8 +330,62 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                                           .validate()) {
                                     return;
                                   }
+                                  _model.apiResultmrl =
+                                      await RBNewsAPIGroup.loginAPICall.call(
+                                    email: _model.loginEmailTextController.text,
+                                    deviceType: FFAppState().deviceType,
+                                    deviceId: FFAppState().deviceId,
+                                    deviceInfo: FFAppState().deviceInfo,
+                                    latitude: FFAppState().latitude,
+                                    longitude: FFAppState().longitude,
+                                  );
 
-                                  context.pushNamed('HomePage');
+                                  if ((_model.apiResultmrl?.succeeded ??
+                                      true)) {
+                                    context.pushNamed(
+                                      'OTPVerificationPage',
+                                      queryParameters: {
+                                        'emailAddress': serializeParam(
+                                          getJsonField(
+                                            (_model.apiResultmrl?.jsonBody ??
+                                                ''),
+                                            r'''$.data.userEmail''',
+                                          ).toString(),
+                                          ParamType.String,
+                                        ),
+                                        'timerSeconds': serializeParam(
+                                          false,
+                                          ParamType.bool,
+                                        ),
+                                        'resendTextState': serializeParam(
+                                          0,
+                                          ParamType.int,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          getJsonField(
+                                            (_model.apiResultmrl?.jsonBody ??
+                                                ''),
+                                            r'''$.message''',
+                                          ).toString(),
+                                          style: TextStyle(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                          ),
+                                        ),
+                                        duration: Duration(milliseconds: 4000),
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondary,
+                                      ),
+                                    );
+                                  }
+
+                                  safeSetState(() {});
                                 },
                                 text: 'ચાલુ રાખો',
                                 options: FFButtonOptions(
@@ -370,33 +434,50 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                               ),
                               Align(
                                 alignment: AlignmentDirectional(-0.02, 0.04),
-                                child: Container(
-                                  width: 150.0,
-                                  height: 25.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(17.0),
-                                    border: Border.all(
-                                      color: Color(0xFFF2F2F2),
-                                      width: 1.0,
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                      'HomePage',
+                                      queryParameters: {
+                                        'hintFlag': serializeParam(
+                                          0,
+                                          ParamType.int,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 150.0,
+                                    height: 25.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(17.0),
+                                      border: Border.all(
+                                        color: Color(0xFFF2F2F2),
+                                        width: 1.0,
+                                      ),
                                     ),
-                                  ),
-                                  alignment: AlignmentDirectional(0.0, 0.0),
-                                  child: Align(
                                     alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Text(
-                                      'તમારું એકાઉન્ટ નથી?',
-                                      textAlign: TextAlign.center,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: Color(0xFF808080),
-                                            fontSize: 13.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                    child: Align(
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Text(
+                                        'તમારું એકાઉન્ટ નથી?',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Color(0xFF808080),
+                                              fontSize: 13.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
                                     ),
                                   ),
                                 ),

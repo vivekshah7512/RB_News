@@ -1,7 +1,9 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'login_page_widget.dart' show LoginPageWidget;
 import 'package:flutter/material.dart';
@@ -29,6 +31,15 @@ class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
     return null;
   }
 
+  // Stores action output result for [Backend Call - API (Login API)] action in Login-button widget.
+  ApiCallResponse? _apiResultmrl;
+  set apiResultmrl(ApiCallResponse? value) {
+    _apiResultmrl = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultmrl => _apiResultmrl;
+
   final Map<String, DebugDataField> debugGeneratorVariables = {};
   final Map<String, DebugDataField> debugBackendQueries = {};
   final Map<String, FlutterFlowModel> widgetBuilderComponents = {};
@@ -54,6 +65,16 @@ class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LoginPage',
             name: 'String',
+            nullable: true,
+          )
+        },
+        actionOutputs: {
+          'apiResultmrl': debugSerializeParam(
+            apiResultmrl,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LoginPage',
+            name: 'ApiCallResponse',
             nullable: true,
           )
         },

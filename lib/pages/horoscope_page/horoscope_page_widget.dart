@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_web_view.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -170,7 +171,7 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                 scrollDirection: Axis.vertical,
                                 itemCount: zodiacList.length,
                                 separatorBuilder: (_, __) =>
-                                    SizedBox(height: 2.0),
+                                    SizedBox(height: 8.0),
                                 itemBuilder: (context, zodiacListIndex) {
                                   final zodiacListItem =
                                       zodiacList[zodiacListIndex];
@@ -268,13 +269,10 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                                           ).toString(),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .headlineSmall
+                                                              .bodyLarge
                                                               .override(
                                                                 fontFamily:
-                                                                    'Outfit',
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
+                                                                    'Readex Pro',
                                                                 letterSpacing:
                                                                     0.0,
                                                               ),

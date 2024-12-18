@@ -1,8 +1,10 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +125,7 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Align(
-                        alignment: AlignmentDirectional(-0.99, -0.99),
+                        alignment: AlignmentDirectional(-0.99, -1.0),
                         child: FlutterFlowIconButton(
                           borderColor: Color(0xFFE6E6E6),
                           borderRadius: 12.0,
@@ -156,7 +158,7 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                       Opacity(
                         opacity: 0.0,
                         child: Align(
-                          alignment: AlignmentDirectional(-0.99, -0.99),
+                          alignment: AlignmentDirectional(-0.99, -1.0),
                           child: FlutterFlowIconButton(
                             borderColor: Color(0xFFE6E6E6),
                             borderRadius: 12.0,
@@ -324,7 +326,86 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                             EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            context.pushNamed('HomePage');
+                            if (_model.pinCodeController!.text != null &&
+                                _model.pinCodeController!.text != '') {
+                              _model.apiResultup6 =
+                                  await RBNewsAPIGroup.oTPVarificationCall.call(
+                                email: widget!.emailAddress,
+                                otp: _model.pinCodeController!.text,
+                                latitude: FFAppState().latitude,
+                                longitude: FFAppState().longitude,
+                              );
+
+                              if ((_model.apiResultup6?.succeeded ?? true)) {
+                                FFAppState().authToken = getJsonField(
+                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  r'''$.data.jwtTokenString''',
+                                ).toString();
+                                FFAppState().isUserLoggedIn = true;
+                                FFAppState().userEmail = getJsonField(
+                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  r'''$.data.userEmail''',
+                                ).toString();
+                                FFAppState().userIdAPI = getJsonField(
+                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  r'''$.data.userId''',
+                                );
+                                FFAppState().authTokenAPI = getJsonField(
+                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  r'''$.data.jwtTokenString''',
+                                ).toString();
+                                FFAppState().userContactNumber = getJsonField(
+                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  r'''$.data.userContactNumber''',
+                                ).toString();
+                                safeSetState(() {});
+
+                                context.pushNamed(
+                                  'HomePage',
+                                  queryParameters: {
+                                    'hintFlag': serializeParam(
+                                      1,
+                                      ParamType.int,
+                                    ),
+                                  }.withoutNulls,
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      getJsonField(
+                                        (_model.apiResultup6?.jsonBody ?? ''),
+                                        r'''$.message''',
+                                      ).toString(),
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 4000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).secondary,
+                                  ),
+                                );
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Enter OTP',
+                                    style: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                ),
+                              );
+                            }
+
+                            safeSetState(() {});
                           },
                           text: 'સાઇન ઇન',
                           options: FFButtonOptions(

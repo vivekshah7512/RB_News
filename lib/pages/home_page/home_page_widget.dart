@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -199,7 +200,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                 ),
                               ),
                               Align(
-                                alignment: AlignmentDirectional(-0.99, -0.99),
+                                alignment: AlignmentDirectional(-0.99, -1.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: Color(0xFFE6E6E6),
                                   borderRadius: 12.0,
@@ -308,7 +309,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                     'NewsListPage',
                                     queryParameters: {
                                       'newsType': serializeParam(
-                                        'save',
+                                        'saved',
                                         ParamType.String,
                                       ),
                                     }.withoutNulls,
@@ -918,6 +919,16 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                         width: 98.0,
                                                         height: double.infinity,
                                                         fit: BoxFit.cover,
+                                                        errorBuilder: (context,
+                                                                error,
+                                                                stackTrace) =>
+                                                            Image.asset(
+                                                          'assets/images/error_image.png',
+                                                          width: 98.0,
+                                                          height:
+                                                              double.infinity,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -1253,6 +1264,14 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                   width: 98.0,
                                                   height: double.infinity,
                                                   fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      Image.asset(
+                                                    'assets/images/error_image.png',
+                                                    width: 98.0,
+                                                    height: double.infinity,
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -1585,6 +1604,14 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                   width: 24.0,
                                                   height: 24.0,
                                                   fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      Image.asset(
+                                                    'assets/images/error_image.png',
+                                                    width: 24.0,
+                                                    height: 24.0,
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                 ),
                                               ),
                                               Padding(

@@ -265,42 +265,32 @@ class _NavBarPageState extends State<NavBarPage> {
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.home,
-                size: 24.0,
-              ),
+              icon: Image.asset('assets/images/home.png', width: 24, height: 24),
+              activeIcon: Image.asset('assets/images/home_selected.png', width: 24, height: 24),
               label: 'ઘર',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.stickyNote,
-                size: 24.0,
-              ),
+              icon: Image.asset('assets/images/news.png', width: 24, height: 24),
+              activeIcon: Image.asset('assets/images/news_selected.png', width: 24, height: 24),
               label: 'સમાચાર',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.building,
-                size: 24.0,
-              ),
+              icon: Image.asset('assets/images/property.png', width: 24, height: 24),
+              activeIcon: Image.asset('assets/images/property_selected.png', width: 24, height: 24),
               label: 'મિલકત',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.star_border,
-                size: 24.0,
-              ),
+              icon: Image.asset('assets/images/horoscopes.png', width: 24, height: 24),
+              activeIcon: Image.asset('assets/images/horoscopes_selected.png', width: 24, height: 24),
               label: 'રાશિફળ',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.user,
-                size: 24.0,
-              ),
+              icon: Image.asset('assets/images/user.png', width: 24, height: 24),
+              activeIcon: Image.asset('assets/images/user_selected.png', width: 24, height: 24),
               label: 'વપરાશકર્તા',
               tooltip: '',
             )

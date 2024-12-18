@@ -2,6 +2,7 @@ import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -155,7 +156,7 @@ class _HoroscopesDetailPageWidgetState extends State<HoroscopesDetailPageWidget>
                         ),
                       ),
                       Align(
-                        alignment: AlignmentDirectional(0.0, 0.99),
+                        alignment: AlignmentDirectional(0.0, 1.0),
                         child: Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
                           height: 505.0,

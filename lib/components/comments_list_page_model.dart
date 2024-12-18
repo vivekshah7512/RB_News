@@ -2,6 +2,7 @@ import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'comments_list_page_widget.dart' show CommentsListPageWidget;
 import 'package:flutter/material.dart';
@@ -23,6 +24,24 @@ class CommentsListPageModel extends FlutterFlowModel<CommentsListPageWidget> {
   }
 
   ApiCallResponse? get apiResulttzl => _apiResulttzl;
+
+  // Stores action output result for [Backend Call - API (Delete News Comment)] action in Button widget.
+  ApiCallResponse? _apiResulty9j;
+  set apiResulty9j(ApiCallResponse? value) {
+    _apiResulty9j = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResulty9j => _apiResulty9j;
+
+  // Stores action output result for [Backend Call - API (NewsComment)] action in Button widget.
+  ApiCallResponse? _apiResult7qu;
+  set apiResult7qu(ApiCallResponse? value) {
+    _apiResult7qu = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResult7qu => _apiResult7qu;
 
   final Map<String, DebugDataField> debugGeneratorVariables = {};
   final Map<String, DebugDataField> debugBackendQueries = {};
@@ -63,6 +82,22 @@ class CommentsListPageModel extends FlutterFlowModel<CommentsListPageWidget> {
         actionOutputs: {
           'apiResulttzl': debugSerializeParam(
             apiResulttzl,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=CommentsListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResulty9j': debugSerializeParam(
+            apiResulty9j,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=CommentsListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResult7qu': debugSerializeParam(
+            apiResult7qu,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=CommentsListPage',

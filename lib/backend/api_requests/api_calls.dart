@@ -18,6 +18,7 @@ class RBNewsAPIGroup {
       'http://rbnews-stage.ap-south-1.elasticbeanstalk.com';
   static Map<String, String> headers = {};
   static LoginAPICall loginAPICall = LoginAPICall();
+  static RegistrationCall registrationCall = RegistrationCall();
   static DashboardDataCall dashboardDataCall = DashboardDataCall();
   static NewsDetailCall newsDetailCall = NewsDetailCall();
   static GuestUserCall guestUserCall = GuestUserCall();
@@ -30,10 +31,23 @@ class RBNewsAPIGroup {
   static LatestPropertyListCall latestPropertyListCall =
       LatestPropertyListCall();
   static PostNewsCommentCall postNewsCommentCall = PostNewsCommentCall();
+  static NewsCategoriesListCall newsCategoriesListCall =
+      NewsCategoriesListCall();
+  static OTPVarificationCall oTPVarificationCall = OTPVarificationCall();
+  static SaveUnsaveNewsCall saveUnsaveNewsCall = SaveUnsaveNewsCall();
+  static LikeUnLikeNewsCall likeUnLikeNewsCall = LikeUnLikeNewsCall();
+  static DeleteNewsCommentCall deleteNewsCommentCall = DeleteNewsCommentCall();
 }
 
 class LoginAPICall {
-  Future<ApiCallResponse> call() async {
+  Future<ApiCallResponse> call({
+    String? email = '',
+    String? deviceType = '',
+    String? deviceId = '',
+    String? deviceInfo = '',
+    String? latitude = '',
+    String? longitude = '',
+  }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
     return ApiManager.instance.makeApiCall(
@@ -42,11 +56,53 @@ class LoginAPICall {
       callType: ApiCallType.POST,
       headers: {},
       params: {
-        'email': "vivekshah.it@gmail.com",
-        'device_type': "iOS",
-        'device_token': "sdfavjkhfkghaf90fvf=",
-        'device_id': "12345",
-        'device_info': "iPhone 12",
+        'email': email,
+        'device_type': deviceType,
+        'device_token': "kjhkjhgk=kjfffjkg+shg1fh5",
+        'device_id': deviceId,
+        'device_info': deviceInfo,
+        'latitude': latitude,
+        'longitude': longitude,
+      },
+      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class RegistrationCall {
+  Future<ApiCallResponse> call({
+    String? email = '',
+    String? deviceType = '',
+    String? deviceId = '',
+    String? deviceInfo = '',
+    String? latitude = '',
+    String? longitude = '',
+    String? fullname = '',
+    String? phoneNumber = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Registration',
+      apiUrl: '${baseUrl}/api/account/log-in',
+      callType: ApiCallType.POST,
+      headers: {},
+      params: {
+        'email': email,
+        'device_type': deviceType,
+        'device_token': "kjhkjhgk=kjfffjkg+shg1fh5",
+        'device_id': deviceId,
+        'device_info': deviceInfo,
+        'latitude': latitude,
+        'longitude': longitude,
+        'fullname': fullname,
+        'phoneNumber': phoneNumber,
       },
       bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
       returnBody: true,
@@ -429,6 +485,157 @@ class PostNewsCommentCall {
         'newsId': newsId,
       },
       bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class NewsCategoriesListCall {
+  Future<ApiCallResponse> call({
+    String? authToken = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'News Categories List',
+      apiUrl: '${baseUrl}/api/news/get-news-categories-list',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  dynamic newsCategoryArray(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+      );
+}
+
+class OTPVarificationCall {
+  Future<ApiCallResponse> call({
+    String? email = '',
+    String? otp = '',
+    String? latitude = '',
+    String? longitude = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'OTP Varification',
+      apiUrl: '${baseUrl}/api/Account/verify-otp',
+      callType: ApiCallType.POST,
+      headers: {},
+      params: {
+        'email': email,
+        'otp': otp,
+        'latitude': latitude,
+        'longitude': longitude,
+      },
+      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class SaveUnsaveNewsCall {
+  Future<ApiCallResponse> call({
+    String? newsId = '',
+    String? userId = '',
+    String? authToken = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Save Unsave News',
+      apiUrl: '${baseUrl}/api/news/save-unsave-news-record',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
+      params: {
+        'newsId': newsId,
+        'userId': userId,
+      },
+      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class LikeUnLikeNewsCall {
+  Future<ApiCallResponse> call({
+    String? newsId = '',
+    String? userId = '',
+    String? authToken = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Like UnLike News',
+      apiUrl: '${baseUrl}/api/news/like-dislike-news',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
+      params: {
+        'newsId': newsId,
+        'userId': userId,
+      },
+      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class DeleteNewsCommentCall {
+  Future<ApiCallResponse> call({
+    String? authToken = '',
+    String? commentId = '',
+    String? deletedBy = '',
+    String? newsId = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Delete News Comment',
+      apiUrl: '${baseUrl}/api/news/delete-user-comment',
+      callType: ApiCallType.DELETE,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
+      params: {
+        'commentId': commentId,
+        'deletedBy': deletedBy,
+        'newsId': newsId,
+      },
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,

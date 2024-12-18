@@ -11,27 +11,18 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
 
-class HtmlViewer extends StatelessWidget {
+class HtmlTextWidget extends StatelessWidget {
   final String htmlContent;
-  final double height;
-  final double width;
 
-  HtmlViewer({
+  const HtmlTextWidget({
     required this.htmlContent,
-    required this.height,
-    required this.width,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: width,
-      child: SingleChildScrollView(
-        child: Html(
-          data: htmlContent,
-        ),
-      ),
+    return Html(
+      data: htmlContent,
     );
   }
 }

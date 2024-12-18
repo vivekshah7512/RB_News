@@ -1,8 +1,10 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import 'o_t_p_verification_page_widget.dart' show OTPVerificationPageWidget;
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -28,6 +30,15 @@ class OTPVerificationPageModel
   );
   FlutterFlowTimerController timerController =
       FlutterFlowTimerController(StopWatchTimer(mode: StopWatchMode.countDown));
+
+  // Stores action output result for [Backend Call - API (OTP Varification)] action in Button widget.
+  ApiCallResponse? _apiResultup6;
+  set apiResultup6(ApiCallResponse? value) {
+    _apiResultup6 = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultup6 => _apiResultup6;
 
   final Map<String, DebugDataField> debugGeneratorVariables = {};
   final Map<String, DebugDataField> debugBackendQueries = {};
@@ -89,6 +100,16 @@ class OTPVerificationPageModel
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=OTPVerificationPage',
             name: 'String',
+            nullable: true,
+          )
+        },
+        actionOutputs: {
+          'apiResultup6': debugSerializeParam(
+            apiResultup6,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=OTPVerificationPage',
+            name: 'ApiCallResponse',
             nullable: true,
           )
         },

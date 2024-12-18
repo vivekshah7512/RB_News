@@ -31,6 +31,16 @@ class FFAppState extends ChangeNotifier {
     _safeInit(() {
       _userIdAPI = prefs.getInt('ff_userIdAPI') ?? _userIdAPI;
     });
+    _safeInit(() {
+      _isUserLoggedIn = prefs.getBool('ff_isUserLoggedIn') ?? _isUserLoggedIn;
+    });
+    _safeInit(() {
+      _userContactNumber =
+          prefs.getString('ff_userContactNumber') ?? _userContactNumber;
+    });
+    _safeInit(() {
+      _userName = prefs.getString('ff_userName') ?? _userName;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -160,7 +170,7 @@ class FFAppState extends ChangeNotifier {
     debugLogAppState(this);
   }
 
-  String _latitude = '';
+  String _latitude = '0';
   String get latitude => _latitude;
   set latitude(String value) {
     _latitude = value;
@@ -168,12 +178,107 @@ class FFAppState extends ChangeNotifier {
     debugLogAppState(this);
   }
 
-  String _longitude = '';
+  String _longitude = '0';
   String get longitude => _longitude;
   set longitude(String value) {
     _longitude = value;
 
     debugLogAppState(this);
+  }
+
+  bool _isUserLoggedIn = false;
+  bool get isUserLoggedIn => _isUserLoggedIn;
+  set isUserLoggedIn(bool value) {
+    _isUserLoggedIn = value;
+    prefs.setBool('ff_isUserLoggedIn', value);
+    debugLogAppState(this);
+  }
+
+  String _userContactNumber = '';
+  String get userContactNumber => _userContactNumber;
+  set userContactNumber(String value) {
+    _userContactNumber = value;
+    prefs.setString('ff_userContactNumber', value);
+    debugLogAppState(this);
+  }
+
+  String _userName = '';
+  String get userName => _userName;
+  set userName(String value) {
+    _userName = value;
+    prefs.setString('ff_userName', value);
+    debugLogAppState(this);
+  }
+
+  late LoggableList<int> _selectedNewsCategory = LoggableList([]);
+  List<int> get selectedNewsCategory =>
+      _selectedNewsCategory?..logger = () => debugLogAppState(this);
+  set selectedNewsCategory(List<int> value) {
+    if (value != null) {
+      _selectedNewsCategory = LoggableList(value);
+    }
+
+    debugLogAppState(this);
+  }
+
+  void addToSelectedNewsCategory(int value) {
+    selectedNewsCategory.add(value);
+  }
+
+  void removeFromSelectedNewsCategory(int value) {
+    selectedNewsCategory.remove(value);
+  }
+
+  void removeAtIndexFromSelectedNewsCategory(int index) {
+    selectedNewsCategory.removeAt(index);
+  }
+
+  void updateSelectedNewsCategoryAtIndex(
+    int index,
+    int Function(int) updateFn,
+  ) {
+    selectedNewsCategory[index] = updateFn(_selectedNewsCategory[index]);
+  }
+
+  void insertAtIndexInSelectedNewsCategory(int index, int value) {
+    selectedNewsCategory.insert(index, value);
+  }
+
+  late LoggableList<SelectedNewsCategoryDataStruct> _selectedNewsCategoryTop =
+      LoggableList([]);
+  List<SelectedNewsCategoryDataStruct> get selectedNewsCategoryTop =>
+      _selectedNewsCategoryTop?..logger = () => debugLogAppState(this);
+  set selectedNewsCategoryTop(List<SelectedNewsCategoryDataStruct> value) {
+    if (value != null) {
+      _selectedNewsCategoryTop = LoggableList(value);
+    }
+
+    debugLogAppState(this);
+  }
+
+  void addToSelectedNewsCategoryTop(SelectedNewsCategoryDataStruct value) {
+    selectedNewsCategoryTop.add(value);
+  }
+
+  void removeFromSelectedNewsCategoryTop(SelectedNewsCategoryDataStruct value) {
+    selectedNewsCategoryTop.remove(value);
+  }
+
+  void removeAtIndexFromSelectedNewsCategoryTop(int index) {
+    selectedNewsCategoryTop.removeAt(index);
+  }
+
+  void updateSelectedNewsCategoryTopAtIndex(
+    int index,
+    SelectedNewsCategoryDataStruct Function(SelectedNewsCategoryDataStruct)
+        updateFn,
+  ) {
+    selectedNewsCategoryTop[index] = updateFn(_selectedNewsCategoryTop[index]);
+  }
+
+  void insertAtIndexInSelectedNewsCategoryTop(
+      int index, SelectedNewsCategoryDataStruct value) {
+    selectedNewsCategoryTop.insert(index, value);
   }
 
   Map<String, DebugDataField> toDebugSerializableMap() => {
@@ -345,6 +450,58 @@ class FFAppState extends ChangeNotifier {
           searchReference:
               'reference=ChsKFQoJbG9uZ2l0dWRlEgh6eHlyZmYwcXICCANaCWxvbmdpdHVkZQ==',
           name: 'String',
+          nullable: false,
+        ),
+        'isUserLoggedIn': debugSerializeParam(
+          isUserLoggedIn,
+          ParamType.bool,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CiAKGgoOaXNVc2VyTG9nZ2VkSW4SCDYyaTd1NWI5cgIIBVoOaXNVc2VyTG9nZ2VkSW4=',
+          name: 'bool',
+          nullable: false,
+        ),
+        'userContactNumber': debugSerializeParam(
+          userContactNumber,
+          ParamType.String,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CiMKHQoRdXNlckNvbnRhY3ROdW1iZXISCDNsN3ZjczlocgIIA1oRdXNlckNvbnRhY3ROdW1iZXI=',
+          name: 'String',
+          nullable: false,
+        ),
+        'userName': debugSerializeParam(
+          userName,
+          ParamType.String,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=ChoKFAoIdXNlck5hbWUSCDRrdTR1OTNpcgIIA1oIdXNlck5hbWU=',
+          name: 'String',
+          nullable: false,
+        ),
+        'selectedNewsCategory': debugSerializeParam(
+          selectedNewsCategory,
+          ParamType.int,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CigKIAoUc2VsZWN0ZWROZXdzQ2F0ZWdvcnkSCGhxb2drdjZzcgQSAggBWhRzZWxlY3RlZE5ld3NDYXRlZ29yeQ==',
+          name: 'int',
+          nullable: false,
+        ),
+        'selectedNewsCategoryTop': debugSerializeParam(
+          selectedNewsCategoryTop,
+          ParamType.DataStruct,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=ClAKIwoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3ASCHcyZmx2aXJicikSAggUKiMSIQoYU2VsZWN0ZWROZXdzQ2F0ZWdvcnlEYXRhEgUzcnVlcFoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3A=',
+          name: 'SelectedNewsCategoryData',
           nullable: false,
         )
       };

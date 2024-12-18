@@ -2,6 +2,7 @@ import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -384,7 +385,14 @@ class _CommentsListPageWidgetState extends State<CommentsListPageWidget>
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   Text(
-                                                    'સાંજના ૩:૧૮',
+                                                    valueOrDefault<String>(
+                                                      functions.formateAPIDate(
+                                                          getJsonField(
+                                                        eachCommentItem,
+                                                        r'''$.modifiedDate''',
+                                                      ).toString()),
+                                                      'સાંજના ૩:૧૮',
+                                                    ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodySmall
@@ -400,12 +408,72 @@ class _CommentsListPageWidgetState extends State<CommentsListPageWidget>
                                                   if (FFAppState().userIdAPI ==
                                                       getJsonField(
                                                         eachCommentItem,
-                                                        r'''$.userId''',
+                                                        r'''$.data.userId''',
                                                       ))
                                                     FFButtonWidget(
-                                                      onPressed: () {
-                                                        print(
-                                                            'Button pressed ...');
+                                                      onPressed: () async {
+                                                        _model.apiResulty9j =
+                                                            await RBNewsAPIGroup
+                                                                .deleteNewsCommentCall
+                                                                .call(
+                                                          authToken:
+                                                              FFAppState()
+                                                                  .authTokenAPI,
+                                                          commentId:
+                                                              getJsonField(
+                                                            eachCommentItem,
+                                                            r'''$.commentId''',
+                                                          ).toString(),
+                                                          deletedBy:
+                                                              FFAppState()
+                                                                  .userName,
+                                                          newsId:
+                                                              widget!.newsId,
+                                                        );
+
+                                                        if ((_model.apiResulty9j
+                                                                ?.succeeded ??
+                                                            true)) {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                getJsonField(
+                                                                  (_model.apiResulty9j
+                                                                          ?.jsonBody ??
+                                                                      ''),
+                                                                  r'''$.message''',
+                                                                ).toString(),
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      4000),
+                                                              backgroundColor:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .secondary,
+                                                            ),
+                                                          );
+                                                          _model.apiResult7qu =
+                                                              await RBNewsAPIGroup
+                                                                  .newsCommentCall
+                                                                  .call(
+                                                            newsId:
+                                                                widget!.newsId,
+                                                            authToken:
+                                                                FFAppState()
+                                                                    .authTokenAPI,
+                                                          );
+                                                        }
+
+                                                        safeSetState(() {});
                                                       },
                                                       text: '',
                                                       icon: Icon(

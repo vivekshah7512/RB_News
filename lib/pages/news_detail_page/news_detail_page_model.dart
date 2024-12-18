@@ -1,16 +1,67 @@
+import '/auth/custom_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
 import '/components/comments_list_page_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'news_detail_page_widget.dart' show NewsDetailPageWidget;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 
 class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
+  ///  Local state fields for this page.
+
+  bool _isNewsLiked = true;
+  set isNewsLiked(bool value) {
+    _isNewsLiked = value;
+    debugLogWidgetClass(this);
+  }
+
+  bool get isNewsLiked => _isNewsLiked;
+
+  bool _isNewsSaved = true;
+  set isNewsSaved(bool value) {
+    _isNewsSaved = value;
+    debugLogWidgetClass(this);
+  }
+
+  bool get isNewsSaved => _isNewsSaved;
+
+  ///  State fields for stateful widgets in this page.
+
+  // Stores action output result for [Backend Call - API (NewsDetail)] action in NewsDetailPage widget.
+  ApiCallResponse? _apiResultoqq;
+  set apiResultoqq(ApiCallResponse? value) {
+    _apiResultoqq = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultoqq => _apiResultoqq;
+
+  // Stores action output result for [Backend Call - API (Like UnLike News)] action in Button widget.
+  ApiCallResponse? _apiResultmjdLike;
+  set apiResultmjdLike(ApiCallResponse? value) {
+    _apiResultmjdLike = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultmjdLike => _apiResultmjdLike;
+
+  // Stores action output result for [Backend Call - API (Save Unsave News)] action in Button widget.
+  ApiCallResponse? _apiResultmjd;
+  set apiResultmjd(ApiCallResponse? value) {
+    _apiResultmjd = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultmjd => _apiResultmjd;
+
   final Map<String, DebugDataField> debugGeneratorVariables = {};
   final Map<String, DebugDataField> debugBackendQueries = {};
   final Map<String, FlutterFlowModel> widgetBuilderComponents = {};
@@ -36,6 +87,54 @@ class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
             nullable: false,
           )
         }.withoutNulls,
+        localStates: {
+          'isNewsLiked': debugSerializeParam(
+            isNewsLiked,
+            ParamType.bool,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
+            searchReference:
+                'reference=QiUKFAoLaXNOZXdzTGlrZWQSBWprNjluKgcSBWZhbHNlcgQIBSABUAFaC2lzTmV3c0xpa2VkYg5OZXdzRGV0YWlsUGFnZQ==',
+            name: 'bool',
+            nullable: false,
+          ),
+          'isNewsSaved': debugSerializeParam(
+            isNewsSaved,
+            ParamType.bool,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
+            searchReference:
+                'reference=QiUKFAoLaXNOZXdzU2F2ZWQSBXRqcnMyKgcSBWZhbHNlcgQIBSABUAFaC2lzTmV3c1NhdmVkYg5OZXdzRGV0YWlsUGFnZQ==',
+            name: 'bool',
+            nullable: false,
+          )
+        },
+        actionOutputs: {
+          'apiResultoqq': debugSerializeParam(
+            apiResultoqq,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultmjdLike': debugSerializeParam(
+            apiResultmjdLike,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultmjd': debugSerializeParam(
+            apiResultmjd,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          )
+        },
         generatorVariables: debugGeneratorVariables,
         backendQueries: debugBackendQueries,
         componentStates: {

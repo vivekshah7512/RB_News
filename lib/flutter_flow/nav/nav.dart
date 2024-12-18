@@ -22,6 +22,8 @@ export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 
+GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+
 const debugRouteLinkMap = {
   '/loginPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LoginPage',
@@ -106,6 +108,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
+      navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
           appStateNotifier.loggedIn ? NavBarPage() : LoginPageWidget(),
       routes: [
@@ -155,10 +158,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/homePage',
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'HomePage')
-              : HomePageWidget(
-                  hintFlag: params.getParam(
-                    'hintFlag',
-                    ParamType.int,
+              : NavBarPage(
+                  initialPage: 'HomePage',
+                  page: HomePageWidget(
+                    hintFlag: params.getParam(
+                      'hintFlag',
+                      ParamType.int,
+                    ),
                   ),
                 ),
         ),
