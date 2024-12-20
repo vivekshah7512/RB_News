@@ -37,6 +37,9 @@ class RBNewsAPIGroup {
   static SaveUnsaveNewsCall saveUnsaveNewsCall = SaveUnsaveNewsCall();
   static LikeUnLikeNewsCall likeUnLikeNewsCall = LikeUnLikeNewsCall();
   static DeleteNewsCommentCall deleteNewsCommentCall = DeleteNewsCommentCall();
+  static PropertyDetailCall propertyDetailCall = PropertyDetailCall();
+  static GetStaticLinkCall getStaticLinkCall = GetStaticLinkCall();
+  static EditProfileCall editProfileCall = EditProfileCall();
 }
 
 class LoginAPICall {
@@ -240,6 +243,7 @@ class NewsListCall {
     int? pageNumber,
     String? newsType = '',
     String? userId = '',
+    String? filterCategoriesIdListString = '',
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -256,6 +260,7 @@ class NewsListCall {
         'pageNumber': pageNumber,
         'searchText': searchText,
         'pageSize': "2",
+        'filterCategoriesIdListString': filterCategoriesIdListString,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -383,8 +388,8 @@ class HoroscopeDetailCall {
         'Authorization': 'Bearer ${authToken}',
       },
       params: {
-        'dateInput': "2024-11-20",
-        'zodiacSignId': "10",
+        'dateInput': dateInput,
+        'zodiacSignId': zodiacSignId,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -395,7 +400,7 @@ class HoroscopeDetailCall {
     );
   }
 
-  dynamic horoscopeData(dynamic response) => getJsonField(
+  dynamic? horoscopeData(dynamic response) => getJsonField(
         response,
         r'''$.data''',
       );
@@ -404,6 +409,9 @@ class HoroscopeDetailCall {
 class PropertyListCall {
   Future<ApiCallResponse> call({
     String? authToken = '',
+    int? pageNumber,
+    String? pageSize = '',
+    String? searchText = '',
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -414,7 +422,11 @@ class PropertyListCall {
       headers: {
         'Authorization': 'Bearer ${authToken}',
       },
-      params: {},
+      params: {
+        'pageNumber': pageNumber,
+        'pageSize': pageSize,
+        'searchText': searchText,
+      },
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
@@ -434,6 +446,7 @@ class LatestPropertyListCall {
   Future<ApiCallResponse> call({
     String? authToken = '',
     int? pageNumber,
+    String? searchText = '',
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -446,7 +459,8 @@ class LatestPropertyListCall {
       },
       params: {
         'pageNumber': pageNumber,
-        'pageSize': "2",
+        'pageSize': "10",
+        'searchText': searchText,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -646,15 +660,46 @@ class DeleteNewsCommentCall {
   }
 }
 
-/// End RB News API Group Code
+class PropertyDetailCall {
+  Future<ApiCallResponse> call({
+    String? authToken = '',
+    int? propertyId,
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
-class HoroscopeAPICall {
-  static Future<ApiCallResponse> call() async {
     return ApiManager.instance.makeApiCall(
-      callName: 'HoroscopeAPI',
-      apiUrl: 'https://dummyjson.com/products',
+      callName: 'Property Detail',
+      apiUrl: '${baseUrl}/api/property/get-property-detail',
       callType: ApiCallType.GET,
-      headers: {},
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
+      params: {
+        'propertyId': propertyId,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class GetStaticLinkCall {
+  Future<ApiCallResponse> call({
+    String? authToken = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Get Static Link',
+      apiUrl: '${baseUrl}/api/details/get-static-links',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
       params: {},
       returnBody: true,
       encodeBodyUtf8: false,
@@ -664,13 +709,41 @@ class HoroscopeAPICall {
       alwaysAllowBody: false,
     );
   }
-
-  static List? productData(dynamic response) => getJsonField(
-        response,
-        r'''$.products''',
-        true,
-      ) as List?;
 }
+
+class EditProfileCall {
+  Future<ApiCallResponse> call({
+    String? authToken = '',
+    String? userId = '',
+    String? userPhoneNumber = '',
+    String? userName = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Edit Profile',
+      apiUrl: '${baseUrl}/api/account/edit-user-profile',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
+      params: {
+        'userId': userId,
+        'userPhoneNumber': userPhoneNumber,
+        'userName': userName,
+      },
+      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+/// End RB News API Group Code
 
 class ApiPagingParams {
   int nextPageNumber = 0;

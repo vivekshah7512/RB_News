@@ -1,5 +1,6 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/news_filter_popup_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:webviewx_plus/webviewx_plus.dart';
 
 class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
   ///  Local state fields for this page.
@@ -99,6 +99,16 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
             searchReference:
                 'reference=SiEKEgoIbmV3c1R5cGUSBm5sbzFnNSoFEgNhbGxyBAgDIAFQAVoIbmV3c1R5cGU=',
+            name: 'String',
+            nullable: false,
+          ),
+          'newsTitle': debugSerializeParam(
+            widget?.newsTitle,
+            ParamType.String,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            searchReference:
+                'reference=SjsKEwoJbmV3c1RpdGxlEgZqMGIyYmMqHhIc4Kqs4Kqn4Kq+IOCquOCqruCqvuCqmuCqvuCqsHIECAMgAVABWgluZXdzVGl0bGU=',
             name: 'String',
             nullable: false,
           )

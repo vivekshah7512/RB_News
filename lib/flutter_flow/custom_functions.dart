@@ -12,33 +12,54 @@ import '/backend/schema/structs/index.dart';
 import '/auth/custom_auth/auth_util.dart';
 
 String? formateAPIDate(String? apiDate) {
-  // format the date in today, yesterday, week ago and months ago. the date is parameter and return string of  formatted date.
   if (apiDate == null) {
     return null;
   }
 
-  DateTime date = DateTime.parse(apiDate);
-  DateTime now = DateTime.now();
+  try {
+    DateTime date = DateTime.parse(apiDate);
+    DateTime now = DateTime.now();
 
-  if (date.year == now.year && date.month == now.month && date.day == now.day) {
-    return 'Today';
+    String formattedTime =
+        "${date.hour % 12 == 0 ? 12 : date.hour % 12}:${date.minute.toString().padLeft(2, '0')} ${date.hour >= 12 ? 'PM' : 'AM'}";
+
+    if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day) {
+      return 'Today, $formattedTime';
+    }
+
+    if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day - 1) {
+      return 'Yesterday, $formattedTime';
+    }
+    String formattedDate =
+        "${date.day} ${_getMonthName(date.month)} ${date.year}";
+    return "$formattedDate, $formattedTime";
+  } catch (e) {
+    return "Invalid Date";
   }
+}
 
-  if (date.year == now.year &&
-      date.month == now.month &&
-      date.day == now.day - 1) {
-    return 'Yesterday';
-  }
+/// Helper function to get the month name.
+String _getMonthName(int month) {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
 
-  if (date.isAfter(now.subtract(Duration(days: 7))) && date.isBefore(now)) {
-    return timeago.format(date, locale: 'en_short');
-  }
-
-  if (date.year == now.year && date.month == now.month) {
-    return DateFormat('dd MMM').format(date);
-  }
-
-  return DateFormat('dd MMM yyyy').format(date);
+  return monthNames[month - 1];
 }
 
 String? getTodayDate() {
@@ -57,15 +78,109 @@ int getDivideVars(
   double result = varA / varB;
 
   // Check if the result ends in .5 and round up
-  if (result % 1 == 0.5) {
-    return result.ceil(); // Round up to the nearest integer
+  if (result % 1 != 0) {
+    return result.toInt() + 1; // Round up to the nearest integer
   }
 
   // Otherwise, return the rounded integer
-  return result.round();
+  return result.toInt();
 }
 
 String? newCustomFunction() {
   // Return the list as a comma-separated string
   return "";
+}
+
+bool? areNumbersEqual(
+  String num1,
+  int num2,
+) {
+  try {
+    int number = int.parse(num1);
+    return number == num2;
+  } catch (e) {
+    // Return null if the string cannot be parsed as an integer
+    return null;
+  }
+}
+
+Color getColor(
+  List<Color> colors,
+  int index,
+) {
+  if (colors.isEmpty) {
+    return Colors.transparent; // Default fallback color if list is empty
+  }
+
+  return colors[index % colors.length];
+}
+
+String? getSingleString(
+  String? inputString,
+  int index,
+) {
+  if (inputString == null || inputString.isEmpty) {
+    return ''; // Return an empty string or handle the null case as needed
+  }
+  return inputString.split(',')[index].trim();
+}
+
+bool shouldShowText(
+  List<String> list,
+  int index,
+) {
+  if (index == 0) {
+    return true; // Always show text for index 0
+  }
+
+  if (list[index] == list[index - 1]) {
+    return true; // Show text if the current value is the same as the previous one
+  }
+
+  return false;
+}
+
+bool isValidPincode(String otp) {
+  return otp != null && otp.isNotEmpty && otp.length == 4;
+}
+
+String getFirstChar(String input) {
+  if (input.isEmpty) {
+    return "RB"; // Return an empty string if the input is empty
+  }
+  return input[0].toUpperCase();
+}
+
+String? horoscopeDateRangeFormat(String dateTimeString) {
+  try {
+    // Parse the input string into a DateTime object
+    DateTime dateTime = DateTime.parse(dateTimeString);
+
+    // Get the month and day
+    int month = dateTime.month;
+    int day = dateTime.day;
+
+    // Map month number to month name
+    List<String> monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    String monthName = monthNames[month - 1]; // Month is 1-based
+
+    // Return the formatted "Month Day" string
+    return '$monthName $day';
+  } catch (e) {
+    // Return an empty string if parsing fails
+    return '';
+  }
 }

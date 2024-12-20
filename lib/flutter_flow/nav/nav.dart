@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,11 @@ const debugRouteLinkMap = {
   '/NewsListPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
   '/latestPropertiesListPage':
-      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LatestPropertiesListPage'
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LatestPropertiesListPage',
+  '/propertyDetailPageCopy':
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailPageCopy',
+  '/propertyDetailNew':
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailNew'
 };
 
 class AppStateNotifier extends ChangeNotifier {
@@ -181,7 +186,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'PropertyDetailPage',
           path: '/propertyDetailPage',
-          builder: (context, params) => PropertyDetailPageWidget(),
+          builder: (context, params) => PropertyDetailPageWidget(
+            propertyId: params.getParam(
+              'propertyId',
+              ParamType.int,
+            ),
+          ),
         ),
         FFRoute(
           name: 'HoroscopesDetailPage',
@@ -210,6 +220,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     'propertyType',
                     ParamType.String,
                   ),
+                  propertyTitle: params.getParam(
+                    'propertyTitle',
+                    ParamType.String,
+                  ),
                 ),
         ),
         FFRoute(
@@ -224,13 +238,41 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       'newsType',
                       ParamType.String,
                     ),
+                    newsTitle: params.getParam(
+                      'newsTitle',
+                      ParamType.String,
+                    ),
                   ),
                 ),
         ),
         FFRoute(
           name: 'LatestPropertiesListPage',
           path: '/latestPropertiesListPage',
-          builder: (context, params) => LatestPropertiesListPageWidget(),
+          builder: (context, params) => LatestPropertiesListPageWidget(
+            propertyType: params.getParam(
+              'propertyType',
+              ParamType.String,
+            ),
+            propertyTitle: params.getParam(
+              'propertyTitle',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'PropertyDetailPageCopy',
+          path: '/propertyDetailPageCopy',
+          builder: (context, params) => PropertyDetailPageCopyWidget(
+            propertyId: params.getParam(
+              'propertyId',
+              ParamType.int,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'PropertyDetailNew',
+          path: '/propertyDetailNew',
+          builder: (context, params) => PropertyDetailNewWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

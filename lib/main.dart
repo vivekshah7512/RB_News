@@ -11,6 +11,7 @@ import 'auth/custom_auth/custom_auth_user_provider.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'flutter_flow/nav/nav.dart';
@@ -24,8 +25,6 @@ void main() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
   debugLogAppConstant();
-
-  await FlutterFlowTheme.initialize();
 
   await authManager.initialize();
 
@@ -122,7 +121,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
   Locale? get locale => _locale;
-  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+  ThemeMode _themeMode = ThemeMode.system;
 
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
@@ -155,7 +154,7 @@ class _MyAppState extends State<MyApp> {
       });
 
     Future.delayed(
-      Duration(milliseconds: 2500),
+      Duration(milliseconds: 1500),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
 
@@ -177,7 +176,6 @@ class _MyAppState extends State<MyApp> {
 
   void setThemeMode(ThemeMode mode) => safeSetState(() {
         _themeMode = mode;
-        FlutterFlowTheme.saveThemeMode(mode);
       });
 
   @override
@@ -198,10 +196,6 @@ class _MyAppState extends State<MyApp> {
       ],
       theme: ThemeData(
         brightness: Brightness.light,
-        useMaterial3: false,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
         useMaterial3: false,
       ),
       themeMode: _themeMode,
@@ -265,32 +259,42 @@ class _NavBarPageState extends State<NavBarPage> {
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/home.png', width: 24, height: 24),
-              activeIcon: Image.asset('assets/images/home_selected.png', width: 24, height: 24),
+              icon: FaIcon(
+                FontAwesomeIcons.home,
+                size: 24.0,
+              ),
               label: 'ઘર',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/news.png', width: 24, height: 24),
-              activeIcon: Image.asset('assets/images/news_selected.png', width: 24, height: 24),
+              icon: FaIcon(
+                FontAwesomeIcons.stickyNote,
+                size: 24.0,
+              ),
               label: 'સમાચાર',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/property.png', width: 24, height: 24),
-              activeIcon: Image.asset('assets/images/property_selected.png', width: 24, height: 24),
+              icon: FaIcon(
+                FontAwesomeIcons.building,
+                size: 24.0,
+              ),
               label: 'મિલકત',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/horoscopes.png', width: 24, height: 24),
-              activeIcon: Image.asset('assets/images/horoscopes_selected.png', width: 24, height: 24),
+              icon: Icon(
+                Icons.star_border,
+                size: 24.0,
+              ),
               label: 'રાશિફળ',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: Image.asset('assets/images/user.png', width: 24, height: 24),
-              activeIcon: Image.asset('assets/images/user_selected.png', width: 24, height: 24),
+              icon: FaIcon(
+                FontAwesomeIcons.user,
+                size: 24.0,
+              ),
               label: 'વપરાશકર્તા',
               tooltip: '',
             )

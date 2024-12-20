@@ -1,5 +1,6 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/news_filter_popup_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:webviewx_plus/webviewx_plus.dart';
 import 'news_list_page_model.dart';
 export 'news_list_page_model.dart';
 
@@ -18,9 +18,12 @@ class NewsListPageWidget extends StatefulWidget {
   const NewsListPageWidget({
     super.key,
     String? newsType,
-  }) : this.newsType = newsType ?? 'all';
+    String? newsTitle,
+  })  : this.newsType = newsType ?? 'all',
+        this.newsTitle = newsTitle ?? 'બધા સમાચાર';
 
   final String newsType;
+  final String newsTitle;
 
   @override
   State<NewsListPageWidget> createState() => _NewsListPageWidgetState();
@@ -121,17 +124,54 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           automaticallyImplyLeading: false,
-          actions: [
-            FFButtonWidget(
-              onPressed: () async {
-                await showModalBottomSheet(
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  enableDrag: false,
-                  context: context,
-                  builder: (context) {
-                    return WebViewAware(
-                      child: GestureDetector(
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FlutterFlowIconButton(
+                borderColor: Color(0xFFE6E6E6),
+                borderRadius: 12.0,
+                borderWidth: 1.0,
+                buttonSize: 40.0,
+                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Color(0xFF808080),
+                  size: 24.0,
+                ),
+                onPressed: () async {
+                  context.pop();
+                },
+              ),
+              Text(
+                widget!.newsTitle,
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      fontFamily: 'Readex Pro',
+                      color: Color(0xFF1A1A1A),
+                      fontSize: 20.0,
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              FlutterFlowIconButton(
+                borderColor: Color(0xFFE6E6E6),
+                borderRadius: 12.0,
+                borderWidth: 1.0,
+                buttonSize: 40.0,
+                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                icon: Icon(
+                  Icons.filter_alt_outlined,
+                  color: Color(0xFF808080),
+                  size: 24.0,
+                ),
+                onPressed: () async {
+                  await showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    enableDrag: false,
+                    context: context,
+                    builder: (context) {
+                      return GestureDetector(
                         onTap: () {
                           FocusScope.of(context).unfocus();
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -140,29 +180,16 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                           padding: MediaQuery.viewInsetsOf(context),
                           child: NewsFilterPopupWidget(),
                         ),
-                      ),
-                    );
-                  },
-                ).then((value) => safeSetState(() {}));
-              },
-              text: 'Filter',
-              options: FFButtonOptions(
-                height: 40.0,
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                color: FlutterFlowTheme.of(context).primary,
-                textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                      fontFamily: 'Readex Pro',
-                      color: Colors.white,
-                      letterSpacing: 0.0,
-                    ),
-                elevation: 0.0,
-                borderRadius: BorderRadius.circular(8.0),
+                      );
+                    },
+                  ).then((value) => safeSetState(() {}));
+                },
               ),
-            ),
-          ],
-          centerTitle: false,
-          elevation: 0.0,
+            ],
+          ),
+          actions: [],
+          centerTitle: true,
+          elevation: 2.0,
         ),
         body: SafeArea(
           top: true,
@@ -174,8 +201,8 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          16.0, 16.0, 16.0, 16.0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 0.0),
                       child: Container(
                         width: MediaQuery.sizeOf(context).width * 1.0,
                         child: Container(
@@ -239,40 +266,44 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                         ),
                       ),
                     ),
-                    Container(
-                      width: 400.0,
-                      height: 100.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                    if (FFAppState().authTokenAPI == null ||
+                        FFAppState().authTokenAPI == '')
+                      Container(
+                        width: 400.0,
+                        height: 100.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                        ),
+                        child: ListView(
+                          padding: EdgeInsets.zero,
+                          primary: false,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  'Crime',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0.0,
+                                      ),
+                                ),
+                                Icon(
+                                  Icons.close,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  size: 24.0,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      child: ListView(
-                        padding: EdgeInsets.zero,
-                        primary: false,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Crime',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Readex Pro',
-                                      letterSpacing: 0.0,
-                                    ),
-                              ),
-                              Icon(
-                                Icons.close,
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                size: 24.0,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
@@ -283,6 +314,8 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                           searchText: _model.textController.text,
                           pageNumber: FFAppState().currentNewsPage,
                           newsType: 'top',
+                          filterCategoriesIdListString:
+                              FFAppState().selectedFilterIds,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -532,19 +565,24 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                         )
                                                             .toString()
                                                             .maybeHandleOverflow(
-                                                              maxChars: 24,
+                                                              maxChars: 58,
                                                               replacement: '…',
                                                             ),
                                                         maxLines: 2,
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyLarge
+                                                                .bodyMedium
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
+                                                                  color: Color(
+                                                                      0xFF4D4D4D),
                                                                   letterSpacing:
                                                                       0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
                                                                 ),
                                                       ),
                                                     ),
@@ -763,27 +801,6 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                       FFAppState().currentNewsPage =
                                           FFAppState().currentNewsPage + 1;
                                       safeSetState(() {});
-                                      await showDialog(
-                                        context: context,
-                                        builder: (alertDialogContext) {
-                                          return WebViewAware(
-                                            child: AlertDialog(
-                                              title: Text('Page'),
-                                              content: Text(FFAppState()
-                                                  .currentNewsPage
-                                                  .toString()),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          alertDialogContext),
-                                                  child: Text('Ok'),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
                                       _model.apiResultg10 = await RBNewsAPIGroup
                                           .newsListCall
                                           .call(

@@ -1,10 +1,12 @@
 import '/backend/api_requests/api_calls.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_web_view.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'horoscope_page_model.dart';
@@ -84,10 +86,46 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           appBar: AppBar(
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            automaticallyImplyLeading: true,
+            automaticallyImplyLeading: false,
+            title: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: FlutterFlowIconButton(
+                    borderColor: Color(0xFFE6E6E6),
+                    borderRadius: 12.0,
+                    borderWidth: 1.0,
+                    buttonSize: 40.0,
+                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                    icon: Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Color(0xFF808080),
+                      size: 24.0,
+                    ),
+                    onPressed: () async {
+                      context.pop();
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    'રાશિફળ',
+                    textAlign: TextAlign.end,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: Color(0xFF1A1A1A),
+                          fontSize: 20.0,
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+              ],
+            ),
             actions: [],
             centerTitle: true,
-            elevation: 0.0,
+            elevation: 2.0,
           ),
           body: SafeArea(
             top: true,
@@ -112,10 +150,9 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                               child: SizedBox(
                                 width: 50.0,
                                 height: 50.0,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    FlutterFlowTheme.of(context).primary,
-                                  ),
+                                child: SpinKitFadingFour(
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  size: 50.0,
                                 ),
                               ),
                             );
@@ -171,7 +208,7 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                 scrollDirection: Axis.vertical,
                                 itemCount: zodiacList.length,
                                 separatorBuilder: (_, __) =>
-                                    SizedBox(height: 8.0),
+                                    SizedBox(height: 20.0),
                                 itemBuilder: (context, zodiacListIndex) {
                                   final zodiacListItem =
                                       zodiacList[zodiacListIndex];
@@ -247,6 +284,15 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                                           width: 80.0,
                                                           height: 80.0,
                                                           fit: BoxFit.cover,
+                                                          errorBuilder: (context,
+                                                                  error,
+                                                                  stackTrace) =>
+                                                              Image.asset(
+                                                            'assets/images/error_image.png',
+                                                            width: 80.0,
+                                                            height: 80.0,
+                                                            fit: BoxFit.cover,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -267,33 +313,46 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                                             zodiacListItem,
                                                             r'''$.zodiacSignName''',
                                                           ).toString(),
+                                                          maxLines: 1,
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .bodyLarge
+                                                              .bodyMedium
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
+                                                                color: Color(
+                                                                    0xFF4D4D4D),
                                                                 letterSpacing:
                                                                     0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                               ),
                                                         ),
-                                                        FlutterFlowWebView(
-                                                          content: getJsonField(
-                                                            zodiacListItem,
-                                                            r'''$.zodiacSignDescription''',
-                                                          ).toString(),
-                                                          width:
-                                                              MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .width *
-                                                                  1.0,
-                                                          height: 29.0,
-                                                          verticalScroll: false,
-                                                          horizontalScroll:
-                                                              false,
-                                                          html: true,
+                                                        Align(
+                                                          alignment:
+                                                              AlignmentDirectional(
+                                                                  -1.0, 0.0),
+                                                          child: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            height: 50.0,
+                                                            child:
+                                                                custom_widgets
+                                                                    .HtmlViewer(
+                                                              width: double
+                                                                  .infinity,
+                                                              height: 50.0,
+                                                              htmlContent:
+                                                                  getJsonField(
+                                                                zodiacListItem,
+                                                                r'''$.zodiacSignDescription''',
+                                                              ).toString(),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ],
+                                                      ].divide(SizedBox(
+                                                          height: 5.0)),
                                                     ),
                                                   ),
                                                 ].divide(SizedBox(width: 16.0)),

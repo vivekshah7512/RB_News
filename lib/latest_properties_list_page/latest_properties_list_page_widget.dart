@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -10,7 +11,12 @@ import 'latest_properties_list_page_model.dart';
 export 'latest_properties_list_page_model.dart';
 
 class LatestPropertiesListPageWidget extends StatefulWidget {
-  const LatestPropertiesListPageWidget({super.key});
+  const LatestPropertiesListPageWidget({
+    super.key,
+    String? propertyTitle,
+  }) : this.propertyTitle = propertyTitle ?? 'તમામ મિલકત';
+
+  final String propertyTitle;
 
   @override
   State<LatestPropertiesListPageWidget> createState() =>
@@ -83,9 +89,58 @@ class _LatestPropertiesListPageWidgetState
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           automaticallyImplyLeading: false,
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FlutterFlowIconButton(
+                borderColor: Color(0xFFE6E6E6),
+                borderRadius: 12.0,
+                borderWidth: 1.0,
+                buttonSize: 40.0,
+                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Color(0xFF808080),
+                  size: 24.0,
+                ),
+                onPressed: () async {
+                  context.safePop();
+                },
+              ),
+              Text(
+                'નવી મિલકત',
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      fontFamily: 'Readex Pro',
+                      color: Color(0xFF1A1A1A),
+                      fontSize: 20.0,
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              Opacity(
+                opacity: 0.0,
+                child: FlutterFlowIconButton(
+                  borderColor: Color(0xFFE6E6E6),
+                  borderRadius: 12.0,
+                  borderWidth: 1.0,
+                  buttonSize: 40.0,
+                  fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                  icon: Icon(
+                    Icons.filter_alt_outlined,
+                    color: Color(0xFF808080),
+                    size: 24.0,
+                  ),
+                  onPressed: () {
+                    print('IconButton pressed ...');
+                  },
+                ),
+              ),
+            ],
+          ),
           actions: [],
-          centerTitle: false,
-          elevation: 0.0,
+          centerTitle: true,
+          elevation: 2.0,
         ),
         body: SafeArea(
           top: true,

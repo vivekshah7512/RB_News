@@ -7,6 +7,7 @@ import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'login_page_model.dart';
@@ -31,8 +32,20 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await actions.getDeviceInfo();
-      await actions.getCurrentLatLng();
+      if (FFAppState().isUserLoggedIn) {
+        context.goNamed(
+          'HomePage',
+          queryParameters: {
+            'hintFlag': serializeParam(
+              1,
+              ParamType.int,
+            ),
+          }.withoutNulls,
+        );
+      } else {
+        await actions.getDeviceInfo();
+        await actions.getCurrentLatLng();
+      }
     });
 
     _model.loginEmailTextController ??= TextEditingController()
@@ -143,32 +156,22 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                             ),
                           ),
                         ),
-                        Opacity(
-                          opacity: 0.8,
-                          child: Align(
-                            alignment: AlignmentDirectional(-0.99, -1.0),
-                            child: FlutterFlowIconButton(
-                              borderColor: Color(0xFFE6E6E6),
-                              borderRadius: 12.0,
-                              borderWidth: 1.0,
-                              buttonSize: 40.0,
-                              icon: Icon(
-                                Icons.navigate_next_rounded,
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                size: 24.0,
-                              ),
-                              onPressed: () async {
-                                context.goNamed(
-                                  'HomePage',
-                                  queryParameters: {
-                                    'hintFlag': serializeParam(
-                                      0,
-                                      ParamType.int,
-                                    ),
-                                  }.withoutNulls,
-                                );
-                              },
-                            ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('HomePage');
+                          },
+                          child: Text(
+                            'Skip >',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                ),
                           ),
                         ),
                       ],
@@ -342,27 +345,58 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
 
                                   if ((_model.apiResultmrl?.succeeded ??
                                       true)) {
-                                    context.pushNamed(
-                                      'OTPVerificationPage',
-                                      queryParameters: {
-                                        'emailAddress': serializeParam(
-                                          getJsonField(
-                                            (_model.apiResultmrl?.jsonBody ??
-                                                ''),
-                                            r'''$.data.userEmail''',
-                                          ).toString(),
-                                          ParamType.String,
-                                        ),
-                                        'timerSeconds': serializeParam(
-                                          false,
-                                          ParamType.bool,
-                                        ),
-                                        'resendTextState': serializeParam(
-                                          0,
-                                          ParamType.int,
-                                        ),
-                                      }.withoutNulls,
+                                    _model.statusCodeAPI = getJsonField(
+                                      (_model.apiResultmrl?.jsonBody ?? ''),
+                                      r'''$.statusCode''',
                                     );
+                                    _model.isUserRegistred = getJsonField(
+                                      (_model.apiResultmrl?.jsonBody ?? ''),
+                                      r'''$.isUserRegistered''',
+                                    );
+                                    safeSetState(() {});
+                                    if (_model.isUserRegistred == true) {
+                                      context.pushNamed(
+                                        'OTPVerificationPage',
+                                        queryParameters: {
+                                          'emailAddress': serializeParam(
+                                            _model
+                                                .loginEmailTextController.text,
+                                            ParamType.String,
+                                          ),
+                                          'timerSeconds': serializeParam(
+                                            false,
+                                            ParamType.bool,
+                                          ),
+                                          'resendTextState': serializeParam(
+                                            0,
+                                            ParamType.int,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            getJsonField(
+                                              (_model.apiResultmrl?.jsonBody ??
+                                                  ''),
+                                              r'''$.message''',
+                                            ).toString(),
+                                            style: TextStyle(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                            ),
+                                          ),
+                                          duration:
+                                              Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondary,
+                                        ),
+                                      );
+                                    }
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(

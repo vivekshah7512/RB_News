@@ -5,10 +5,12 @@ import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'o_t_p_verification_page_model.dart';
@@ -322,13 +324,13 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                     child: Align(
                       alignment: AlignmentDirectional(0.0, 1.0),
                       child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            0.0, 25.0, 0.0, 25.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            if (_model.pinCodeController!.text != null &&
-                                _model.pinCodeController!.text != '') {
-                              _model.apiResultup6 =
+                            if (functions.isValidPincode(
+                                _model.pinCodeController!.text)) {
+                              _model.apiResultup6CopyCopy =
                                   await RBNewsAPIGroup.oTPVarificationCall.call(
                                 email: widget!.emailAddress,
                                 otp: _model.pinCodeController!.text,
@@ -336,27 +338,34 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                                 longitude: FFAppState().longitude,
                               );
 
-                              if ((_model.apiResultup6?.succeeded ?? true)) {
+                              if ((_model.apiResultup6CopyCopy?.succeeded ??
+                                  true)) {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 3000));
                                 FFAppState().authToken = getJsonField(
-                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
                                   r'''$.data.jwtTokenString''',
                                 ).toString();
                                 FFAppState().isUserLoggedIn = true;
                                 FFAppState().userEmail = getJsonField(
-                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
                                   r'''$.data.userEmail''',
                                 ).toString();
                                 FFAppState().userIdAPI = getJsonField(
-                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
                                   r'''$.data.userId''',
                                 );
                                 FFAppState().authTokenAPI = getJsonField(
-                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
                                   r'''$.data.jwtTokenString''',
                                 ).toString();
                                 FFAppState().userContactNumber = getJsonField(
-                                  (_model.apiResultup6?.jsonBody ?? ''),
+                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
                                   r'''$.data.userContactNumber''',
+                                ).toString();
+                                FFAppState().userName = getJsonField(
+                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
+                                  r'''$.data.userFullName''',
                                 ).toString();
                                 safeSetState(() {});
 
@@ -374,7 +383,9 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                                   SnackBar(
                                     content: Text(
                                       getJsonField(
-                                        (_model.apiResultup6?.jsonBody ?? ''),
+                                        (_model.apiResultup6CopyCopy
+                                                ?.jsonBody ??
+                                            ''),
                                         r'''$.message''',
                                       ).toString(),
                                       style: TextStyle(
@@ -392,13 +403,13 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Enter OTP',
+                                    'Please enter valid OTP',
                                     style: TextStyle(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                     ),
                                   ),
-                                  duration: Duration(milliseconds: 4000),
+                                  duration: Duration(milliseconds: 2500),
                                   backgroundColor:
                                       FlutterFlowTheme.of(context).secondary,
                                 ),

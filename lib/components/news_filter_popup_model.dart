@@ -5,11 +5,21 @@ import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'news_filter_popup_widget.dart' show NewsFilterPopupWidget;
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:webviewx_plus/webviewx_plus.dart';
 
 class NewsFilterPopupModel extends FlutterFlowModel<NewsFilterPopupWidget> {
+  ///  Local state fields for this component.
+
+  String? _selectedCategoryIds;
+  set selectedCategoryIds(String? value) {
+    _selectedCategoryIds = value;
+    debugLogWidgetClass(this);
+  }
+
+  String? get selectedCategoryIds => _selectedCategoryIds;
+
   ///  State fields for stateful widgets in this component.
 
   // State field(s) for Checkbox widget.
@@ -131,6 +141,18 @@ class NewsFilterPopupModel extends FlutterFlowModel<NewsFilterPopupWidget> {
 
   @override
   WidgetClassDebugData toWidgetClassDebugData() => WidgetClassDebugData(
+        localStates: {
+          'selectedCategoryIds': debugSerializeParam(
+            selectedCategoryIds,
+            ParamType.String,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsFilterPopup',
+            searchReference:
+                'reference=QigKHAoTc2VsZWN0ZWRDYXRlZ29yeUlkcxIFM3V3OGEqAhIAcgQIAyAAUABaE3NlbGVjdGVkQ2F0ZWdvcnlJZHNiD05ld3NGaWx0ZXJQb3B1cA==',
+            name: 'String',
+            nullable: true,
+          )
+        },
         widgetStates: {
           'checkboxCheckedItems1': debugSerializeParam(
             checkboxCheckedItems1,

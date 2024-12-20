@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'registration_page_model.dart';
@@ -588,11 +589,16 @@ class _RegistrationPageWidgetState extends State<RegistrationPageWidget>
                                   'OTPVerificationPage',
                                   queryParameters: {
                                     'emailAddress': serializeParam(
-                                      getJsonField(
-                                        (_model.apiResultcan?.jsonBody ?? ''),
-                                        r'''$.data.userEmail''',
-                                      ).toString(),
+                                      _model.textController2.text,
                                       ParamType.String,
+                                    ),
+                                    'timerSeconds': serializeParam(
+                                      false,
+                                      ParamType.bool,
+                                    ),
+                                    'resendTextState': serializeParam(
+                                      0,
+                                      ParamType.int,
                                     ),
                                   }.withoutNulls,
                                 );

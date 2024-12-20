@@ -9,10 +9,10 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'news_detail_page_widget.dart' show NewsDetailPageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:webviewx_plus/webviewx_plus.dart';
 
 class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
   ///  Local state fields for this page.
@@ -33,6 +33,14 @@ class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
 
   bool get isNewsSaved => _isNewsSaved;
 
+  String? _viewMoreURL;
+  set viewMoreURL(String? value) {
+    _viewMoreURL = value;
+    debugLogWidgetClass(this);
+  }
+
+  String? get viewMoreURL => _viewMoreURL;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Backend Call - API (NewsDetail)] action in NewsDetailPage widget.
@@ -44,16 +52,16 @@ class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
 
   ApiCallResponse? get apiResultoqq => _apiResultoqq;
 
-  // Stores action output result for [Backend Call - API (Like UnLike News)] action in Button widget.
-  ApiCallResponse? _apiResultmjdLike;
-  set apiResultmjdLike(ApiCallResponse? value) {
-    _apiResultmjdLike = value;
+  // Stores action output result for [Backend Call - API (Like UnLike News)] action in Image widget.
+  ApiCallResponse? _apiResultmjdLikeCopy;
+  set apiResultmjdLikeCopy(ApiCallResponse? value) {
+    _apiResultmjdLikeCopy = value;
     debugLogWidgetClass(this);
   }
 
-  ApiCallResponse? get apiResultmjdLike => _apiResultmjdLike;
+  ApiCallResponse? get apiResultmjdLikeCopy => _apiResultmjdLikeCopy;
 
-  // Stores action output result for [Backend Call - API (Save Unsave News)] action in Button widget.
+  // Stores action output result for [Backend Call - API (Save Unsave News)] action in Image widget.
   ApiCallResponse? _apiResultmjd;
   set apiResultmjd(ApiCallResponse? value) {
     _apiResultmjd = value;
@@ -107,6 +115,16 @@ class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
                 'reference=QiUKFAoLaXNOZXdzU2F2ZWQSBXRqcnMyKgcSBWZhbHNlcgQIBSABUAFaC2lzTmV3c1NhdmVkYg5OZXdzRGV0YWlsUGFnZQ==',
             name: 'bool',
             nullable: false,
+          ),
+          'viewMoreURL': debugSerializeParam(
+            viewMoreURL,
+            ParamType.String,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
+            searchReference:
+                'reference=QiAKFAoLdmlld01vcmVVUkwSBXRseDAxKgISAHIECAMgAFABWgt2aWV3TW9yZVVSTGIOTmV3c0RldGFpbFBhZ2U=',
+            name: 'String',
+            nullable: true,
           )
         },
         actionOutputs: {
@@ -118,8 +136,8 @@ class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
             name: 'ApiCallResponse',
             nullable: true,
           ),
-          'apiResultmjdLike': debugSerializeParam(
-            apiResultmjdLike,
+          'apiResultmjdLikeCopy': debugSerializeParam(
+            apiResultmjdLikeCopy,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',

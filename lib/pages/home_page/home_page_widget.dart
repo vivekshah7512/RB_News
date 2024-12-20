@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -122,10 +123,9 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
-                  ),
+                child: SpinKitFadingFour(
+                  color: FlutterFlowTheme.of(context).primary,
+                  size: 50.0,
                 ),
               ),
             ),
@@ -305,15 +305,23 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  context.pushNamed(
-                                    'NewsListPage',
-                                    queryParameters: {
-                                      'newsType': serializeParam(
-                                        'saved',
-                                        ParamType.String,
-                                      ),
-                                    }.withoutNulls,
-                                  );
+                                  if (FFAppState().isUserLoggedIn) {
+                                    context.pushNamed(
+                                      'NewsListPage',
+                                      queryParameters: {
+                                        'newsType': serializeParam(
+                                          'saved',
+                                          ParamType.String,
+                                        ),
+                                        'newsTitle': serializeParam(
+                                          'સાચવેલી સમાચાર',
+                                          ParamType.String,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  } else {
+                                    context.pushNamed('LoginPage');
+                                  }
                                 },
                                 child: Container(
                                   width: 160.0,
@@ -374,6 +382,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                     queryParameters: {
                                       'newsType': serializeParam(
                                         'all',
+                                        ParamType.String,
+                                      ),
+                                      'newsTitle': serializeParam(
+                                        'બધા સમાચાર',
                                         ParamType.String,
                                       ),
                                     }.withoutNulls,
@@ -452,6 +464,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                           'top',
                                           ParamType.String,
                                         ),
+                                        'newsTitle': serializeParam(
+                                          'મુખ્ય સમાચાર',
+                                          ParamType.String,
+                                        ),
                                       }.withoutNulls,
                                     );
                                   },
@@ -510,8 +526,19 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    context
-                                        .pushNamed('LatestPropertiesListPage');
+                                    context.pushNamed(
+                                      'LatestPropertiesListPage',
+                                      queryParameters: {
+                                        'propertyType': serializeParam(
+                                          'latest',
+                                          ParamType.String,
+                                        ),
+                                        'propertyTitle': serializeParam(
+                                          'નવી મિલકત',
+                                          ParamType.String,
+                                        ),
+                                      }.withoutNulls,
+                                    );
                                   },
                                   child: Container(
                                     width: 160.0,
@@ -586,6 +613,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                       queryParameters: {
                                         'propertyType': serializeParam(
                                           'all',
+                                          ParamType.String,
+                                        ),
+                                        'propertyTitle': serializeParam(
+                                          'તમામ મિલકત',
                                           ParamType.String,
                                         ),
                                       }.withoutNulls,
@@ -666,43 +697,34 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                       ],
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        context.pushNamed('HoroscopePage');
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            child: Image.asset(
-                                              'assets/images/grid6.png',
-                                              width: 40.0,
-                                              height: 40.0,
-                                              fit: BoxFit.cover,
-                                            ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.asset(
+                                            'assets/images/grid6.png',
+                                            width: 40.0,
+                                            height: 40.0,
+                                            fit: BoxFit.cover,
                                           ),
-                                          Text(
-                                            'રાશિફળ',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  color: Color(0xFF1A1A1A),
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                        ]
-                                            .divide(SizedBox(width: 5.0))
-                                            .addToStart(SizedBox(width: 8.0)),
-                                      ),
+                                        ),
+                                        Text(
+                                          'રાશિફળ',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                color: Color(0xFF1A1A1A),
+                                                letterSpacing: 0.0,
+                                              ),
+                                        ),
+                                      ]
+                                          .divide(SizedBox(width: 5.0))
+                                          .addToStart(SizedBox(width: 8.0)),
                                     ),
                                   ),
                                 ),
@@ -789,12 +811,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                       child: SizedBox(
                                         width: 50.0,
                                         height: 50.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
+                                        child: SpinKitFadingFour(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          size: 50.0,
                                         ),
                                       ),
                                     );
@@ -850,6 +870,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
 
                                       return ListView.separated(
                                         padding: EdgeInsets.zero,
+                                        primary: false,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
                                         itemCount: newsList.length,
@@ -1109,7 +1130,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                               ),
                                                             ),
                                                           ),
-                                                        ],
+                                                        ].divide(SizedBox(
+                                                            height: 5.0)),
                                                       ),
                                                     ),
                                                   ),
@@ -1149,8 +1171,19 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    context
-                                        .pushNamed('LatestPropertiesListPage');
+                                    context.pushNamed(
+                                      'LatestPropertiesListPage',
+                                      queryParameters: {
+                                        'propertyType': serializeParam(
+                                          'latest',
+                                          ParamType.String,
+                                        ),
+                                        'propertyTitle': serializeParam(
+                                          'નવી મિલકત',
+                                          ParamType.String,
+                                        ),
+                                      }.withoutNulls,
+                                    );
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -1208,6 +1241,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
 
                                 return ListView.separated(
                                   padding: EdgeInsets.zero,
+                                  primary: false,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: propertyList.length,
@@ -1241,8 +1275,18 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                         hoverColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () async {
-                                          context
-                                              .pushNamed('PropertyDetailPage');
+                                          context.pushNamed(
+                                            'PropertyDetailPage',
+                                            queryParameters: {
+                                              'propertyId': serializeParam(
+                                                getJsonField(
+                                                  propertyListItem,
+                                                  r'''$.propertyId''',
+                                                ),
+                                                ParamType.int,
+                                              ),
+                                            }.withoutNulls,
+                                          );
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
@@ -1286,183 +1330,154 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    6.0),
-                                                            child: Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Color(
-                                                                    0xFFF1F3FE),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            16.0),
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: EdgeInsetsDirectional
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Color(
+                                                                0xFFF1F3FE),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        16.0),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             7.0,
                                                                             3.0,
                                                                             0.0,
                                                                             3.0),
-                                                                    child: Text(
-                                                                      '•',
-                                                                      style: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .override(
-                                                                            fontFamily:
-                                                                                'Readex Pro',
-                                                                            color:
-                                                                                Color(0xFF5374FF),
-                                                                            letterSpacing:
-                                                                                0.0,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                  Align(
-                                                                    alignment:
-                                                                        AlignmentDirectional(
+                                                                child: Text(
+                                                                  '•',
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Color(
+                                                                            0xFF5374FF),
+                                                                        letterSpacing:
                                                                             0.0,
-                                                                            0.0),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        0.0,
+                                                                        0.0),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
                                                                           7.0,
                                                                           3.0,
                                                                           10.0,
                                                                           3.0),
-                                                                      child:
-                                                                          Text(
-                                                                        getJsonField(
-                                                                          propertyListItem,
-                                                                          r'''$.propertyType''',
-                                                                        ).toString(),
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .labelSmall
-                                                                            .override(
-                                                                              fontFamily: 'Readex Pro',
-                                                                              color: Color(0xFF5374FF),
-                                                                              letterSpacing: 0.0,
-                                                                            ),
-                                                                      ),
-                                                                    ),
+                                                                  child: Text(
+                                                                    getJsonField(
+                                                                      propertyListItem,
+                                                                      r'''$.propertyType''',
+                                                                    ).toString(),
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .labelSmall
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Readex Pro',
+                                                                          color:
+                                                                              Color(0xFF5374FF),
+                                                                          letterSpacing:
+                                                                              0.0,
+                                                                        ),
                                                                   ),
-                                                                ],
+                                                                ),
                                                               ),
-                                                            ),
+                                                            ],
                                                           ),
-                                                        ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              -1.0, 0.0),
+                                                      child: Text(
+                                                        getJsonField(
+                                                          propertyListItem,
+                                                          r'''$.propertyName''',
+                                                        )
+                                                            .toString()
+                                                            .maybeHandleOverflow(
+                                                              maxChars: 58,
+                                                              replacement: '…',
+                                                            ),
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        maxLines: 2,
+                                                        style: FlutterFlowTheme
+                                                                .of(context)
+                                                            .bodyMedium
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Readex Pro',
+                                                              color: Color(
+                                                                  0xFF4D4D4D),
+                                                              fontSize: 15.0,
+                                                              letterSpacing:
+                                                                  0.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                       ),
                                                     ),
                                                     Align(
                                                       alignment:
                                                           AlignmentDirectional(
                                                               -1.0, 0.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    8.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Text(
-                                                          getJsonField(
-                                                            propertyListItem,
-                                                            r'''$.propertyName''',
-                                                          )
-                                                              .toString()
-                                                              .maybeHandleOverflow(
-                                                                maxChars: 58,
-                                                                replacement:
-                                                                    '…',
-                                                              ),
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          maxLines: 2,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                color: Color(
-                                                                    0xFF4D4D4D),
-                                                                fontSize: 15.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                        ),
+                                                      child: Text(
+                                                        getJsonField(
+                                                          propertyListItem,
+                                                          r'''$.propertyDescription''',
+                                                        )
+                                                            .toString()
+                                                            .maybeHandleOverflow(
+                                                              maxChars: 58,
+                                                              replacement: '…',
+                                                            ),
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        maxLines: 2,
+                                                        style: FlutterFlowTheme
+                                                                .of(context)
+                                                            .bodyMedium
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Readex Pro',
+                                                              color: Color(
+                                                                  0xFF808080),
+                                                              fontSize: 14.0,
+                                                              letterSpacing:
+                                                                  0.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
                                                       ),
                                                     ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -1.0, 0.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    8.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Text(
-                                                          getJsonField(
-                                                            propertyListItem,
-                                                            r'''$.propertyDescription''',
-                                                          )
-                                                              .toString()
-                                                              .maybeHandleOverflow(
-                                                                maxChars: 58,
-                                                                replacement:
-                                                                    '…',
-                                                              ),
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          maxLines: 2,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                color: Color(
-                                                                    0xFF808080),
-                                                                fontSize: 14.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                  ].divide(
+                                                      SizedBox(height: 5.0)),
                                                 ),
                                               ),
                                             ),
@@ -1494,34 +1509,42 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text(
-                                      'વધુ જુઓ ',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: Color(0xFF5374FF),
-                                            fontSize: 16.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
-                                    FaIcon(
-                                      FontAwesomeIcons.angleRight,
-                                      color: Color(0xFF5374FF),
-                                      size: 16.0,
-                                    ),
-                                  ],
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed('HoroscopePage');
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'વધુ જુઓ ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Color(0xFF5374FF),
+                                              fontSize: 16.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                      FaIcon(
+                                        FontAwesomeIcons.angleRight,
+                                        color: Color(0xFF5374FF),
+                                        size: 16.0,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                           Container(
                             width: double.infinity,
-                            height: 289.0,
                             decoration: BoxDecoration(),
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
@@ -1558,95 +1581,118 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                       mainAxisSpacing: 10.0,
                                       childAspectRatio: 1.0,
                                     ),
+                                    primary: false,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
                                     itemCount: horoscopeList.length,
                                     itemBuilder: (context, horoscopeListIndex) {
                                       final horoscopeListItem =
                                           horoscopeList[horoscopeListIndex];
-                                      return ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                        child: Container(
-                                          width: 70.0,
-                                          height: 70.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 3.0,
-                                                color: Color(0xFFB3B3B3),
-                                                offset: Offset(
-                                                  0.0,
-                                                  2.0,
-                                                ),
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                child: Image.network(
-                                                  getJsonField(
-                                                    horoscopeListItem,
-                                                    r'''$.zodiacSignIcon''',
-                                                  ).toString(),
-                                                  width: 24.0,
-                                                  height: 24.0,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (context, error,
-                                                          stackTrace) =>
-                                                      Image.asset(
-                                                    'assets/images/error_image.png',
+                                      return InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed(
+                                            'HoroscopesDetailPage',
+                                            queryParameters: {
+                                              'horoscopeId': serializeParam(
+                                                getJsonField(
+                                                  horoscopeListItem,
+                                                  r'''$.zodiacSignId''',
+                                                ).toString(),
+                                                ParamType.String,
+                                              ),
+                                            }.withoutNulls,
+                                          );
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                          child: Container(
+                                            width: 70.0,
+                                            height: 70.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 3.0,
+                                                  color: Color(0xFFB3B3B3),
+                                                  offset: Offset(
+                                                    0.0,
+                                                    2.0,
+                                                  ),
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  child: Image.network(
+                                                    getJsonField(
+                                                      horoscopeListItem,
+                                                      r'''$.zodiacSignIcon''',
+                                                    ).toString(),
                                                     width: 24.0,
                                                     height: 24.0,
                                                     fit: BoxFit.cover,
+                                                    errorBuilder: (context,
+                                                            error,
+                                                            stackTrace) =>
+                                                        Image.asset(
+                                                      'assets/images/error_image.png',
+                                                      width: 24.0,
+                                                      height: 24.0,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        2.0, 8.0, 2.0, 0.0),
-                                                child: Text(
-                                                  getJsonField(
-                                                    horoscopeListItem,
-                                                    r'''$.zodiacSignName''',
-                                                  )
-                                                      .toString()
-                                                      .maybeHandleOverflow(
-                                                        maxChars: 7,
-                                                        replacement: '…',
-                                                      ),
-                                                  maxLines: 1,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 13.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          2.0, 8.0, 2.0, 0.0),
+                                                  child: Text(
+                                                    getJsonField(
+                                                      horoscopeListItem,
+                                                      r'''$.zodiacSignName''',
+                                                    )
+                                                        .toString()
+                                                        .maybeHandleOverflow(
+                                                          maxChars: 7,
+                                                          replacement: '…',
+                                                        ),
+                                                    maxLines: 1,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );

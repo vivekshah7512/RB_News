@@ -281,6 +281,62 @@ class FFAppState extends ChangeNotifier {
     selectedNewsCategoryTop.insert(index, value);
   }
 
+  String _selectedFilterIds = '  ';
+  String get selectedFilterIds => _selectedFilterIds;
+  set selectedFilterIds(String value) {
+    _selectedFilterIds = value;
+
+    debugLogAppState(this);
+  }
+
+  late LoggableList<Color> _commentColors = LoggableList([
+    Color(4293849599),
+    Color(4293327300),
+    Color(4294892993),
+    Color(4293709823),
+    Color(4289722102)
+  ]);
+  List<Color> get commentColors =>
+      _commentColors?..logger = () => debugLogAppState(this);
+  set commentColors(List<Color> value) {
+    if (value != null) {
+      _commentColors = LoggableList(value);
+    }
+
+    debugLogAppState(this);
+  }
+
+  void addToCommentColors(Color value) {
+    commentColors.add(value);
+  }
+
+  void removeFromCommentColors(Color value) {
+    commentColors.remove(value);
+  }
+
+  void removeAtIndexFromCommentColors(int index) {
+    commentColors.removeAt(index);
+  }
+
+  void updateCommentColorsAtIndex(
+    int index,
+    Color Function(Color) updateFn,
+  ) {
+    commentColors[index] = updateFn(_commentColors[index]);
+  }
+
+  void insertAtIndexInCommentColors(int index, Color value) {
+    commentColors.insert(index, value);
+  }
+
+  String _assetsBaseUrl = 'http://rbnews-stage.ap-south-1.elasticbeanstalk.com';
+  String get assetsBaseUrl => _assetsBaseUrl;
+  set assetsBaseUrl(String value) {
+    _assetsBaseUrl = value;
+
+    debugLogAppState(this);
+  }
+
   Map<String, DebugDataField> toDebugSerializableMap() => {
         'TimerSeconds': debugSerializeParam(
           TimerSeconds,
@@ -503,6 +559,37 @@ class FFAppState extends ChangeNotifier {
               'reference=ClAKIwoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3ASCHcyZmx2aXJicikSAggUKiMSIQoYU2VsZWN0ZWROZXdzQ2F0ZWdvcnlEYXRhEgUzcnVlcFoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3A=',
           name: 'SelectedNewsCategoryData',
           nullable: false,
+        ),
+        'selectedFilterIds': debugSerializeParam(
+          selectedFilterIds,
+          ParamType.String,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CiMKHQoRc2VsZWN0ZWRGaWx0ZXJJZHMSCHA1cmxkYjRmcgIIA1oRc2VsZWN0ZWRGaWx0ZXJJZHM=',
+          name: 'String',
+          nullable: false,
+        ),
+        'commentColors': debugSerializeParam(
+          commentColors,
+          ParamType.Color,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CiEKGQoNY29tbWVudENvbG9ycxIIYXA1djI2YTVyBBICCBZaDWNvbW1lbnRDb2xvcnM=',
+          name: 'Color',
+          nullable: false,
+        ),
+        'assetsBaseUrl': debugSerializeParam(
+          assetsBaseUrl,
+          ParamType.String,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=Ch8KGQoNYXNzZXRzQmFzZVVybBIIYmFiM3p0aDJyAggDWg1hc3NldHNCYXNlVXJs',
+          name: 'String',
+          nullable: false,
         )
       };
 }
@@ -517,4 +604,11 @@ Future _safeInitAsync(Function() initializeField) async {
   try {
     await initializeField();
   } catch (_) {}
+}
+
+Color? _colorFromIntValue(int? val) {
+  if (val == null) {
+    return null;
+  }
+  return Color(val);
 }

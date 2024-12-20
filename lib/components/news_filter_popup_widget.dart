@@ -4,9 +4,9 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:webviewx_plus/webviewx_plus.dart';
 import 'news_filter_popup_model.dart';
 export 'news_filter_popup_model.dart';
 
@@ -76,6 +76,7 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                   highlightColor: Colors.transparent,
                   onTap: () async {
                     FFAppState().selectedNewsCategory = [];
+                    FFAppState().selectedFilterIds = '  ';
                     safeSetState(() {});
                   },
                   child: Text(
@@ -103,10 +104,9 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                         child: SizedBox(
                           width: 50.0,
                           height: 50.0,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              FlutterFlowTheme.of(context).primary,
-                            ),
+                          child: SpinKitFadingFour(
+                            color: FlutterFlowTheme.of(context).primary,
+                            size: 50.0,
                           ),
                         ),
                       );
@@ -209,32 +209,10 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                                             r'''$.newsCategoryID''',
                                           ).toString(),
                                           true,
-                                          getJsonField(
-                                            categoryListArrayItem,
-                                            r'''$.newsCategoryName''',
-                                          ).toString(),
                                         );
-                                        await showDialog(
-                                          context: context,
-                                          builder: (alertDialogContext) {
-                                            return WebViewAware(
-                                              child: AlertDialog(
-                                                title: Text(
-                                                    'Selectected Categories'),
-                                                content: Text(
-                                                    _model.selectedCatIds!),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            alertDialogContext),
-                                                    child: Text('Ok'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
+                                        _model.selectedCategoryIds =
+                                            _model.selectedCategoryIds;
+                                        safeSetState(() {});
 
                                         safeSetState(() {});
                                       } else {
@@ -246,32 +224,10 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                                             r'''$.newsCategoryID''',
                                           ).toString(),
                                           false,
-                                          getJsonField(
-                                            categoryListArrayItem,
-                                            r'''$.newsCategoryName''',
-                                          ).toString(),
                                         );
-                                        await showDialog(
-                                          context: context,
-                                          builder: (alertDialogContext) {
-                                            return WebViewAware(
-                                              child: AlertDialog(
-                                                title: Text(
-                                                    'Selectected Categories'),
-                                                content: Text(
-                                                    _model.selectedCatIdsCopy!),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            alertDialogContext),
-                                                    child: Text('Ok'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
+                                        _model.selectedCategoryIds =
+                                            _model.selectedCategoryIds;
+                                        safeSetState(() {});
 
                                         safeSetState(() {});
                                       }

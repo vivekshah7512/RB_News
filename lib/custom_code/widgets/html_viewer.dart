@@ -30,6 +30,15 @@ class HtmlViewer extends StatelessWidget {
       child: SingleChildScrollView(
         child: Html(
           data: htmlContent,
+          shrinkWrap: false,
+          style: {
+            "body": Style(
+              textAlign: TextAlign.left, // Align text to the left
+              margin: Margins.zero, // Set margin to zero
+              padding: HtmlPaddings.zero,
+              textOverflow: TextOverflow.ellipsis, // Show ellipsis for overflow
+            ),
+          },
         ),
       ),
     );

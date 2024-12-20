@@ -15,8 +15,13 @@ export '/pages/horoscopes_detail_page/horoscopes_detail_page_widget.dart'
     show HoroscopesDetailPageWidget;
 export '/pages/user_detail_page/user_detail_page_widget.dart'
     show UserDetailPageWidget;
-export '/all_properties_list_page/all_properties_list_page_widget.dart'
+export '/pages/all_properties_list_page/all_properties_list_page_widget.dart'
     show AllPropertiesListPageWidget;
-export '/news_list_page/news_list_page_widget.dart' show NewsListPageWidget;
-export '/latest_properties_list_page/latest_properties_list_page_widget.dart'
+export '/pages/news_list_page/news_list_page_widget.dart'
+    show NewsListPageWidget;
+export '/pages/latest_properties_list_page/latest_properties_list_page_widget.dart'
     show LatestPropertiesListPageWidget;
+export '/pages/property_detail_page_copy/property_detail_page_copy_widget.dart'
+    show PropertyDetailPageCopyWidget;
+export '/property_detail_new/property_detail_new_widget.dart'
+    show PropertyDetailNewWidget;

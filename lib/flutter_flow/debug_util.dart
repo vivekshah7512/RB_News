@@ -123,11 +123,6 @@ void debugLogGlobalProperty(
                               ParamType.String,
                               nullable: false,
                             ),
-                            'themeMode': debugSerializeParam(
-                              FlutterFlowTheme.themeMode.name,
-                              ParamType.String,
-                              nullable: false,
-                            ),
                             'currentTime': debugSerializeParam(
                               getCurrentTimestamp,
                               ParamType.DateTime,

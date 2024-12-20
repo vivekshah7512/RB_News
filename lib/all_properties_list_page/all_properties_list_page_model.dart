@@ -26,6 +26,15 @@ class AllPropertiesListPageModel
 
   ApiCallResponse? get apiResultudj => _apiResultudj;
 
+  // Stores action output result for [Backend Call - API (Latest Property List )] action in AllPropertiesListPage widget.
+  ApiCallResponse? _apiResult9rr;
+  set apiResult9rr(ApiCallResponse? value) {
+    _apiResult9rr = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResult9rr => _apiResult9rr;
+
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
@@ -48,6 +57,24 @@ class AllPropertiesListPageModel
 
   ApiCallResponse? get apiResultg10Copy => _apiResultg10Copy;
 
+  // Stores action output result for [Backend Call - API (Latest Property List )] action in Button widget.
+  ApiCallResponse? _apiResultz0zCopy1;
+  set apiResultz0zCopy1(ApiCallResponse? value) {
+    _apiResultz0zCopy1 = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultz0zCopy1 => _apiResultz0zCopy1;
+
+  // Stores action output result for [Backend Call - API (Latest Property List )] action in Button widget.
+  ApiCallResponse? _apiResultg10Copy11;
+  set apiResultg10Copy11(ApiCallResponse? value) {
+    _apiResultg10Copy11 = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultg10Copy11 => _apiResultg10Copy11;
+
   // Stores action output result for [Backend Call - API (Property List)] action in Button widget.
   ApiCallResponse? _apiResultz0z;
   set apiResultz0z(ApiCallResponse? value) {
@@ -65,6 +92,24 @@ class AllPropertiesListPageModel
   }
 
   ApiCallResponse? get apiResultg10 => _apiResultg10;
+
+  // Stores action output result for [Backend Call - API (Latest Property List )] action in Button widget.
+  ApiCallResponse? _apiResultz0z1;
+  set apiResultz0z1(ApiCallResponse? value) {
+    _apiResultz0z1 = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultz0z1 => _apiResultz0z1;
+
+  // Stores action output result for [Backend Call - API (Latest Property List )] action in Button widget.
+  ApiCallResponse? _apiResultg101;
+  set apiResultg101(ApiCallResponse? value) {
+    _apiResultg101 = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultg101 => _apiResultg101;
 
   final Map<String, DebugDataField> debugGeneratorVariables = {};
   final Map<String, DebugDataField> debugBackendQueries = {};
@@ -92,6 +137,16 @@ class AllPropertiesListPageModel
                 'reference=SiUKFgoMcHJvcGVydHlUeXBlEgZ0aW9taWkqBRIDYWxscgQIAyABUAFaDHByb3BlcnR5VHlwZQ==',
             name: 'String',
             nullable: false,
+          ),
+          'propertyTitle': debugSerializeParam(
+            widget?.propertyTitle,
+            ParamType.String,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
+            searchReference:
+                'reference=Sj8KFwoNcHJvcGVydHlUaXRsZRIGdTBuaGk4Kh4SHOCqpOCqruCqvuCqriDgqq7gqr/gqrLgqpXgqqRyBAgDIAFQAVoNcHJvcGVydHlUaXRsZQ==',
+            name: 'String',
+            nullable: false,
           )
         }.withoutNulls,
         widgetStates: {
@@ -107,6 +162,14 @@ class AllPropertiesListPageModel
         actionOutputs: {
           'apiResultudj': debugSerializeParam(
             apiResultudj,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResult9rr': debugSerializeParam(
+            apiResult9rr,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
@@ -129,6 +192,22 @@ class AllPropertiesListPageModel
             name: 'ApiCallResponse',
             nullable: true,
           ),
+          'apiResultz0zCopy1': debugSerializeParam(
+            apiResultz0zCopy1,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultg10Copy11': debugSerializeParam(
+            apiResultg10Copy11,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
           'apiResultz0z': debugSerializeParam(
             apiResultz0z,
             ParamType.ApiResponse,
@@ -139,6 +218,22 @@ class AllPropertiesListPageModel
           ),
           'apiResultg10': debugSerializeParam(
             apiResultg10,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultz0z1': debugSerializeParam(
+            apiResultz0z1,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultg101': debugSerializeParam(
+            apiResultg101,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',

@@ -11,39 +11,38 @@ import 'package:flutter/material.dart';
 String? selectedNewsCategories(
   String? id,
   bool? isChecked,
-  String? name,
 ) {
-  final selectedCategoryMap = Map<int, String>.from(
-    FFAppState().selectedNewsCategoryTop as Map,
-  );
+  List<int> selectedCategoryIds = [];
+  selectedCategoryIds = List<int>.from(FFAppState().selectedNewsCategoryTop);
+
+  List<dynamic> selectedCategoryList =
+      List<dynamic>.from(FFAppState().selectedNewsCategoryTop);
+
   if (id != null) {
     int categoryId = int.tryParse(id) ?? 0; // Convert String to int safely
     if (categoryId != 0) {
-      final newCategory = {
-        'id': categoryId,
-        'name': name,
-      };
-
       if (isChecked == true) {
-        // Add the object if it doesn't already exist in the list
-        if (!selectedCategoryMap.containsKey(categoryId)) {
-          selectedCategoryMap[categoryId] = name!;
+        if (!selectedCategoryIds.contains(categoryId)) {
+          selectedCategoryIds.add(categoryId); // Add ID
           FFAppState().update(() {
-            FFAppState().selectedNewsCategoryTop = selectedCategoryMap as List<SelectedNewsCategoryDataStruct>;
+            FFAppState().selectedNewsCategory.add(categoryId);
           });
         }
       } else {
-        // Remove the object if it exists in the list
-        selectedCategoryMap.remove(categoryId);
+        selectedCategoryIds.remove(categoryId); // Remove ID
         FFAppState().update(() {
-          FFAppState().selectedNewsCategoryTop = selectedCategoryMap as List<SelectedNewsCategoryDataStruct>;
+          FFAppState().selectedNewsCategory.remove(categoryId);
         });
       }
     }
   }
 
+  FFAppState().update(() {
+    FFAppState().selectedFilterIds =
+        FFAppState().selectedNewsCategory.join(',');
+  });
   // Return the list as a comma-separated string
-  return selectedCategoryMap.values.join(',');
+  return FFAppState().selectedNewsCategory.join(',');
 }
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the green button on the right!
