@@ -168,6 +168,27 @@ class _PropertyDetailPageWidgetState extends State<PropertyDetailPageWidget>
                               ),
                             ),
                           ),
+                          Align(
+                            alignment: AlignmentDirectional(0.0, 1.0),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width * 1.0,
+                              height: 18.0,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(0.0),
+                                  bottomRight: Radius.circular(0.0),
+                                  topLeft: Radius.circular(70.0),
+                                  topRight: Radius.circular(70.0),
+                                ),
+                                border: Border.all(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -179,34 +200,51 @@ class _PropertyDetailPageWidgetState extends State<PropertyDetailPageWidget>
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(0.0),
                         ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 8.0, 4.0, 8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFF1F3FE),
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Padding(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 4.0, 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF1F3FE),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          7.0, 3.0, 0.0, 3.0),
+                                      child: Text(
+                                        '•',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Color(0xFF5374FF),
+                                              letterSpacing: 0.0,
+                                            ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            7.0, 3.0, 0.0, 3.0),
+                                            7.0, 3.0, 10.0, 3.0),
                                         child: Text(
-                                          '•',
+                                          getJsonField(
+                                            propertyDetailPagePropertyDetailResponse
+                                                .jsonBody,
+                                            r'''$.data.propertyType''',
+                                          ).toString(),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
+                                              .labelSmall
                                               .override(
                                                 fontFamily: 'Readex Pro',
                                                 color: Color(0xFF5374FF),
@@ -214,128 +252,91 @@ class _PropertyDetailPageWidgetState extends State<PropertyDetailPageWidget>
                                               ),
                                         ),
                                       ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  7.0, 3.0, 10.0, 3.0),
-                                          child: Text(
-                                            getJsonField(
-                                              propertyDetailPagePropertyDetailResponse
-                                                  .jsonBody,
-                                              r'''$.data.propertyType''',
-                                            ).toString(),
-                                            style: FlutterFlowTheme.of(context)
-                                                .labelSmall
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  color: Color(0xFF5374FF),
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 0.0, 12.0, 0.0),
-                                child: Text(
-                                  getJsonField(
-                                    propertyDetailPagePropertyDetailResponse
-                                        .jsonBody,
-                                    r'''$.data.propertyName''',
-                                  ).toString(),
-                                  maxLines: 2,
-                                  style: FlutterFlowTheme.of(context)
-                                      .titleLarge
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        letterSpacing: 0.0,
-                                      ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 3.0, 12.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.asset(
-                                        'assets/images/location.png',
-                                        width: 20.0,
-                                        height: 20.0,
-                                        fit: BoxFit.cover,
-                                      ),
                                     ),
-                                    Text(
-                                      getJsonField(
-                                        propertyDetailPagePropertyDetailResponse
-                                            .jsonBody,
-                                        r'''$.data.propertyLocation''',
-                                      ).toString(),
-                                      maxLines: 1,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            letterSpacing: 0.0,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(width: 4.0)),
+                                  ],
                                 ),
                               ),
-                              Flexible(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      12.0, 12.0, 12.0, 0.0),
-                                  child: Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 1.0,
-                                    height: 50.0,
-                                    child: custom_widgets.HtmlViewer(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          1.0,
-                                      height: 50.0,
-                                      htmlContent: getJsonField(
-                                        propertyDetailPagePropertyDetailResponse
-                                            .jsonBody,
-                                        r'''$.data.propertyDescription''',
-                                      ).toString(),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 12.0, 0.0),
+                              child: Text(
+                                getJsonField(
+                                  propertyDetailPagePropertyDetailResponse
+                                      .jsonBody,
+                                  r'''$.data.propertyName''',
+                                ).toString(),
+                                maxLines: 2,
+                                style: FlutterFlowTheme.of(context)
+                                    .titleLarge
+                                    .override(
+                                      fontFamily: 'Outfit',
+                                      letterSpacing: 0.0,
                                     ),
-                                  ),
-                                ),
                               ),
-                              Row(
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 3.0, 12.0, 0.0),
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        12.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      '₹',
-                                      style: FlutterFlowTheme.of(context)
-                                          .titleLarge
-                                          .override(
-                                            fontFamily: 'Outfit',
-                                            letterSpacing: 0.0,
-                                          ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.asset(
+                                      'assets/images/location.png',
+                                      width: 15.0,
+                                      height: 15.0,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                   Text(
                                     getJsonField(
                                       propertyDetailPagePropertyDetailResponse
                                           .jsonBody,
-                                      r'''$.data.propertyPrice''',
+                                      r'''$.data.propertyLocation''',
                                     ).toString(),
+                                    maxLines: 1,
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          letterSpacing: 0.0,
+                                        ),
+                                  ),
+                                ].divide(SizedBox(width: 4.0)),
+                              ),
+                            ),
+                            Flexible(
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    12.0, 12.0, 12.0, 0.0),
+                                child: Container(
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height: 50.0,
+                                  child: custom_widgets.HtmlViewer(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 1.0,
+                                    height: 50.0,
+                                    htmlContent: getJsonField(
+                                      propertyDetailPagePropertyDetailResponse
+                                          .jsonBody,
+                                      r'''$.data.propertyDescription''',
+                                    ).toString(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      12.0, 0.0, 0.0, 0.0),
+                                  child: Text(
+                                    '₹',
                                     style: FlutterFlowTheme.of(context)
                                         .titleLarge
                                         .override(
@@ -343,61 +344,87 @@ class _PropertyDetailPageWidgetState extends State<PropertyDetailPageWidget>
                                           letterSpacing: 0.0,
                                         ),
                                   ),
-                                ].divide(SizedBox(width: 2.0)),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 0.0, 12.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'કિંમત',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            letterSpacing: 0.0,
+                                ),
+                                Text(
+                                  getJsonField(
+                                    propertyDetailPagePropertyDetailResponse
+                                        .jsonBody,
+                                    r'''$.data.propertyPrice''',
+                                  ).toString(),
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleLarge
+                                      .override(
+                                        fontFamily: 'Outfit',
+                                        letterSpacing: 0.0,
+                                      ),
+                                ),
+                              ].divide(SizedBox(width: 2.0)),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 12.0, 0.0),
+                              child: Container(
+                                width: double.infinity,
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      12.0, 0.0, 12.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'કિંમત',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              letterSpacing: 0.0,
+                                            ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/share_property.png',
+                                              width: 40.0,
+                                              height: 40.0,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.asset(
-                                            'assets/images/share_property.png',
-                                            width: 40.0,
-                                            height: 40.0,
-                                            fit: BoxFit.cover,
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/call.png',
+                                              width: 40.0,
+                                              height: 40.0,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.asset(
-                                            'assets/images/call.png',
-                                            width: 40.0,
-                                            height: 40.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ].divide(SizedBox(width: 8.0)),
+                                        ],
+                                      ),
+                                    ].divide(SizedBox(width: 8.0)),
+                                  ),
                                 ),
                               ),
-                            ].divide(SizedBox(height: 6.0)),
-                          ),
+                            ),
+                          ].divide(SizedBox(height: 6.0)),
                         ),
                       ),
                     ),

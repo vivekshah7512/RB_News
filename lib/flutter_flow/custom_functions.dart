@@ -162,18 +162,18 @@ String? horoscopeDateRangeFormat(String dateTimeString) {
 
     // Map month number to month name
     List<String> monthNames = [
-      "January",
-      "February",
+      "Jan",
+      "Feb",
       "March",
       "April",
       "May",
       "June",
       "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
     ];
     String monthName = monthNames[month - 1]; // Month is 1-based
 
@@ -183,4 +183,8 @@ String? horoscopeDateRangeFormat(String dateTimeString) {
     // Return an empty string if parsing fails
     return '';
   }
+}
+
+bool? isValidTextView(String? textString) {
+  return textString != null && textString.isNotEmpty;
 }

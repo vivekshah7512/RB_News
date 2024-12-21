@@ -1595,9 +1595,9 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                         highlightColor: Colors.transparent,
                                         onTap: () async {
                                           context.pushNamed(
-                                            'HoroscopesDetailPage',
+                                            'HoroscopeDetailNew',
                                             queryParameters: {
-                                              'horoscopeId': serializeParam(
+                                              'zodiacSignId': serializeParam(
                                                 getJsonField(
                                                   horoscopeListItem,
                                                   r'''$.zodiacSignId''',

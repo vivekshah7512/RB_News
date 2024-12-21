@@ -375,8 +375,8 @@ class ZodiacListCall {
 class HoroscopeDetailCall {
   Future<ApiCallResponse> call({
     String? authToken = '',
-    String? dateInput = '2024-11-20',
-    String? zodiacSignId = '10',
+    String? dateInput = '',
+    String? zodiacSignId = '',
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 

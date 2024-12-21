@@ -40,8 +40,6 @@ const debugRouteLinkMap = {
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
   '/propertyDetailPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailPage',
-  '/horoscopesDetailPage':
-      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HoroscopesDetailPage',
   '/userDetailPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=UserDetailPage',
   '/allPropertiesListPage':
@@ -50,9 +48,9 @@ const debugRouteLinkMap = {
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
   '/latestPropertiesListPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LatestPropertiesListPage',
-  '/propertyDetailPageCopy':
-      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailPageCopy',
-  '/propertyDetailNew':
+  '/horoscopeDetailNew':
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HoroscopeDetailNew',
+  '/PropertyDetailNew':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailNew'
 };
 
@@ -194,16 +192,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'HoroscopesDetailPage',
-          path: '/horoscopesDetailPage',
-          builder: (context, params) => HoroscopesDetailPageWidget(
-            horoscopeId: params.getParam(
-              'horoscopeId',
-              ParamType.String,
-            ),
-          ),
-        ),
-        FFRoute(
           name: 'UserDetailPage',
           path: '/userDetailPage',
           builder: (context, params) => params.isEmpty
@@ -260,19 +248,24 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'PropertyDetailPageCopy',
-          path: '/propertyDetailPageCopy',
-          builder: (context, params) => PropertyDetailPageCopyWidget(
-            propertyId: params.getParam(
-              'propertyId',
-              ParamType.int,
+          name: 'HoroscopeDetailNew',
+          path: '/horoscopeDetailNew',
+          builder: (context, params) => HoroscopeDetailNewWidget(
+            zodiacSignId: params.getParam(
+              'zodiacSignId',
+              ParamType.String,
             ),
           ),
         ),
         FFRoute(
           name: 'PropertyDetailNew',
-          path: '/propertyDetailNew',
-          builder: (context, params) => PropertyDetailNewWidget(),
+          path: '/PropertyDetailNew',
+          builder: (context, params) => PropertyDetailNewWidget(
+            propertyId: params.getParam(
+              'propertyId',
+              ParamType.int,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

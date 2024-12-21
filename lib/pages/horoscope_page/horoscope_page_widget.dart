@@ -244,9 +244,9 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                                   Colors.transparent,
                                               onTap: () async {
                                                 context.pushNamed(
-                                                  'HoroscopesDetailPage',
+                                                  'HoroscopeDetailNew',
                                                   queryParameters: {
-                                                    'horoscopeId':
+                                                    'zodiacSignId':
                                                         serializeParam(
                                                       getJsonField(
                                                         zodiacListItem,
