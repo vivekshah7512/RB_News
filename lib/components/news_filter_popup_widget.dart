@@ -209,10 +209,49 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                                             r'''$.newsCategoryID''',
                                           ).toString(),
                                           true,
+                                          valueOrDefault<String>(
+                                            getJsonField(
+                                              categoryListArrayItem,
+                                              r'''$.newsCategoryName''',
+                                            )?.toString(),
+                                            '\"\"',
+                                          ),
                                         );
                                         _model.selectedCategoryIds =
                                             _model.selectedCategoryIds;
                                         safeSetState(() {});
+                                        await actions.test(
+                                          getJsonField(
+                                            categoryListArrayItem,
+                                            r'''$.newsCategoryName''',
+                                          ).toString(),
+                                          getJsonField(
+                                            categoryListArrayItem,
+                                            r'''$.newsCategoryID''',
+                                          ),
+                                          true,
+                                        );
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title:
+                                                  Text('mapable array count'),
+                                              content: Text(FFAppState()
+                                                  .selectedNewsCategoryTop
+                                                  .length
+                                                  .toString()),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
 
                                         safeSetState(() {});
                                       } else {
@@ -224,6 +263,13 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                                             r'''$.newsCategoryID''',
                                           ).toString(),
                                           false,
+                                          valueOrDefault<String>(
+                                            getJsonField(
+                                              categoryListArrayItem,
+                                              r'''$.newsCategoryName''',
+                                            )?.toString(),
+                                            '\"\"',
+                                          ),
                                         );
                                         _model.selectedCategoryIds =
                                             _model.selectedCategoryIds;

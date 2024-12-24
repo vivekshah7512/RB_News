@@ -244,43 +244,6 @@ class FFAppState extends ChangeNotifier {
     selectedNewsCategory.insert(index, value);
   }
 
-  late LoggableList<SelectedNewsCategoryDataStruct> _selectedNewsCategoryTop =
-      LoggableList([]);
-  List<SelectedNewsCategoryDataStruct> get selectedNewsCategoryTop =>
-      _selectedNewsCategoryTop?..logger = () => debugLogAppState(this);
-  set selectedNewsCategoryTop(List<SelectedNewsCategoryDataStruct> value) {
-    if (value != null) {
-      _selectedNewsCategoryTop = LoggableList(value);
-    }
-
-    debugLogAppState(this);
-  }
-
-  void addToSelectedNewsCategoryTop(SelectedNewsCategoryDataStruct value) {
-    selectedNewsCategoryTop.add(value);
-  }
-
-  void removeFromSelectedNewsCategoryTop(SelectedNewsCategoryDataStruct value) {
-    selectedNewsCategoryTop.remove(value);
-  }
-
-  void removeAtIndexFromSelectedNewsCategoryTop(int index) {
-    selectedNewsCategoryTop.removeAt(index);
-  }
-
-  void updateSelectedNewsCategoryTopAtIndex(
-    int index,
-    SelectedNewsCategoryDataStruct Function(SelectedNewsCategoryDataStruct)
-        updateFn,
-  ) {
-    selectedNewsCategoryTop[index] = updateFn(_selectedNewsCategoryTop[index]);
-  }
-
-  void insertAtIndexInSelectedNewsCategoryTop(
-      int index, SelectedNewsCategoryDataStruct value) {
-    selectedNewsCategoryTop.insert(index, value);
-  }
-
   String _selectedFilterIds = '  ';
   String get selectedFilterIds => _selectedFilterIds;
   set selectedFilterIds(String value) {
@@ -335,6 +298,78 @@ class FFAppState extends ChangeNotifier {
     _assetsBaseUrl = value;
 
     debugLogAppState(this);
+  }
+
+  late LoggableList<String> _selectedNewsCatStringArray = LoggableList([]);
+  List<String> get selectedNewsCatStringArray =>
+      _selectedNewsCatStringArray?..logger = () => debugLogAppState(this);
+  set selectedNewsCatStringArray(List<String> value) {
+    if (value != null) {
+      _selectedNewsCatStringArray = LoggableList(value);
+    }
+
+    debugLogAppState(this);
+  }
+
+  void addToSelectedNewsCatStringArray(String value) {
+    selectedNewsCatStringArray.add(value);
+  }
+
+  void removeFromSelectedNewsCatStringArray(String value) {
+    selectedNewsCatStringArray.remove(value);
+  }
+
+  void removeAtIndexFromSelectedNewsCatStringArray(int index) {
+    selectedNewsCatStringArray.removeAt(index);
+  }
+
+  void updateSelectedNewsCatStringArrayAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    selectedNewsCatStringArray[index] =
+        updateFn(_selectedNewsCatStringArray[index]);
+  }
+
+  void insertAtIndexInSelectedNewsCatStringArray(int index, String value) {
+    selectedNewsCatStringArray.insert(index, value);
+  }
+
+  late LoggableList<SelectedNewsCategoryDataStruct> _selectedNewsCategoryTop =
+      LoggableList([]);
+  List<SelectedNewsCategoryDataStruct> get selectedNewsCategoryTop =>
+      _selectedNewsCategoryTop?..logger = () => debugLogAppState(this);
+  set selectedNewsCategoryTop(List<SelectedNewsCategoryDataStruct> value) {
+    if (value != null) {
+      _selectedNewsCategoryTop = LoggableList(value);
+    }
+
+    debugLogAppState(this);
+  }
+
+  void addToSelectedNewsCategoryTop(SelectedNewsCategoryDataStruct value) {
+    selectedNewsCategoryTop.add(value);
+  }
+
+  void removeFromSelectedNewsCategoryTop(SelectedNewsCategoryDataStruct value) {
+    selectedNewsCategoryTop.remove(value);
+  }
+
+  void removeAtIndexFromSelectedNewsCategoryTop(int index) {
+    selectedNewsCategoryTop.removeAt(index);
+  }
+
+  void updateSelectedNewsCategoryTopAtIndex(
+    int index,
+    SelectedNewsCategoryDataStruct Function(SelectedNewsCategoryDataStruct)
+        updateFn,
+  ) {
+    selectedNewsCategoryTop[index] = updateFn(_selectedNewsCategoryTop[index]);
+  }
+
+  void insertAtIndexInSelectedNewsCategoryTop(
+      int index, SelectedNewsCategoryDataStruct value) {
+    selectedNewsCategoryTop.insert(index, value);
   }
 
   Map<String, DebugDataField> toDebugSerializableMap() => {
@@ -549,17 +584,6 @@ class FFAppState extends ChangeNotifier {
           name: 'int',
           nullable: false,
         ),
-        'selectedNewsCategoryTop': debugSerializeParam(
-          selectedNewsCategoryTop,
-          ParamType.DataStruct,
-          isList: true,
-          link:
-              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
-          searchReference:
-              'reference=ClAKIwoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3ASCHcyZmx2aXJicikSAggUKiMSIQoYU2VsZWN0ZWROZXdzQ2F0ZWdvcnlEYXRhEgUzcnVlcFoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3A=',
-          name: 'SelectedNewsCategoryData',
-          nullable: false,
-        ),
         'selectedFilterIds': debugSerializeParam(
           selectedFilterIds,
           ParamType.String,
@@ -589,6 +613,28 @@ class FFAppState extends ChangeNotifier {
           searchReference:
               'reference=Ch8KGQoNYXNzZXRzQmFzZVVybBIIYmFiM3p0aDJyAggDWg1hc3NldHNCYXNlVXJs',
           name: 'String',
+          nullable: false,
+        ),
+        'selectedNewsCatStringArray': debugSerializeParam(
+          selectedNewsCatStringArray,
+          ParamType.String,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=Ci4KJgoac2VsZWN0ZWROZXdzQ2F0U3RyaW5nQXJyYXkSCGg1emE5ejU2cgQSAggDWhpzZWxlY3RlZE5ld3NDYXRTdHJpbmdBcnJheQ==',
+          name: 'String',
+          nullable: false,
+        ),
+        'selectedNewsCategoryTop': debugSerializeParam(
+          selectedNewsCategoryTop,
+          ParamType.DataStruct,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=ClAKIwoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3ASCDhtMWIwb3pvcikSAggUKiMSIQoYU2VsZWN0ZWROZXdzQ2F0ZWdvcnlEYXRhEgUzcnVlcFoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3A=',
+          name: 'SelectedNewsCategoryData',
           nullable: false,
         )
       };

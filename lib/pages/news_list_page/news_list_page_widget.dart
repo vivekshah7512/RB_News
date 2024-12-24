@@ -236,6 +236,34 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                 child: TextFormField(
                                   controller: _model.textController,
                                   focusNode: _model.textFieldFocusNode,
+                                  onFieldSubmitted: (_) async {
+                                    FFAppState().currentNewsPage = 1;
+                                    safeSetState(() {});
+                                    _model.apiResultudjS =
+                                        await RBNewsAPIGroup.newsListCall.call(
+                                      authToken: FFAppState().authTokenAPI,
+                                      userId: FFAppState().userIdAPI.toString(),
+                                      searchText: _model.textController.text,
+                                      pageNumber: FFAppState().currentNewsPage,
+                                      newsType: 'top',
+                                    );
+
+                                    if ((_model.apiResultudjS?.succeeded ??
+                                        true)) {
+                                      FFAppState().totalNewsPage =
+                                          functions.getDivideVars(
+                                              getJsonField(
+                                                (_model.apiResultudjS
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.totalCount''',
+                                              ),
+                                              2);
+                                      safeSetState(() {});
+                                    }
+
+                                    safeSetState(() {});
+                                  },
                                   autofocus: false,
                                   obscureText: false,
                                   decoration: InputDecoration(
@@ -267,44 +295,76 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                         ),
                       ),
                     ),
-                    if (FFAppState().authTokenAPI == null ||
-                        FFAppState().authTokenAPI == '')
-                      Container(
-                        width: 400.0,
-                        height: 100.0,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                        ),
-                        child: ListView(
-                          padding: EdgeInsets.zero,
-                          primary: false,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  'Crime',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        letterSpacing: 0.0,
-                                      ),
-                                ),
-                                Icon(
-                                  Icons.close,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 24.0,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                    Container(
+                      width: 400.0,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
                       ),
+                      child: Builder(
+                        builder: (context) {
+                          final filterCategoryArray =
+                              FFAppState().selectedNewsCatStringArray.toList();
+                          _model.debugGeneratorVariables[
+                                  'filterCategoryArray${filterCategoryArray.length > 100 ? ' (first 100)' : ''}'] =
+                              debugSerializeParam(
+                            filterCategoryArray.take(100),
+                            ParamType.String,
+                            isList: true,
+                            link:
+                                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+                            name: 'String',
+                            nullable: false,
+                          );
+                          debugLogWidgetClass(_model);
+
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            primary: false,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: filterCategoryArray.length,
+                            itemBuilder: (context, filterCategoryArrayIndex) {
+                              final filterCategoryArrayItem =
+                                  filterCategoryArray[filterCategoryArrayIndex];
+                              return Container(
+                                height: 70.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      valueOrDefault<String>(
+                                        FFAppState()
+                                            .selectedNewsCatStringArray
+                                            .elementAtOrNull(
+                                                filterCategoryArrayIndex),
+                                        'All',
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                    Icon(
+                                      Icons.close,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 24.0,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),

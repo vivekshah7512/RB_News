@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,9 +17,11 @@ class PropertyDetailNewWidget extends StatefulWidget {
   const PropertyDetailNewWidget({
     super.key,
     int? propertyId,
+    required this.propertyAllImages,
   }) : this.propertyId = propertyId ?? 1;
 
   final int propertyId;
+  final List<String>? propertyAllImages;
 
   @override
   State<PropertyDetailNewWidget> createState() =>
@@ -35,6 +38,25 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => PropertyDetailNewModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text('Images'),
+            content: Text(widget!.propertyAllImages!.length.toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 
   @override
@@ -186,6 +208,88 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                               ),
                             ),
                           ),
+                          if (widget!.propertyAllImages!.length > 0)
+                            Align(
+                              alignment: AlignmentDirectional(0.0, 1.0),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    12.0, 0.0, 12.0, 30.0),
+                                child: Container(
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xE6FFFFFF),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 4.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(
+                                          0.0,
+                                          2.0,
+                                        ),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Builder(
+                                      builder: (context) {
+                                        final propertyImages = getJsonField(
+                                          propertyDetailNewPropertyDetailResponse
+                                              .jsonBody,
+                                          r'''$.data.propertyImagesURL''',
+                                        ).toList();
+                                        _model.debugGeneratorVariables[
+                                                'propertyImages${propertyImages.length > 100 ? ' (first 100)' : ''}'] =
+                                            debugSerializeParam(
+                                          propertyImages.take(100),
+                                          ParamType.JSON,
+                                          link:
+                                              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailNew',
+                                          name: 'dynamic',
+                                          nullable: false,
+                                        );
+                                        debugLogWidgetClass(_model);
+
+                                        return ListView.separated(
+                                          padding: EdgeInsets.zero,
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: propertyImages.length,
+                                          separatorBuilder: (_, __) =>
+                                              SizedBox(width: 10.0),
+                                          itemBuilder:
+                                              (context, propertyImagesIndex) {
+                                            final propertyImagesItem =
+                                                propertyImages[
+                                                    propertyImagesIndex];
+                                            return ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              child: Image.network(
+                                                'https://picsum.photos/seed/125/600',
+                                                width: 80.0,
+                                                height: 80.0,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    Image.asset(
+                                                  'assets/images/error_image.png',
+                                                  width: 80.0,
+                                                  height: 80.0,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -320,15 +424,19 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                   12.0, 8.0, 12.0, 0.0),
                               child: Container(
                                 width: double.infinity,
-                                height: 60.0,
-                                child: custom_widgets.HtmlViewer(
+                                child: custom_widgets.ReadMoreWidget(
                                   width: double.infinity,
-                                  height: 60.0,
-                                  htmlContent: getJsonField(
+                                  textContent: getJsonField(
                                     propertyDetailNewPropertyDetailResponse
                                         .jsonBody,
                                     r'''$.data.propertyDescription''',
                                   ).toString(),
+                                  trimLines: 3,
+                                  trimCollapsedText: 'વધુ વાંચો',
+                                  trimExpandedText: 'ઓછું વાંચો',
+                                  colorClickableText:
+                                      FlutterFlowTheme.of(context).primary,
+                                  isHtml: true,
                                 ),
                               ),
                             ),

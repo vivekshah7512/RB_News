@@ -40,6 +40,15 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Backend Call - API (NewsList)] action in TextField widget.
+  ApiCallResponse? _apiResultudjS;
+  set apiResultudjS(ApiCallResponse? value) {
+    _apiResultudjS = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultudjS => _apiResultudjS;
+
   // Stores action output result for [Backend Call - API (NewsList)] action in Button widget.
   ApiCallResponse? _apiResultz0zCopy;
   set apiResultz0zCopy(ApiCallResponse? value) {
@@ -139,6 +148,14 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
         actionOutputs: {
           'apiResultudj': debugSerializeParam(
             apiResultudj,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultudjS': debugSerializeParam(
+            apiResultudjS,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',

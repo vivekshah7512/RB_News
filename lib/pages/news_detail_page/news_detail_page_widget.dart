@@ -268,6 +268,7 @@ class _NewsDetailPageWidgetState extends State<NewsDetailPageWidget>
                             trimExpandedText: 'ઓછું વાંચો',
                             colorClickableText:
                                 FlutterFlowTheme.of(context).primary,
+                            isHtml: true,
                           ),
                         ),
                         Row(

@@ -9,15 +9,16 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'package:readmore/readmore.dart';
+import 'package:flutter_html/flutter_html.dart';
 
-class ReadMoreWidget extends StatelessWidget {
-  final String textContent;
+class ReadMoreWidget extends StatefulWidget {
+  final String textContent; // Text content (plain or HTML)
   final int trimLines;
   final String trimCollapsedText;
   final String trimExpandedText;
   final Color colorClickableText;
   final double? width; // Optional width
+  final bool isHtml; // Flag to indicate if the text is HTML
 
   ReadMoreWidget({
     required this.textContent,
@@ -26,25 +27,65 @@ class ReadMoreWidget extends StatelessWidget {
     required this.trimExpandedText,
     required this.colorClickableText,
     this.width,
+    this.isHtml = false, // Default is plain text
   });
 
   @override
+  _ReadMoreWidgetState createState() => _ReadMoreWidgetState();
+}
+
+class _ReadMoreWidgetState extends State<ReadMoreWidget> {
+  bool isExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
-    // Use LayoutBuilder to calculate height dynamically
     return LayoutBuilder(
       builder: (context, constraints) {
-        final double maxWidth = width ?? constraints.maxWidth;
+        final double maxWidth = widget.width ?? constraints.maxWidth;
+
         return Container(
           width: maxWidth,
-          child: ReadMoreText(
-            textContent,
-            trimLines: trimLines,
-            trimMode: TrimMode.Line,
-            trimCollapsedText: trimCollapsedText,
-            trimExpandedText: trimExpandedText,
-            style: TextStyle(fontSize: 16, color: Colors.black),
-            moreStyle: TextStyle(fontSize: 16, color: colorClickableText),
-            lessStyle: TextStyle(fontSize: 16, color: colorClickableText),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Render content
+              widget.isHtml
+                  ? Html(
+                      data: widget.textContent,
+                      style: {
+                        'body': Style(
+                          fontSize: FontSize(16.0),
+                          color: Colors.black,
+                          maxLines: isExpanded ? null : widget.trimLines,
+                          textOverflow: TextOverflow.ellipsis,
+                        ),
+                      },
+                    )
+                  : Text(
+                      widget.textContent,
+                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                      maxLines: isExpanded ? null : widget.trimLines,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+              // "Read More" or "Read Less" button
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+                child: Text(
+                  isExpanded
+                      ? widget.trimExpandedText
+                      : widget.trimCollapsedText,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: widget.colorClickableText,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

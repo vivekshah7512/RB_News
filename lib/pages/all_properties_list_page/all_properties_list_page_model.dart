@@ -31,6 +31,15 @@ class AllPropertiesListPageModel
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Backend Call - API (Property List)] action in TextField widget.
+  ApiCallResponse? _apiResult4pqs;
+  set apiResult4pqs(ApiCallResponse? value) {
+    _apiResult4pqs = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResult4pqs => _apiResult4pqs;
+
   // Stores action output result for [Backend Call - API (Property List)] action in Button widget.
   ApiCallResponse? _apiResultz0zCopy;
   set apiResultz0zCopy(ApiCallResponse? value) {
@@ -118,6 +127,14 @@ class AllPropertiesListPageModel
         actionOutputs: {
           'apiResult4pq': debugSerializeParam(
             apiResult4pq,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResult4pqs': debugSerializeParam(
+            apiResult4pqs,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=AllPropertiesListPage',

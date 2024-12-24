@@ -32,6 +32,15 @@ class LatestPropertiesListPageModel
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Backend Call - API (Latest Property List )] action in TextField widget.
+  ApiCallResponse? _apiResult4pqsearch;
+  set apiResult4pqsearch(ApiCallResponse? value) {
+    _apiResult4pqsearch = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResult4pqsearch => _apiResult4pqsearch;
+
   // Stores action output result for [Backend Call - API (Latest Property List )] action in Button widget.
   ApiCallResponse? _apiResultz0zCopy;
   set apiResultz0zCopy(ApiCallResponse? value) {
@@ -119,6 +128,14 @@ class LatestPropertiesListPageModel
         actionOutputs: {
           'apiResult4pq': debugSerializeParam(
             apiResult4pq,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LatestPropertiesListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResult4pqsearch': debugSerializeParam(
+            apiResult4pqsearch,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=LatestPropertiesListPage',

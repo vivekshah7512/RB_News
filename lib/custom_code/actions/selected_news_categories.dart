@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 String? selectedNewsCategories(
   String? id,
   bool? isChecked,
+  String? selectedCategoryString,
 ) {
   List<int> selectedCategoryIds = [];
   selectedCategoryIds = List<int>.from(FFAppState().selectedNewsCategoryTop);
@@ -26,21 +27,30 @@ String? selectedNewsCategories(
           selectedCategoryIds.add(categoryId); // Add ID
           FFAppState().update(() {
             FFAppState().selectedNewsCategory.add(categoryId);
+            if (selectedCategoryString != null &&
+                selectedCategoryString.isNotEmpty) {
+              FFAppState()
+                  .selectedNewsCatStringArray
+                  .add(selectedCategoryString); // Add String
+            }
           });
         }
       } else {
         selectedCategoryIds.remove(categoryId); // Remove ID
-        FFAppState().update(() {
-          FFAppState().selectedNewsCategory.remove(categoryId);
-        });
+        int index = FFAppState().selectedNewsCategory.indexOf(categoryId);
+
+        if (index != -1) {
+          FFAppState().update(() {
+            FFAppState().selectedNewsCategory.remove(categoryId);
+            if (index < FFAppState().selectedNewsCatStringArray.length) {
+              FFAppState().selectedNewsCatStringArray.removeAt(index);
+            }
+          });
+        }
       }
     }
   }
 
-  FFAppState().update(() {
-    FFAppState().selectedFilterIds =
-        FFAppState().selectedNewsCategory.join(',');
-  });
   // Return the list as a comma-separated string
   return FFAppState().selectedNewsCategory.join(',');
 }

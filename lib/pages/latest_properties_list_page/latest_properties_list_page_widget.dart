@@ -222,6 +222,34 @@ class _LatestPropertiesListPageWidgetState
                                 child: TextFormField(
                                   controller: _model.textController,
                                   focusNode: _model.textFieldFocusNode,
+                                  onFieldSubmitted: (_) async {
+                                    FFAppState().currentNewsPage = 1;
+                                    safeSetState(() {});
+                                    _model.apiResult4pqsearch =
+                                        await RBNewsAPIGroup
+                                            .latestPropertyListCall
+                                            .call(
+                                      authToken: FFAppState().authTokenAPI,
+                                      pageNumber: FFAppState().currentNewsPage,
+                                      searchText: _model.textController.text,
+                                    );
+
+                                    if ((_model.apiResult4pqsearch?.succeeded ??
+                                        true)) {
+                                      FFAppState().totalNewsPage =
+                                          functions.getDivideVars(
+                                              getJsonField(
+                                                (_model.apiResult4pqsearch
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.totalCount''',
+                                              ),
+                                              10);
+                                      safeSetState(() {});
+                                    }
+
+                                    safeSetState(() {});
+                                  },
                                   autofocus: false,
                                   obscureText: false,
                                   decoration: InputDecoration(
@@ -348,6 +376,18 @@ class _LatestPropertiesListPageWidgetState
                                               r'''$.propertyId''',
                                             ),
                                             ParamType.int,
+                                          ),
+                                          'propertyAllImages': serializeParam(
+                                            (getJsonField(
+                                              latestPropertyListItem,
+                                              r'''$.propertyImagesURL''',
+                                              true,
+                                            ) as List)
+                                                .map<String>(
+                                                    (s) => s.toString())
+                                                .toList(),
+                                            ParamType.String,
+                                            isList: true,
                                           ),
                                         }.withoutNulls,
                                       );

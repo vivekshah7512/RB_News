@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -165,7 +166,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
             body: SafeArea(
               top: true,
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20.0, 25.0, 20.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(12.0, 25.0, 12.0, 0.0),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
@@ -324,7 +325,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                   }
                                 },
                                 child: Container(
-                                  width: 160.0,
+                                  width:
+                                      MediaQuery.sizeOf(context).width * 0.45,
                                   height: 52.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
@@ -363,6 +365,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               fontFamily: 'Readex Pro',
                                               color: Color(0xFF1A1A1A),
                                               letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                       ),
                                     ]
@@ -392,7 +395,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                   );
                                 },
                                 child: Container(
-                                  width: 160.0,
+                                  width:
+                                      MediaQuery.sizeOf(context).width * 0.45,
                                   height: 52.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
@@ -431,6 +435,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               fontFamily: 'Readex Pro',
                                               color: Color(0xFF1A1A1A),
                                               letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                       ),
                                     ]
@@ -440,13 +445,13 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                 ),
                               ),
                             ]
-                                .divide(SizedBox(width: 2.0))
+                                .divide(SizedBox(width: 8.0))
                                 .addToStart(SizedBox(width: 0.0))
                                 .addToEnd(SizedBox(width: 0.0)),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 15.0, 0.0, 0.0),
+                                0.0, 12.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -472,7 +477,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                     );
                                   },
                                   child: Container(
-                                    width: 160.0,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.45,
                                     height: 52.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
@@ -512,6 +518,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                 fontFamily: 'Readex Pro',
                                                 color: Color(0xFF1A1A1A),
                                                 letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                         ),
                                       ]
@@ -541,7 +548,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                     );
                                   },
                                   child: Container(
-                                    width: 160.0,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.45,
                                     height: 52.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
@@ -581,6 +589,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                 fontFamily: 'Readex Pro',
                                                 color: Color(0xFF1A1A1A),
                                                 letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                         ),
                                       ]
@@ -590,14 +599,14 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                   ),
                                 ),
                               ]
-                                  .divide(SizedBox(width: 2.0))
+                                  .divide(SizedBox(width: 8.0))
                                   .addToStart(SizedBox(width: 0.0))
                                   .addToEnd(SizedBox(width: 0.0)),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 15.0, 0.0, 0.0),
+                                0.0, 12.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -623,7 +632,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                     );
                                   },
                                   child: Container(
-                                    width: 160.0,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.45,
                                     height: 52.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
@@ -663,6 +673,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                 fontFamily: 'Readex Pro',
                                                 color: Color(0xFF1A1A1A),
                                                 letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                         ),
                                       ]
@@ -680,7 +691,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                     context.pushNamed('HoroscopePage');
                                   },
                                   child: Container(
-                                    width: 160.0,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.45,
                                     height: 52.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
@@ -720,6 +732,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                 fontFamily: 'Readex Pro',
                                                 color: Color(0xFF1A1A1A),
                                                 letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                         ),
                                       ]
@@ -729,7 +742,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                   ),
                                 ),
                               ]
-                                  .divide(SizedBox(width: 2.0))
+                                  .divide(SizedBox(width: 8.0))
                                   .addToStart(SizedBox(width: 0.0))
                                   .addToEnd(SizedBox(width: 0.0)),
                             ),
@@ -899,8 +912,9 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               );
                                             },
                                             child: Container(
-                                              width: double.infinity,
-                                              height: 140.0,
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  1.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -938,7 +952,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                           r'''$.newsImage''',
                                                         ).toString(),
                                                         width: 98.0,
-                                                        height: double.infinity,
+                                                        height: 128.0,
                                                         fit: BoxFit.cover,
                                                         errorBuilder: (context,
                                                                 error,
@@ -946,8 +960,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                             Image.asset(
                                                           'assets/images/error_image.png',
                                                           width: 98.0,
-                                                          height:
-                                                              double.infinity,
+                                                          height: 128.0,
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ),
@@ -1045,93 +1058,56 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                               ],
                                                             ),
                                                           ),
-                                                          Align(
-                                                            alignment:
-                                                                AlignmentDirectional(
-                                                                    -1.0, 0.0),
-                                                            child: Text(
-                                                              getJsonField(
-                                                                newsListItem,
-                                                                r'''$.newsTitle''',
-                                                              )
-                                                                  .toString()
-                                                                  .maybeHandleOverflow(
-                                                                    maxChars:
-                                                                        58,
-                                                                    replacement:
-                                                                        '…',
-                                                                  ),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              maxLines: 2,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Readex Pro',
-                                                                    color: Color(
-                                                                        0xFF4D4D4D),
-                                                                    fontSize:
-                                                                        15.0,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                            ),
+                                                          Text(
+                                                            getJsonField(
+                                                              newsListItem,
+                                                              r'''$.newsTitle''',
+                                                            )
+                                                                .toString()
+                                                                .maybeHandleOverflow(
+                                                                  maxChars: 58,
+                                                                  replacement:
+                                                                      '…',
+                                                                ),
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            maxLines: 2,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  color: Color(
+                                                                      0xFF4D4D4D),
+                                                                  fontSize:
+                                                                      15.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
                                                           ),
-                                                          Align(
-                                                            alignment:
-                                                                AlignmentDirectional(
-                                                                    -1.0, 0.0),
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          8.0,
-                                                                          2.0,
-                                                                          0.0),
-                                                              child: Text(
-                                                                getJsonField(
-                                                                  newsListItem,
-                                                                  r'''$.newsDescription''',
-                                                                )
-                                                                    .toString()
-                                                                    .maybeHandleOverflow(
-                                                                      maxChars:
-                                                                          58,
-                                                                      replacement:
-                                                                          '…',
-                                                                    ),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                maxLines: 2,
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Color(
-                                                                          0xFF808080),
-                                                                      fontSize:
-                                                                          14.0,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                              ),
+                                                          Container(
+                                                            width:
+                                                                double.infinity,
+                                                            height: 42.0,
+                                                            child:
+                                                                custom_widgets
+                                                                    .HtmlViewer(
+                                                              width: double
+                                                                  .infinity,
+                                                              height: 42.0,
+                                                              htmlContent:
+                                                                  getJsonField(
+                                                                newsListItem,
+                                                                r'''$.newsDescription''',
+                                                              ).toString(),
                                                             ),
                                                           ),
                                                         ].divide(SizedBox(
-                                                            height: 5.0)),
+                                                            height: 8.0)),
                                                       ),
                                                     ),
                                                   ),
@@ -1252,7 +1228,6 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                         propertyList[propertyListIndex];
                                     return Container(
                                       width: double.infinity,
-                                      height: 134.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
@@ -1303,17 +1278,17 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                 child: Image.network(
                                                   getJsonField(
                                                     propertyListItem,
-                                                    r'''$.propertyThumbnail''',
+                                                    r'''$.propertyImagesURL[0]''',
                                                   ).toString(),
                                                   width: 98.0,
-                                                  height: double.infinity,
+                                                  height: 128.0,
                                                   fit: BoxFit.cover,
                                                   errorBuilder: (context, error,
                                                           stackTrace) =>
                                                       Image.asset(
                                                     'assets/images/error_image.png',
                                                     width: 98.0,
-                                                    height: double.infinity,
+                                                    height: 128.0,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -1408,76 +1383,62 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                         ),
                                                       ],
                                                     ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -1.0, 0.0),
-                                                      child: Text(
-                                                        getJsonField(
-                                                          propertyListItem,
-                                                          r'''$.propertyName''',
-                                                        )
-                                                            .toString()
-                                                            .maybeHandleOverflow(
-                                                              maxChars: 58,
-                                                              replacement: '…',
-                                                            ),
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        maxLines: 2,
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              fontFamily:
-                                                                  'Readex Pro',
-                                                              color: Color(
-                                                                  0xFF4D4D4D),
-                                                              fontSize: 15.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                      ),
+                                                    Text(
+                                                      getJsonField(
+                                                        propertyListItem,
+                                                        r'''$.propertyName''',
+                                                      )
+                                                          .toString()
+                                                          .maybeHandleOverflow(
+                                                            maxChars: 58,
+                                                            replacement: '…',
+                                                          ),
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      maxLines: 2,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            color: Color(
+                                                                0xFF4D4D4D),
+                                                            fontSize: 15.0,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                     ),
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -1.0, 0.0),
-                                                      child: Text(
-                                                        getJsonField(
-                                                          propertyListItem,
-                                                          r'''$.propertyDescription''',
-                                                        )
-                                                            .toString()
-                                                            .maybeHandleOverflow(
-                                                              maxChars: 58,
-                                                              replacement: '…',
-                                                            ),
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        maxLines: 2,
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              fontFamily:
-                                                                  'Readex Pro',
-                                                              color: Color(
-                                                                  0xFF808080),
-                                                              fontSize: 14.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
-                                                      ),
+                                                    Text(
+                                                      getJsonField(
+                                                        propertyListItem,
+                                                        r'''$.propertyDescription''',
+                                                      )
+                                                          .toString()
+                                                          .maybeHandleOverflow(
+                                                            maxChars: 58,
+                                                            replacement: '…',
+                                                          ),
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      maxLines: 2,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            color: Color(
+                                                                0xFF808080),
+                                                            fontSize: 14.0,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
                                                     ),
                                                   ].divide(
-                                                      SizedBox(height: 5.0)),
+                                                      SizedBox(height: 8.0)),
                                                 ),
                                               ),
                                             ),

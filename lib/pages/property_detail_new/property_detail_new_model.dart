@@ -6,6 +6,7 @@ import 'dart:ui';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'property_detail_new_widget.dart' show PropertyDetailNewWidget;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -61,6 +62,17 @@ class PropertyDetailNewModel extends FlutterFlowModel<PropertyDetailNewWidget> {
                 'reference=SiEKFAoKcHJvcGVydHlJZBIGanI0dnpsKgMSATFyBAgBIAFQAVoKcHJvcGVydHlJZA==',
             name: 'int',
             nullable: false,
+          ),
+          'propertyAllImages': debugSerializeParam(
+            widget?.propertyAllImages,
+            ParamType.String,
+            isList: true,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailNew',
+            searchReference:
+                'reference=SiUKGwoRcHJvcGVydHlBbGxJbWFnZXMSBmkxamZxdHIGEgIIAyABUAFaEXByb3BlcnR5QWxsSW1hZ2Vz',
+            name: 'String',
+            nullable: true,
           )
         }.withoutNulls,
         localStates: {

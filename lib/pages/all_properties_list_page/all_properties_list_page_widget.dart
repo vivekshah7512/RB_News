@@ -223,6 +223,34 @@ class _AllPropertiesListPageWidgetState
                                 child: TextFormField(
                                   controller: _model.textController,
                                   focusNode: _model.textFieldFocusNode,
+                                  onFieldSubmitted: (_) async {
+                                    FFAppState().currentNewsPage = 1;
+                                    safeSetState(() {});
+                                    _model.apiResult4pqs = await RBNewsAPIGroup
+                                        .propertyListCall
+                                        .call(
+                                      authToken: FFAppState().authTokenAPI,
+                                      pageNumber: FFAppState().currentNewsPage,
+                                      pageSize: '10',
+                                      searchText: _model.textController.text,
+                                    );
+
+                                    if ((_model.apiResult4pqs?.succeeded ??
+                                        true)) {
+                                      FFAppState().totalNewsPage =
+                                          functions.getDivideVars(
+                                              getJsonField(
+                                                (_model.apiResult4pqs
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.totalCount''',
+                                              ),
+                                              10);
+                                      safeSetState(() {});
+                                    }
+
+                                    safeSetState(() {});
+                                  },
                                   autofocus: false,
                                   obscureText: false,
                                   decoration: InputDecoration(
@@ -262,7 +290,7 @@ class _AllPropertiesListPageWidgetState
                           authToken: FFAppState().authTokenAPI,
                           pageNumber: FFAppState().currentNewsPage,
                           pageSize: '10',
-                          searchText: ' ',
+                          searchText: _model.textController.text,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -347,6 +375,18 @@ class _AllPropertiesListPageWidgetState
                                               r'''$.propertyId''',
                                             ),
                                             ParamType.int,
+                                          ),
+                                          'propertyAllImages': serializeParam(
+                                            (getJsonField(
+                                              allPropertyListItem,
+                                              r'''$.propertyImagesURL''',
+                                              true,
+                                            ) as List)
+                                                .map<String>(
+                                                    (s) => s.toString())
+                                                .toList(),
+                                            ParamType.String,
+                                            isList: true,
                                           ),
                                         }.withoutNulls,
                                       );

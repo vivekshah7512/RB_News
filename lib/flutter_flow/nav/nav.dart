@@ -265,6 +265,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               'propertyId',
               ParamType.int,
             ),
+            propertyAllImages: params.getParam<String>(
+              'propertyAllImages',
+              ParamType.String,
+              isList: true,
+            ),
           ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
