@@ -1,9 +1,11 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/logout_alert_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/pages/edit_profile_popup/edit_profile_popup_widget.dart';
 import 'dart:ui';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -116,9 +118,9 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
                   child: Text(
-                    'મારું પ્રોફાઇલ',
+                    'મારી પ્રોફાઇલ',
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
                           fontFamily: 'Outfit',
                           letterSpacing: 0.0,
@@ -141,7 +143,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                           ),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(12.0),
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Padding(
                       padding:
@@ -152,90 +154,134 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                         children: [
                           Stack(
                             children: [
-                              Container(
-                                width: 350.0,
-                                height: 62.0,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: Image.asset(
-                                      'assets/images/profileBG.png',
-                                    ).image,
-                                  ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(0.0),
+                                  bottomRight: Radius.circular(0.0),
+                                  topLeft: Radius.circular(16.0),
+                                  topRight: Radius.circular(16.0),
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 10.0, 0.0),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          await showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            enableDrag: false,
-                                            context: context,
-                                            builder: (context) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  FocusScope.of(context)
-                                                      .unfocus();
-                                                  FocusManager
-                                                      .instance.primaryFocus
-                                                      ?.unfocus();
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      MediaQuery.viewInsetsOf(
-                                                          context),
-                                                  child: EditProfilePopupWidget(
-                                                    userName:
-                                                        FFAppState().userName,
-                                                    userPhone: FFAppState()
-                                                        .userContactNumber,
+                                child: Image.asset(
+                                  'assets/images/profileBG.png',
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height: 60.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional(0.0, -1.0),
+                                child: Container(
+                                  width: 350.0,
+                                  height: 62.5,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(0.0),
+                                      bottomRight: Radius.circular(0.0),
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 15.0, 15.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            await showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              enableDrag: false,
+                                              context: context,
+                                              builder: (context) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    FocusScope.of(context)
+                                                        .unfocus();
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        MediaQuery.viewInsetsOf(
+                                                            context),
+                                                    child:
+                                                        EditProfilePopupWidget(
+                                                      userName:
+                                                          FFAppState().userName,
+                                                      userPhone: FFAppState()
+                                                          .userContactNumber,
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                          ).then(
-                                              (value) => safeSetState(() {}));
-                                        },
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.asset(
-                                            'assets/images/PencilSimple.png',
-                                            width: 30.0,
-                                            height: 30.0,
-                                            fit: BoxFit.cover,
+                                                );
+                                              },
+                                            ).then(
+                                                (value) => safeSetState(() {}));
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/PencilSimple.png',
+                                              width: 24.0,
+                                              height: 24.0,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     15.0, 30.0, 0.0, 0.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(27.0),
-                                    bottomRight: Radius.circular(27.0),
-                                    topLeft: Radius.circular(27.0),
-                                    topRight: Radius.circular(27.0),
+                                child: Container(
+                                  width: 56.0,
+                                  height: 56.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFEEF1FF),
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(28.0),
+                                      bottomRight: Radius.circular(28.0),
+                                      topLeft: Radius.circular(28.0),
+                                      topRight: Radius.circular(28.0),
+                                    ),
+                                    border: Border.all(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      width: 5.0,
+                                    ),
                                   ),
-                                  child: Image.network(
-                                    'https://picsum.photos/seed/888/600',
-                                    width: 54.0,
-                                    height: 54.0,
-                                    fit: BoxFit.cover,
+                                  child: Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          2.0, 2.0, 2.0, 2.0),
+                                      child: Text(
+                                        functions.getInitalLetter(
+                                            FFAppState().userName),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              fontSize: 22.0,
+                                              letterSpacing: 0.0,
+                                            ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -243,7 +289,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 12.0, 0.0, 0.0),
+                                0.0, 9.0, 0.0, 0.0),
                             child: Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
@@ -258,7 +304,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                             ),
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 8.0, 0.0, 8.0),
+                                  0.0, 0.0, 0.0, 8.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -303,7 +349,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           child: Image.asset(
-                                            'assets/images/call.png',
+                                            'assets/images/call_blue.png',
                                             width: 20.0,
                                             height: 20.0,
                                             fit: BoxFit.cover,
@@ -321,6 +367,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                                 .labelMedium
                                                 .override(
                                                   fontFamily: 'Readex Pro',
+                                                  fontSize: 16.0,
                                                   letterSpacing: 0.0,
                                                 ),
                                           ),
@@ -368,13 +415,14 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                   Expanded(
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 0.0, 0.0, 0.0),
+                                          12.0, 0.0, 0.0, 1.0),
                                       child: Text(
                                         FFAppState().userEmail,
                                         style: FlutterFlowTheme.of(context)
                                             .labelMedium
                                             .override(
                                               fontFamily: 'Readex Pro',
+                                              fontSize: 16.0,
                                               letterSpacing: 0.0,
                                             ),
                                       ),
@@ -405,7 +453,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                           ),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(12.0),
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Padding(
                       padding:
@@ -444,7 +492,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 8.0, 0.0, 0.0),
+                                        0.0, 5.0, 0.0, 0.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
@@ -477,7 +525,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                                     fontFamily:
                                                         'Plus Jakarta Sans',
                                                     color: Color(0xFF14181B),
-                                                    fontSize: 14.0,
+                                                    fontSize: 16.0,
                                                     letterSpacing: 0.0,
                                                     fontWeight: FontWeight.w500,
                                                   ),
@@ -535,7 +583,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 8.0, 0.0, 8.0),
+                                        0.0, 10.0, 0.0, 5.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
@@ -568,7 +616,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                                     fontFamily:
                                                         'Plus Jakarta Sans',
                                                     color: Color(0xFF14181B),
-                                                    fontSize: 14.0,
+                                                    fontSize: 16.0,
                                                     letterSpacing: 0.0,
                                                     fontWeight: FontWeight.w500,
                                                   ),
@@ -608,19 +656,33 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 5.0, 0.0, 0.0),
+                                0.0, 7.0, 0.0, 0.0),
                             child: InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                FFAppState().authTokenAPI = '';
-                                FFAppState().userIdAPI = 0;
-                                FFAppState().isUserLoggedIn = false;
-                                safeSetState(() {});
-
-                                context.pushNamed('LoginPage');
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        FocusScope.of(context).unfocus();
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            MediaQuery.viewInsetsOf(context),
+                                        child: LogoutAlertWidget(),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
                               },
                               child: Container(
                                 width: double.infinity,
@@ -660,7 +722,7 @@ class _UserDetailPageWidgetState extends State<UserDetailPageWidget>
                                                   fontFamily:
                                                       'Plus Jakarta Sans',
                                                   color: Color(0xFF14181B),
-                                                  fontSize: 14.0,
+                                                  fontSize: 16.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight: FontWeight.w500,
                                                 ),

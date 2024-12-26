@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -138,8 +139,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                               color: Color(0xFF808080),
                               size: 24.0,
                             ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
+                            onPressed: () async {
+                              context.safePop();
                             },
                           ),
                         ),
@@ -231,7 +232,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                     ),
                     Form(
                       key: _model.formKey,
-                      autovalidateMode: AutovalidateMode.always,
+                      autovalidateMode: AutovalidateMode.disabled,
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -245,6 +246,17 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                                 child: TextFormField(
                                   controller: _model.loginEmailTextController,
                                   focusNode: _model.loginEmailFocusNode,
+                                  onChanged: (_) => EasyDebounce.debounce(
+                                    '_model.loginEmailTextController',
+                                    Duration(milliseconds: 2000),
+                                    () async {
+                                      if (_model.formKey.currentState == null ||
+                                          !_model.formKey.currentState!
+                                              .validate()) {
+                                        return;
+                                      }
+                                    },
+                                  ),
                                   autofocus: false,
                                   textInputAction: TextInputAction.done,
                                   obscureText: false,
@@ -386,14 +398,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                                             style: TextStyle(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryText,
+                                                      .secondaryBackground,
+                                              fontSize: 14.0,
                                             ),
                                           ),
                                           duration:
                                               Duration(milliseconds: 4000),
-                                          backgroundColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .secondary,
+                                          backgroundColor: Color(0xFF748187),
                                         ),
                                       );
                                     }
@@ -408,13 +419,12 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                                           ).toString(),
                                           style: TextStyle(
                                             color: FlutterFlowTheme.of(context)
-                                                .primaryText,
+                                                .secondaryBackground,
+                                            fontSize: 14.0,
                                           ),
                                         ),
                                         duration: Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .secondary,
+                                        backgroundColor: Color(0xFF748187),
                                       ),
                                     );
                                   }
@@ -468,50 +478,33 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                               ),
                               Align(
                                 alignment: AlignmentDirectional(-0.02, 0.04),
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed(
-                                      'HomePage',
-                                      queryParameters: {
-                                        'hintFlag': serializeParam(
-                                          0,
-                                          ParamType.int,
-                                        ),
-                                      }.withoutNulls,
-                                    );
-                                  },
-                                  child: Container(
-                                    width: 150.0,
-                                    height: 25.0,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius: BorderRadius.circular(17.0),
-                                      border: Border.all(
-                                        color: Color(0xFFF2F2F2),
-                                        width: 1.0,
-                                      ),
+                                child: Container(
+                                  width: 150.0,
+                                  height: 25.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    borderRadius: BorderRadius.circular(17.0),
+                                    border: Border.all(
+                                      color: Color(0xFFF2F2F2),
+                                      width: 1.0,
                                     ),
+                                  ),
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Align(
                                     alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: Text(
-                                        'તમારું એકાઉન્ટ નથી?',
-                                        textAlign: TextAlign.center,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Readex Pro',
-                                              color: Color(0xFF808080),
-                                              fontSize: 13.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                      ),
+                                    child: Text(
+                                      'તમારું એકાઉન્ટ નથી?',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: Color(0xFF808080),
+                                            fontSize: 13.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -528,17 +521,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> with RouteAware {
                             0.0, 25.0, 0.0, 25.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            context.pushNamed(
-                              'RegistrationPage',
-                              extra: <String, dynamic>{
-                                kTransitionInfoKey: TransitionInfo(
-                                  hasTransition: true,
-                                  transitionType:
-                                      PageTransitionType.rightToLeft,
-                                  duration: Duration(milliseconds: 800),
-                                ),
-                              },
-                            );
+                            context.pushNamed('RegistrationPage');
                           },
                           text: 'એકાઉન્ટ બનાવો',
                           options: FFButtonOptions(

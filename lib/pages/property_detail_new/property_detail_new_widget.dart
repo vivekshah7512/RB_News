@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -41,21 +42,10 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text('Images'),
-            content: Text(widget!.propertyAllImages!.length.toString()),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
+      _model.tapImage = widget!.propertyAllImages?.firstOrNull;
+      safeSetState(() {});
+      _model.selectedImageId = 0;
+      safeSetState(() {});
     });
   }
 
@@ -163,7 +153,7 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: MediaQuery.sizeOf(context).height * 0.62,
+                      height: 451.0,
                       child: Stack(
                         children: [
                           Align(
@@ -171,21 +161,16 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                getJsonField(
-                                  propertyDetailNewPropertyDetailResponse
-                                      .jsonBody,
-                                  r'''$.data.propertyThumbnail''',
-                                ).toString(),
+                                _model.tapImage!,
                                 width: MediaQuery.sizeOf(context).width * 1.0,
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.623,
+                                height: MediaQuery.sizeOf(context).height * 1.0,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
                                     Image.asset(
                                   'assets/images/error_image.png',
                                   width: MediaQuery.sizeOf(context).width * 1.0,
                                   height:
-                                      MediaQuery.sizeOf(context).height * 0.623,
+                                      MediaQuery.sizeOf(context).height * 1.0,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -195,7 +180,7 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                             alignment: AlignmentDirectional(0.0, 1.0),
                             child: Container(
                               width: MediaQuery.sizeOf(context).width * 1.0,
-                              height: 18.0,
+                              height: 20.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
@@ -213,10 +198,10 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                               alignment: AlignmentDirectional(0.0, 1.0),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 0.0, 12.0, 30.0),
+                                    24.0, 0.0, 24.0, 42.0),
                                 child: Container(
                                   width: MediaQuery.sizeOf(context).width * 1.0,
-                                  height: 100.0,
+                                  height: 60.0,
                                   decoration: BoxDecoration(
                                     color: Color(0xE6FFFFFF),
                                     boxShadow: [
@@ -264,21 +249,71 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                             final propertyImagesItem =
                                                 propertyImages[
                                                     propertyImagesIndex];
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                              child: Image.network(
-                                                'https://picsum.photos/seed/125/600',
-                                                width: 80.0,
-                                                height: 80.0,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                        stackTrace) =>
-                                                    Image.asset(
-                                                  'assets/images/error_image.png',
-                                                  width: 80.0,
-                                                  height: 80.0,
-                                                  fit: BoxFit.cover,
+                                            return InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                _model.tapImage = widget!
+                                                    .propertyAllImages
+                                                    ?.elementAtOrNull(
+                                                        propertyImagesIndex);
+                                                safeSetState(() {});
+                                                _model.selectedImageId =
+                                                    propertyImagesIndex;
+                                                safeSetState(() {});
+                                              },
+                                              child: Container(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0),
+                                                  border: Border.all(
+                                                    color: Color(0xFF5374FF),
+                                                    width: _model
+                                                                .selectedImageId ==
+                                                            propertyImagesIndex
+                                                        ? 4.0
+                                                        : 0.0,
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(
+                                                      valueOrDefault<double>(
+                                                    _model.selectedImageId ==
+                                                            propertyImagesIndex
+                                                        ? 4.0
+                                                        : 0.0,
+                                                    0.0,
+                                                  )),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    child: Image.network(
+                                                      (widget!
+                                                          .propertyAllImages!
+                                                          .elementAtOrNull(
+                                                              propertyImagesIndex))!,
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (context,
+                                                              error,
+                                                              stackTrace) =>
+                                                          Image.asset(
+                                                        'assets/images/error_image.png',
+                                                        width: double.infinity,
+                                                        height: double.infinity,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             );
@@ -303,15 +338,15 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                           borderRadius: BorderRadius.circular(0.0),
                         ),
                         alignment: AlignmentDirectional(0.0, 1.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 0.0, 0.0, 0.0),
-                              child: Row(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              12.0, 0.0, 12.0, 0.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Container(
@@ -333,7 +368,9 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                                 .override(
                                                   fontFamily: 'Readex Pro',
                                                   color: Color(0xFF5374FF),
+                                                  fontSize: 16.0,
                                                   letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                           ),
                                         ),
@@ -343,7 +380,7 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                           child: Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    7.0, 3.0, 10.0, 3.0),
+                                                    5.0, 3.0, 10.0, 3.0),
                                             child: Text(
                                               getJsonField(
                                                 propertyDetailNewPropertyDetailResponse
@@ -357,6 +394,7 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                                     fontFamily: 'Readex Pro',
                                                     color: Color(0xFF5374FF),
                                                     letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.w600,
                                                   ),
                                             ),
                                           ),
@@ -366,122 +404,120 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                   ),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 12.0, 12.0, 0.0),
-                              child: Text(
-                                getJsonField(
-                                  propertyDetailNewPropertyDetailResponse
-                                      .jsonBody,
-                                  r'''$.data.propertyName''',
-                                ).toString(),
-                                maxLines: 2,
-                                style: FlutterFlowTheme.of(context)
-                                    .titleLarge
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      letterSpacing: 0.0,
-                                    ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 6.0, 12.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.asset(
-                                      'assets/images/location.png',
-                                      width: 15.0,
-                                      height: 15.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Text(
-                                    getJsonField(
-                                      propertyDetailNewPropertyDetailResponse
-                                          .jsonBody,
-                                      r'''$.data.propertyLocation''',
-                                    ).toString(),
-                                    maxLines: 1,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodySmall
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          letterSpacing: 0.0,
-                                        ),
-                                  ),
-                                ].divide(SizedBox(width: 4.0)),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 8.0, 12.0, 0.0),
-                              child: Container(
-                                width: double.infinity,
-                                child: custom_widgets.ReadMoreWidget(
-                                  width: double.infinity,
-                                  textContent: getJsonField(
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 16.0, 0.0, 0.0),
+                                child: Text(
+                                  getJsonField(
                                     propertyDetailNewPropertyDetailResponse
                                         .jsonBody,
-                                    r'''$.data.propertyDescription''',
+                                    r'''$.data.propertyName''',
                                   ).toString(),
-                                  trimLines: 3,
-                                  trimCollapsedText: 'વધુ વાંચો',
-                                  trimExpandedText: 'ઓછું વાંચો',
-                                  colorClickableText:
-                                      FlutterFlowTheme.of(context).primary,
-                                  isHtml: true,
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleLarge
+                                      .override(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF1A1A1A),
+                                        fontSize: 20.0,
+                                        letterSpacing: 0.0,
+                                      ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 15.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        12.0, 4.0, 0.0, 0.0),
-                                    child: Text(
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 6.0, 0.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        'assets/images/location.png',
+                                        width: 20.0,
+                                        height: 20.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Text(
+                                      getJsonField(
+                                        propertyDetailNewPropertyDetailResponse
+                                            .jsonBody,
+                                        r'''$.data.propertyLocation''',
+                                      ).toString(),
+                                      maxLines: 1,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodySmall
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: Color(0xFF808080),
+                                            fontSize: 14.0,
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                  ].divide(SizedBox(width: 10.0)),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 6.0, 0.0, 0.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  child: custom_widgets.ReadMoreWidget(
+                                    width: double.infinity,
+                                    textContent: getJsonField(
+                                      propertyDetailNewPropertyDetailResponse
+                                          .jsonBody,
+                                      r'''$.data.propertyDescription''',
+                                    ).toString(),
+                                    trimLines: 3,
+                                    trimCollapsedText: 'ઓછું વાંચો',
+                                    trimExpandedText: 'વધુ વાંચો',
+                                    colorClickableText:
+                                        FlutterFlowTheme.of(context).primary,
+                                    isHtml: true,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 16.0, 0.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
                                       '₹',
                                       style: FlutterFlowTheme.of(context)
                                           .titleLarge
                                           .override(
                                             fontFamily: 'Outfit',
+                                            color: Color(0xFF1A1A1A),
+                                            fontSize: 24.0,
                                             letterSpacing: 0.0,
                                           ),
                                     ),
-                                  ),
-                                  Text(
-                                    getJsonField(
-                                      propertyDetailNewPropertyDetailResponse
-                                          .jsonBody,
-                                      r'''$.data.propertyPrice''',
-                                    ).toString(),
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleLarge
-                                        .override(
-                                          fontFamily: 'Outfit',
-                                          letterSpacing: 0.0,
-                                        ),
-                                  ),
-                                ].divide(SizedBox(width: 2.0)),
+                                    Text(
+                                      functions.formatAmount(getJsonField(
+                                        propertyDetailNewPropertyDetailResponse
+                                            .jsonBody,
+                                        r'''$.data.propertyPrice''',
+                                      )),
+                                      maxLines: 1,
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleLarge
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 24.0,
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                  ].divide(SizedBox(width: 3.0)),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 0.0, 12.0, 0.0),
-                              child: Row(
+                              Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
                                     'કિંમત',
@@ -489,9 +525,9 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                         .bodyMedium
                                         .override(
                                           fontFamily: 'Readex Pro',
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
+                                          color: Color(0xFF808080),
                                           letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                   ),
                                   Row(
@@ -524,8 +560,8 @@ class _PropertyDetailNewWidgetState extends State<PropertyDetailNewWidget>
                                   ),
                                 ].divide(SizedBox(width: 8.0)),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

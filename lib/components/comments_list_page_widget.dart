@@ -62,15 +62,19 @@ class _CommentsListPageWidgetState extends State<CommentsListPageWidget>
     context.watch<FFAppState>();
 
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 16.0),
+      padding: EdgeInsetsDirectional.fromSTEB(16.0, 14.0, 16.0, 16.0),
       child: Container(
         width: MediaQuery.sizeOf(context).width * 1.0,
+        height: MediaQuery.sizeOf(context).height * 0.5,
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(context).height * 1.0,
+        ),
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsetsDirectional.fromSTEB(24.0, 50.0, 24.0, 24.0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -191,16 +195,17 @@ class _CommentsListPageWidgetState extends State<CommentsListPageWidget>
                                   r'''$.message''',
                                 ).toString(),
                                 style: TextStyle(
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  fontSize: 14.0,
                                 ),
                               ),
                               duration: Duration(milliseconds: 2500),
-                              backgroundColor:
-                                  FlutterFlowTheme.of(context).secondary,
+                              backgroundColor: Color(0xFF748187),
                             ),
                           );
-                          Navigator.pop(context);
+
+                          safeSetState(() {});
                         } else {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -211,13 +216,13 @@ class _CommentsListPageWidgetState extends State<CommentsListPageWidget>
                                   r'''$.message''',
                                 ).toString(),
                                 style: TextStyle(
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  fontSize: 14.0,
                                 ),
                               ),
                               duration: Duration(milliseconds: 2500),
-                              backgroundColor:
-                                  FlutterFlowTheme.of(context).secondary,
+                              backgroundColor: Color(0xFF748187),
                             ),
                           );
                         }
@@ -520,16 +525,17 @@ class _CommentsListPageWidgetState extends State<CommentsListPageWidget>
                                                                       TextStyle(
                                                                     color: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .primaryText,
+                                                                        .secondaryBackground,
+                                                                    fontSize:
+                                                                        14.0,
                                                                   ),
                                                                 ),
                                                                 duration: Duration(
                                                                     milliseconds:
                                                                         4000),
                                                                 backgroundColor:
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .secondary,
+                                                                    Color(
+                                                                        0xFF748187),
                                                               ),
                                                             );
                                                             _model.apiResult7qu =

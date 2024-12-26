@@ -20,6 +20,9 @@ class FFAppState extends ChangeNotifier {
   Future initializePersistedState() async {
     prefs = await SharedPreferences.getInstance();
     _safeInit(() {
+      _userEmail = prefs.getString('ff_userEmail') ?? _userEmail;
+    });
+    _safeInit(() {
       _userId = prefs.getString('ff_userId') ?? _userId;
     });
     _safeInit(() {
@@ -78,7 +81,7 @@ class FFAppState extends ChangeNotifier {
   String get userEmail => _userEmail;
   set userEmail(String value) {
     _userEmail = value;
-
+    prefs.setString('ff_userEmail', value);
     debugLogAppState(this);
   }
 
@@ -372,6 +375,14 @@ class FFAppState extends ChangeNotifier {
     selectedNewsCategoryTop.insert(index, value);
   }
 
+  int _pageSize = 10;
+  int get pageSize => _pageSize;
+  set pageSize(int value) {
+    _pageSize = value;
+
+    debugLogAppState(this);
+  }
+
   Map<String, DebugDataField> toDebugSerializableMap() => {
         'TimerSeconds': debugSerializeParam(
           TimerSeconds,
@@ -635,6 +646,16 @@ class FFAppState extends ChangeNotifier {
           searchReference:
               'reference=ClAKIwoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3ASCDhtMWIwb3pvcikSAggUKiMSIQoYU2VsZWN0ZWROZXdzQ2F0ZWdvcnlEYXRhEgUzcnVlcFoXc2VsZWN0ZWROZXdzQ2F0ZWdvcnlUb3A=',
           name: 'SelectedNewsCategoryData',
+          nullable: false,
+        ),
+        'pageSize': debugSerializeParam(
+          pageSize,
+          ParamType.int,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=ChoKFAoIcGFnZVNpemUSCG5mM2xtaHhjcgIIAVoIcGFnZVNpemU=',
+          name: 'int',
           nullable: false,
         )
       };

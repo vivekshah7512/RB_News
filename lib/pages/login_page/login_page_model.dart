@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'login_page_widget.dart' show LoginPageWidget;
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -42,10 +43,6 @@ class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
       BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Please enter your email id';
-    }
-
-    if (val.length < 1) {
-      return 'Requires at least 1 characters.';
     }
 
     if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {

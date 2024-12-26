@@ -38,8 +38,6 @@ const debugRouteLinkMap = {
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HomePage',
   '/newsDetailPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
-  '/propertyDetailPage':
-      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailPage',
   '/userDetailPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=UserDetailPage',
   '/allPropertiesListPage':
@@ -178,16 +176,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             newsId: params.getParam(
               'newsId',
               ParamType.String,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: 'PropertyDetailPage',
-          path: '/propertyDetailPage',
-          builder: (context, params) => PropertyDetailPageWidget(
-            propertyId: params.getParam(
-              'propertyId',
-              ParamType.int,
             ),
           ),
         ),

@@ -1,6 +1,6 @@
-import '/auth/custom_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
 import '/components/comments_list_page_widget.dart';
+import '/components/login_alert_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -40,6 +40,14 @@ class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
   }
 
   String? get viewMoreURL => _viewMoreURL;
+
+  int _currentNewsPageForSwipe = 0;
+  set currentNewsPageForSwipe(int value) {
+    _currentNewsPageForSwipe = value;
+    debugLogWidgetClass(this);
+  }
+
+  int get currentNewsPageForSwipe => _currentNewsPageForSwipe;
 
   ///  State fields for stateful widgets in this page.
 
@@ -125,6 +133,16 @@ class NewsDetailPageModel extends FlutterFlowModel<NewsDetailPageWidget> {
                 'reference=QiAKFAoLdmlld01vcmVVUkwSBXRseDAxKgISAHIECAMgAFABWgt2aWV3TW9yZVVSTGIOTmV3c0RldGFpbFBhZ2U=',
             name: 'String',
             nullable: true,
+          ),
+          'currentNewsPageForSwipe': debugSerializeParam(
+            currentNewsPageForSwipe,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailPage',
+            searchReference:
+                'reference=QigKIAoXY3VycmVudE5ld3NQYWdlRm9yU3dpcGUSBTd6cmo5cgQIASABUAFaF2N1cnJlbnROZXdzUGFnZUZvclN3aXBlYg5OZXdzRGV0YWlsUGFnZQ==',
+            name: 'int',
+            nullable: false,
           )
         },
         actionOutputs: {

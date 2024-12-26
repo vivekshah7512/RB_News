@@ -36,6 +36,37 @@ class ReadMoreWidget extends StatefulWidget {
 
 class _ReadMoreWidgetState extends State<ReadMoreWidget> {
   bool isExpanded = false;
+  bool showReadMore = false; // Flag to control visibility of Read More
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkTextOverflow());
+  }
+
+  void _checkTextOverflow() {
+    // Create a TextPainter to measure text size
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: widget.textContent,
+        style: TextStyle(
+          fontSize: 16.0, // Match font size used in the widget
+          color: Color(0xFF808080),
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      maxLines: widget.trimLines,
+    );
+
+    textPainter.layout(maxWidth: widget.width ?? double.infinity);
+
+    // Check if text overflows the trimLines
+    if (textPainter.didExceedMaxLines) {
+      setState(() {
+        showReadMore = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,37 +85,48 @@ class _ReadMoreWidgetState extends State<ReadMoreWidget> {
                       data: widget.textContent,
                       style: {
                         'body': Style(
-                          fontSize: FontSize(16.0),
-                          color: Colors.black,
+                          fontSize: FontSize(16.0), // Text size 16px
+                          color: Color(0xFF808080), // Text color #808080
+                          fontWeight: FontWeight.w400, // Text weight 400
                           maxLines: isExpanded ? null : widget.trimLines,
                           textOverflow: TextOverflow.ellipsis,
+                        ),
+                        'p': Style(
+                          margin: Margins
+                              .zero, // Remove default margin for <p> tags
+                          padding:
+                              HtmlPaddings.zero, // Remove padding for <p> tags
                         ),
                       },
                     )
                   : Text(
                       widget.textContent,
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                      style: TextStyle(
+                        fontSize: 16.0, // Text size 16px
+                        color: Color(0xFF808080), // Text color #808080
+                        fontWeight: FontWeight.w400, // Text weight 400
+                      ),
                       maxLines: isExpanded ? null : widget.trimLines,
                       overflow: TextOverflow.ellipsis,
                     ),
-              // "Read More" or "Read Less" button
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    isExpanded = !isExpanded;
-                  });
-                },
-                child: Text(
-                  isExpanded
-                      ? widget.trimExpandedText
-                      : widget.trimCollapsedText,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: widget.colorClickableText,
-                    fontWeight: FontWeight.bold,
+              if (showReadMore)
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
+                  child: Text(
+                    isExpanded
+                        ? widget.trimExpandedText
+                        : widget.trimCollapsedText,
+                    style: TextStyle(
+                      fontSize: 16.0, // Text size 16px
+                      color: widget.colorClickableText,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         );

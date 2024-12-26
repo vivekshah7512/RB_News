@@ -203,7 +203,7 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                       child: Text(
-                        'અમે તમારા નોંધાયેલ ઇમેઇલ સરનામે ${widget!.emailAddress} પર એક ચકાસણી કોડ મોકલ્યો છે.',
+                        'અમે તમારા નોંધાયેલ ઇમેઇલ સરનામે ${functions.maskEmail(widget!.emailAddress)} પર એક ચકાસણી કોડ મોકલ્યો છે.',
                         textAlign: TextAlign.start,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Readex Pro',
@@ -238,8 +238,8 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                         obscureText: false,
                         keyboardType: TextInputType.number,
                         pinTheme: PinTheme(
-                          fieldHeight: 44.0,
-                          fieldWidth: 44.0,
+                          fieldHeight: 48.0,
+                          fieldWidth: 72.0,
                           borderWidth: 1.0,
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(12.0),
@@ -266,179 +266,187 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                       ),
                     ),
                   ),
-                  if (FFAppState().resendTimerVisible == 0)
-                    FlutterFlowTimer(
-                      initialTime: _model.timerInitialTimeMs,
-                      getDisplayTime: (value) => StopWatchTimer.getDisplayTime(
-                        value,
-                        hours: false,
-                        milliSecond: false,
-                      ),
-                      controller: _model.timerController,
-                      updateStateInterval: Duration(milliseconds: 1000),
-                      onChanged: (value, displayTime, shouldUpdate) {
-                        _model.timerMilliseconds = value;
-                        _model.timerValue = displayTime;
-                        if (shouldUpdate) safeSetState(() {});
-                      },
-                      onEnded: () async {
-                        FFAppState().resendTimerVisible = 1;
-                        safeSetState(() {});
-                      },
-                      textAlign: TextAlign.center,
-                      style:
-                          FlutterFlowTheme.of(context).headlineSmall.override(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF808080),
-                                fontSize: 16.0,
-                                letterSpacing: 0.0,
-                              ),
-                    ),
-                  if (FFAppState().resendTimerVisible == 1)
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        FFAppState().resendTimerVisible = 0;
-                        safeSetState(() {});
-                        _model.timerController.timer
-                            .setPresetTime(mSec: 60000, add: false);
-                        _model.timerController.onResetTimer();
-
-                        _model.timerController.onStartTimer();
-                      },
-                      child: Text(
-                        'કોડ ફરીથી મોકલો',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color: Color(0xFFB3B3B3),
-                              fontSize: 16.0,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ),
-                  Flexible(
+                  Expanded(
                     child: Align(
                       alignment: AlignmentDirectional(0.0, 1.0),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            0.0, 25.0, 0.0, 25.0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            if (functions.isValidPincode(
-                                _model.pinCodeController!.text)) {
-                              _model.apiResultup6CopyCopy =
-                                  await RBNewsAPIGroup.oTPVarificationCall.call(
-                                email: widget!.emailAddress,
-                                otp: _model.pinCodeController!.text,
-                                latitude: FFAppState().latitude,
-                                longitude: FFAppState().longitude,
-                              );
-
-                              if ((_model.apiResultup6CopyCopy?.succeeded ??
-                                  true)) {
-                                await Future.delayed(
-                                    const Duration(milliseconds: 3000));
-                                FFAppState().authToken = getJsonField(
-                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
-                                  r'''$.data.jwtTokenString''',
-                                ).toString();
-                                FFAppState().isUserLoggedIn = true;
-                                FFAppState().userEmail = getJsonField(
-                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
-                                  r'''$.data.userEmail''',
-                                ).toString();
-                                FFAppState().userIdAPI = getJsonField(
-                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
-                                  r'''$.data.userId''',
-                                );
-                                FFAppState().authTokenAPI = getJsonField(
-                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
-                                  r'''$.data.jwtTokenString''',
-                                ).toString();
-                                FFAppState().userContactNumber = getJsonField(
-                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
-                                  r'''$.data.userContactNumber''',
-                                ).toString();
-                                FFAppState().userName = getJsonField(
-                                  (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
-                                  r'''$.data.userFullName''',
-                                ).toString();
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (FFAppState().resendTimerVisible == 0)
+                            FlutterFlowTimer(
+                              initialTime: _model.timerInitialTimeMs,
+                              getDisplayTime: (value) =>
+                                  StopWatchTimer.getDisplayTime(
+                                value,
+                                hours: false,
+                                milliSecond: false,
+                              ),
+                              controller: _model.timerController,
+                              updateStateInterval: Duration(milliseconds: 1000),
+                              onChanged: (value, displayTime, shouldUpdate) {
+                                _model.timerMilliseconds = value;
+                                _model.timerValue = displayTime;
+                                if (shouldUpdate) safeSetState(() {});
+                              },
+                              onEnded: () async {
+                                FFAppState().resendTimerVisible = 1;
                                 safeSetState(() {});
-
-                                context.pushNamed(
-                                  'HomePage',
-                                  queryParameters: {
-                                    'hintFlag': serializeParam(
-                                      1,
-                                      ParamType.int,
-                                    ),
-                                  }.withoutNulls,
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      getJsonField(
-                                        (_model.apiResultup6CopyCopy
-                                                ?.jsonBody ??
-                                            ''),
-                                        r'''$.message''',
-                                      ).toString(),
-                                      style: TextStyle(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                    ),
-                                    duration: Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).secondary,
+                              },
+                              textAlign: TextAlign.center,
+                              style: FlutterFlowTheme.of(context)
+                                  .headlineSmall
+                                  .override(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF808080),
+                                    fontSize: 16.0,
+                                    letterSpacing: 0.0,
                                   ),
-                                );
-                              }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Please enter valid OTP',
-                                    style: TextStyle(
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                                  ),
-                                  duration: Duration(milliseconds: 2500),
-                                  backgroundColor:
-                                      FlutterFlowTheme.of(context).secondary,
-                                ),
-                              );
-                            }
+                            ),
+                          if (FFAppState().resendTimerVisible == 1)
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                FFAppState().resendTimerVisible = 0;
+                                safeSetState(() {});
+                                _model.timerController.timer
+                                    .setPresetTime(mSec: 60000, add: false);
+                                _model.timerController.onResetTimer();
 
+                                _model.timerController.onStartTimer();
+                              },
+                              child: Text(
+                                'કોડ ફરીથી મોકલો',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: Color(0xFFB3B3B3),
+                                      fontSize: 16.0,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ),
+                        ].divide(SizedBox(width: 10.0)),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 25.0),
+                    child: FFButtonWidget(
+                      onPressed: () async {
+                        if (functions
+                            .isValidPincode(_model.pinCodeController!.text)) {
+                          _model.apiResultup6CopyCopy =
+                              await RBNewsAPIGroup.oTPVarificationCall.call(
+                            email: widget!.emailAddress,
+                            otp: _model.pinCodeController!.text,
+                            latitude: FFAppState().latitude,
+                            longitude: FFAppState().longitude,
+                          );
+
+                          if ((_model.apiResultup6CopyCopy?.succeeded ??
+                              true)) {
+                            await Future.delayed(
+                                const Duration(milliseconds: 3000));
+                            FFAppState().authToken = getJsonField(
+                              (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
+                              r'''$.data.jwtTokenString''',
+                            ).toString();
+                            FFAppState().isUserLoggedIn = true;
+                            FFAppState().userEmail = getJsonField(
+                              (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
+                              r'''$.data.userEmail''',
+                            ).toString();
+                            FFAppState().userIdAPI = getJsonField(
+                              (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
+                              r'''$.data.userId''',
+                            );
+                            FFAppState().authTokenAPI = getJsonField(
+                              (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
+                              r'''$.data.jwtTokenString''',
+                            ).toString();
+                            FFAppState().userContactNumber = getJsonField(
+                              (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
+                              r'''$.data.userContactNumber''',
+                            ).toString();
+                            FFAppState().userName = getJsonField(
+                              (_model.apiResultup6CopyCopy?.jsonBody ?? ''),
+                              r'''$.data.userFullName''',
+                            ).toString();
                             safeSetState(() {});
-                          },
-                          text: 'સાઇન ઇન',
-                          options: FFButtonOptions(
-                            width: double.infinity,
-                            height: 45.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                16.0, 0.0, 16.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: Color(0xFF5374FF),
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
+
+                            context.pushNamed(
+                              'HomePage',
+                              queryParameters: {
+                                'hintFlag': serializeParam(
+                                  1,
+                                  ParamType.int,
+                                ),
+                              }.withoutNulls,
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  getJsonField(
+                                    (_model.apiResultup6CopyCopy?.jsonBody ??
+                                        ''),
+                                    r'''$.message''',
+                                  ).toString(),
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                                duration: Duration(milliseconds: 2500),
+                                backgroundColor: Color(0xFF748187),
+                              ),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Please enter valid OTP',
+                                style: TextStyle(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  fontSize: 14.0,
+                                ),
+                              ),
+                              duration: Duration(milliseconds: 2500),
+                              backgroundColor: Color(0xFF748187),
+                            ),
+                          );
+                        }
+
+                        safeSetState(() {});
+                      },
+                      text: 'સાઇન ઇન',
+                      options: FFButtonOptions(
+                        width: double.infinity,
+                        height: 48.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: Color(0xFF5374FF),
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Readex Pro',
                                   color: Colors.white,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.w600,
                                 ),
-                            elevation: 0.0,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                        ),
+                        elevation: 0.0,
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
                   ),

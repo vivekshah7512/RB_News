@@ -86,11 +86,6 @@ int getDivideVars(
   return result.toInt();
 }
 
-String? newCustomFunction() {
-  // Return the list as a comma-separated string
-  return "";
-}
-
 bool? areNumbersEqual(
   String num1,
   int num2,
@@ -187,4 +182,90 @@ String? horoscopeDateRangeFormat(String dateTimeString) {
 
 bool? isValidTextView(String? textString) {
   return textString != null && textString.isNotEmpty;
+}
+
+bool? isFilterChecked(
+  int? filterId,
+  List<SelectedNewsCategoryDataStruct>? selectedCategories,
+) {
+  if (selectedCategories == null || filterId == null) {
+    // If the list or filterId is null, return false
+    return false;
+  }
+  int index =
+      selectedCategories.indexWhere((category) => category.id == filterId);
+
+  // If index is -1, the item does not exist in the list
+  return index != -1;
+}
+
+String maskEmail(String email) {
+  if (email.isEmpty || !email.contains('@')) {
+    return email; // Return as is if email is empty or invalid
+  }
+
+  // Split the email into username and domain
+  final parts = email.split('@');
+  final username = parts[0];
+  final domain = parts[1];
+
+  // Check if the username is long enough to mask
+  if (username.length <= 4) {
+    // For short usernames, show the first character only and mask the rest
+    return username[0] + '*' * (username.length - 1) + '@' + domain;
+  }
+
+  // Mask part of the username (leave the first 2 and last 2 characters visible)
+  String maskedUsername = username.substring(0, 2) +
+      '*' * (username.length - 4) +
+      username.substring(username.length - 2);
+
+  // Combine the masked username and domain
+  return '$maskedUsername@$domain';
+}
+
+String getInitalLetter(String stringToSplit) {
+  if (stringToSplit.isEmpty) {
+    return 'RB';
+  }
+
+  // Split the name into words
+  final words = stringToSplit.trim().split(' ');
+
+  // If there's only one word, return the first letter
+  if (words.length == 1) {
+    return words[0].substring(0, 1).toUpperCase();
+  }
+
+  // For multiple words, get the first letter of each word
+  final initials = words
+      .where((word) => word.isNotEmpty) // Avoid empty words from split
+      .map((word) => word[0]) // Take the first letter of each word
+      .join(); // Combine the initials
+
+  // Return the initials in uppercase
+  return initials.toUpperCase();
+}
+
+String getImagePath(String? dynamicPath) {
+// Check if the dynamicPath is null or empty
+  if (dynamicPath == null || dynamicPath.isEmpty) {
+    return 'assets/images/placeholder_image.png'; // Return a default image path
+  }
+
+  // Replace spaces with %20 in the dynamicPath
+  dynamicPath = dynamicPath.replaceAll(' ', '%20');
+
+  // Return the dynamic path
+  return dynamicPath;
+}
+
+String formatAmount(double amount) {
+  int integerAmount = amount.toInt();
+
+  // Format the integer amount using the Indian comma system
+  NumberFormat numberFormat = NumberFormat('###,##,###', 'en_IN');
+  String formattedAmount = numberFormat.format(integerAmount);
+
+  return formattedAmount;
 }

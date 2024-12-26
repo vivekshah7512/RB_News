@@ -244,6 +244,7 @@ class NewsListCall {
     String? newsType = '',
     String? userId = '',
     String? filterCategoriesIdListString = '',
+    int? pageSize,
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -259,7 +260,7 @@ class NewsListCall {
         'newsType': newsType,
         'pageNumber': pageNumber,
         'searchText': searchText,
-        'pageSize': "2",
+        'pageSize': pageSize,
         'filterCategoriesIdListString': filterCategoriesIdListString,
       },
       returnBody: true,
@@ -447,6 +448,7 @@ class LatestPropertyListCall {
     String? authToken = '',
     int? pageNumber,
     String? searchText = '',
+    int? pageSize,
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -459,7 +461,7 @@ class LatestPropertyListCall {
       },
       params: {
         'pageNumber': pageNumber,
-        'pageSize': "10",
+        'pageSize': pageSize,
         'searchText': searchText,
       },
       returnBody: true,

@@ -50,6 +50,7 @@ class _LatestPropertiesListPageWidgetState
         authToken: FFAppState().authTokenAPI,
         pageNumber: FFAppState().currentNewsPage,
         searchText: _model.textController.text,
+        pageSize: FFAppState().pageSize,
       );
 
       if ((_model.apiResult4pq?.succeeded ?? true)) {
@@ -232,6 +233,7 @@ class _LatestPropertiesListPageWidgetState
                                       authToken: FFAppState().authTokenAPI,
                                       pageNumber: FFAppState().currentNewsPage,
                                       searchText: _model.textController.text,
+                                      pageSize: FFAppState().pageSize,
                                     );
 
                                     if ((_model.apiResult4pqsearch?.succeeded ??
@@ -244,7 +246,7 @@ class _LatestPropertiesListPageWidgetState
                                                     ''),
                                                 r'''$.totalCount''',
                                               ),
-                                              10);
+                                              FFAppState().pageSize);
                                       safeSetState(() {});
                                     }
 
@@ -289,6 +291,7 @@ class _LatestPropertiesListPageWidgetState
                           authToken: FFAppState().authTokenAPI,
                           pageNumber: FFAppState().currentNewsPage,
                           searchText: _model.textController.text,
+                          pageSize: FFAppState().pageSize,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -378,14 +381,11 @@ class _LatestPropertiesListPageWidgetState
                                             ParamType.int,
                                           ),
                                           'propertyAllImages': serializeParam(
-                                            (getJsonField(
+                                            getJsonField(
                                               latestPropertyListItem,
                                               r'''$.propertyImagesURL''',
                                               true,
-                                            ) as List)
-                                                .map<String>(
-                                                    (s) => s.toString())
-                                                .toList(),
+                                            ),
                                             ParamType.String,
                                             isList: true,
                                           ),
@@ -427,29 +427,17 @@ class _LatestPropertiesListPageWidgetState
                                                 child: Image.network(
                                                   getJsonField(
                                                     latestPropertyListItem,
-                                                    r'''$.propertyThumbnail''',
+                                                    r'''$.data.propertyImagesURL[0]''',
                                                   ).toString(),
-                                                  width:
-                                                      MediaQuery.sizeOf(context)
-                                                              .width *
-                                                          0.29,
-                                                  height:
-                                                      MediaQuery.sizeOf(context)
-                                                              .height *
-                                                          0.2,
+                                                  width: 98.0,
+                                                  height: 162.0,
                                                   fit: BoxFit.cover,
                                                   errorBuilder: (context, error,
                                                           stackTrace) =>
                                                       Image.asset(
                                                     'assets/images/error_image.png',
-                                                    width: MediaQuery.sizeOf(
-                                                                context)
-                                                            .width *
-                                                        0.29,
-                                                    height: MediaQuery.sizeOf(
-                                                                context)
-                                                            .height *
-                                                        0.2,
+                                                    width: 98.0,
+                                                    height: 162.0,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -473,85 +461,84 @@ class _LatestPropertiesListPageWidgetState
                                                           CrossAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      0.0,
-                                                                      5.0,
-                                                                      0.0,
-                                                                      0.0),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Color(
-                                                                      0xFFF1F3FE),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              16.0),
-                                                                ),
-                                                                child: Row(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
-                                                                  children: [
-                                                                    Padding(
+                                                        Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Color(
+                                                                    0xFFF1F3FE),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16.0),
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            7.0,
+                                                                            3.0,
+                                                                            0.0,
+                                                                            3.0),
+                                                                    child: Text(
+                                                                      '•',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Readex Pro',
+                                                                            color:
+                                                                                Color(0xFF5374FF),
+                                                                            fontSize:
+                                                                                16.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment:
+                                                                        AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0),
+                                                                    child:
+                                                                        Padding(
                                                                       padding: EdgeInsetsDirectional.fromSTEB(
                                                                           7.0,
                                                                           3.0,
-                                                                          0.0,
+                                                                          10.0,
                                                                           3.0),
                                                                       child:
                                                                           Text(
-                                                                        '•',
+                                                                        getJsonField(
+                                                                          latestPropertyListItem,
+                                                                          r'''$.propertyType''',
+                                                                        ).toString(),
                                                                         style: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
+                                                                            .labelSmall
                                                                             .override(
                                                                               fontFamily: 'Readex Pro',
                                                                               color: Color(0xFF5374FF),
                                                                               letterSpacing: 0.0,
+                                                                              fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
                                                                     ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          AlignmentDirectional(
-                                                                              0.0,
-                                                                              0.0),
-                                                                      child:
-                                                                          Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            7.0,
-                                                                            3.0,
-                                                                            10.0,
-                                                                            3.0),
-                                                                        child:
-                                                                            Text(
-                                                                          getJsonField(
-                                                                            latestPropertyListItem,
-                                                                            r'''$.propertyType''',
-                                                                          ).toString(),
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                              .labelSmall
-                                                                              .override(
-                                                                                fontFamily: 'Readex Pro',
-                                                                                color: Color(0xFF5374FF),
-                                                                                letterSpacing: 0.0,
-                                                                              ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
                                                         Row(
                                                           mainAxisSize:
@@ -560,119 +547,32 @@ class _LatestPropertiesListPageWidgetState
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
-                                                            Align(
-                                                              alignment:
-                                                                  AlignmentDirectional(
-                                                                      0.0, 0.0),
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
                                                               child:
-                                                                  FFButtonWidget(
-                                                                onPressed: () {
-                                                                  print(
-                                                                      'Button pressed ...');
-                                                                },
-                                                                text: '',
-                                                                icon: Icon(
-                                                                  Icons.reply,
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryText,
-                                                                  size: 15.0,
-                                                                ),
-                                                                options:
-                                                                    FFButtonOptions(
-                                                                  width: 40.0,
-                                                                  height: 25.0,
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  iconAlignment:
-                                                                      IconAlignment
-                                                                          .end,
-                                                                  iconPadding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryBackground,
-                                                                  textStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .titleSmall
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Readex Pro',
-                                                                        color: Colors
-                                                                            .white,
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                      ),
-                                                                  elevation:
-                                                                      0.0,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.0),
-                                                                ),
+                                                                  Image.asset(
+                                                                'assets/images/share_property.png',
+                                                                width: 32.0,
+                                                                height: 32.0,
+                                                                fit: BoxFit
+                                                                    .cover,
                                                               ),
                                                             ),
-                                                            FFButtonWidget(
-                                                              onPressed: () {
-                                                                print(
-                                                                    'Button pressed ...');
-                                                              },
-                                                              text: '',
-                                                              icon: Icon(
-                                                                Icons.call,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                size: 15.0,
-                                                              ),
-                                                              options:
-                                                                  FFButtonOptions(
-                                                                width: 40.0,
-                                                                height: 25.0,
-                                                                padding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                iconAlignment:
-                                                                    IconAlignment
-                                                                        .end,
-                                                                iconPadding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .secondaryBackground,
-                                                                textStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: Colors
-                                                                          .white,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                    ),
-                                                                elevation: 0.0,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
+                                                              child:
+                                                                  Image.asset(
+                                                                'assets/images/call.png',
+                                                                width: 35.0,
+                                                                height: 35.0,
+                                                                fit: BoxFit
+                                                                    .cover,
                                                               ),
                                                             ),
                                                           ],
@@ -691,7 +591,7 @@ class _LatestPropertiesListPageWidgetState
                                                           ),
                                                       textAlign:
                                                           TextAlign.start,
-                                                      maxLines: 2,
+                                                      maxLines: 1,
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyMedium
@@ -700,9 +600,10 @@ class _LatestPropertiesListPageWidgetState
                                                                 'Readex Pro',
                                                             color: Color(
                                                                 0xFF4D4D4D),
+                                                            fontSize: 16.0,
                                                             letterSpacing: 0.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                                FontWeight.w600,
                                                           ),
                                                     ),
                                                     Align(
@@ -711,12 +612,12 @@ class _LatestPropertiesListPageWidgetState
                                                               -1.0, 0.0),
                                                       child: Container(
                                                         width: double.infinity,
-                                                        height: 50.0,
+                                                        height: 40.0,
                                                         child: custom_widgets
                                                             .HtmlViewer(
                                                           width:
                                                               double.infinity,
-                                                          height: 50.0,
+                                                          height: 40.0,
                                                           htmlContent:
                                                               getJsonField(
                                                             latestPropertyListItem,
@@ -737,24 +638,23 @@ class _LatestPropertiesListPageWidgetState
                                                         mainAxisSize:
                                                             MainAxisSize.max,
                                                         children: [
-                                                          Icon(
-                                                            Icons.location_on,
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryText,
-                                                            size: 16.0,
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                            child: Image.asset(
+                                                              'assets/images/location.png',
+                                                              width: 20.0,
+                                                              height: 20.0,
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                           ),
                                                           Text(
                                                             getJsonField(
                                                               latestPropertyListItem,
                                                               r'''$.propertyLocation''',
-                                                            )
-                                                                .toString()
-                                                                .maybeHandleOverflow(
-                                                                  maxChars: 24,
-                                                                  replacement:
-                                                                      '…',
-                                                                ),
+                                                            ).toString(),
                                                             maxLines: 1,
                                                             style: FlutterFlowTheme
                                                                     .of(context)
@@ -762,9 +662,10 @@ class _LatestPropertiesListPageWidgetState
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
+                                                                  color: Color(
+                                                                      0xFF808080),
+                                                                  fontSize:
+                                                                      14.0,
                                                                   letterSpacing:
                                                                       0.0,
                                                                 ),
@@ -785,24 +686,31 @@ class _LatestPropertiesListPageWidgetState
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
+                                                                color: Color(
+                                                                    0xFF1A1A1A),
+                                                                fontSize: 16.0,
                                                                 letterSpacing:
                                                                     0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
                                                               ),
                                                         ),
                                                         Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
                                                                   .fromSTEB(
-                                                                      4.0,
+                                                                      3.0,
                                                                       0.0,
-                                                                      4.0,
+                                                                      0.0,
                                                                       0.0),
                                                           child: Text(
-                                                            getJsonField(
-                                                              latestPropertyListItem,
-                                                              r'''$.propertyPrice''',
-                                                            )
-                                                                .toString()
+                                                            functions
+                                                                .formatAmount(
+                                                                    getJsonField(
+                                                                  latestPropertyListItem,
+                                                                  r'''$.propertyPrice''',
+                                                                ))
                                                                 .maybeHandleOverflow(
                                                                   maxChars: 24,
                                                                   replacement:
@@ -815,18 +723,25 @@ class _LatestPropertiesListPageWidgetState
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
+                                                                  color: Color(
+                                                                      0xFF1A1A1A),
+                                                                  fontSize:
+                                                                      16.0,
                                                                   letterSpacing:
                                                                       0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
                                                                 ),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ].divide(
-                                                      SizedBox(height: 5.0)),
+                                                      SizedBox(height: 4.0)),
                                                 ),
                                               ),
-                                            ].divide(SizedBox(width: 16.0)),
+                                            ].divide(SizedBox(width: 10.0)),
                                           ),
                                         ),
                                       ),
@@ -877,61 +792,77 @@ class _LatestPropertiesListPageWidgetState
                             child: Align(
                               alignment: AlignmentDirectional(0.0, 0.0),
                               child: FFButtonWidget(
-                                onPressed: () async {
-                                  _model.apiResultz0zCopy = await RBNewsAPIGroup
-                                      .latestPropertyListCall
-                                      .call(
-                                    authToken: FFAppState().authTokenAPI,
-                                    pageNumber: FFAppState().currentNewsPage,
-                                    searchText: _model.textController.text,
-                                  );
-
-                                  if ((_model.apiResultz0zCopy?.succeeded ??
-                                      true)) {
-                                    FFAppState().totalNewsPage =
-                                        functions.getDivideVars(
-                                            getJsonField(
-                                              (_model.apiResultz0zCopy
-                                                      ?.jsonBody ??
-                                                  ''),
-                                              r'''$.totalCount''',
-                                            ),
-                                            10);
-                                    safeSetState(() {});
-                                    if (FFAppState().currentNewsPage != 1) {
-                                      FFAppState().currentNewsPage =
-                                          FFAppState().currentNewsPage + -1;
-                                      safeSetState(() {});
-                                      _model.apiResultg10Copy =
-                                          await RBNewsAPIGroup
-                                              .latestPropertyListCall
-                                              .call(
-                                        authToken: FFAppState().authTokenAPI,
-                                        pageNumber:
-                                            FFAppState().currentNewsPage,
-                                        searchText: _model.textController.text,
-                                      );
-
-                                      if ((_model.apiResultg10Copy?.succeeded ??
-                                          true)) {
-                                        FFAppState().totalNewsDataSize =
-                                            getJsonField(
-                                          (_model.apiResultg10Copy?.jsonBody ??
-                                              ''),
-                                          r'''$.totalCount''',
+                                onPressed: (FFAppState().currentNewsPage == 1)
+                                    ? null
+                                    : () async {
+                                        _model.apiResultz0zCopy =
+                                            await RBNewsAPIGroup
+                                                .latestPropertyListCall
+                                                .call(
+                                          authToken: FFAppState().authTokenAPI,
+                                          pageNumber:
+                                              FFAppState().currentNewsPage,
+                                          searchText:
+                                              _model.textController.text,
+                                          pageSize: FFAppState().pageSize,
                                         );
-                                        safeSetState(() {});
-                                      }
-                                    }
-                                  }
 
-                                  safeSetState(() {});
-                                },
+                                        if ((_model
+                                                .apiResultz0zCopy?.succeeded ??
+                                            true)) {
+                                          FFAppState().totalNewsPage =
+                                              functions.getDivideVars(
+                                                  getJsonField(
+                                                    (_model.apiResultz0zCopy
+                                                            ?.jsonBody ??
+                                                        ''),
+                                                    r'''$.totalCount''',
+                                                  ),
+                                                  FFAppState().pageSize);
+                                          safeSetState(() {});
+                                          if (FFAppState().currentNewsPage !=
+                                              1) {
+                                            FFAppState().currentNewsPage =
+                                                FFAppState().currentNewsPage +
+                                                    -1;
+                                            safeSetState(() {});
+                                            _model.apiResultg10Copy =
+                                                await RBNewsAPIGroup
+                                                    .latestPropertyListCall
+                                                    .call(
+                                              authToken:
+                                                  FFAppState().authTokenAPI,
+                                              pageNumber:
+                                                  FFAppState().currentNewsPage,
+                                              searchText:
+                                                  _model.textController.text,
+                                              pageSize: FFAppState().pageSize,
+                                            );
+
+                                            if ((_model.apiResultg10Copy
+                                                    ?.succeeded ??
+                                                true)) {
+                                              FFAppState().totalNewsDataSize =
+                                                  getJsonField(
+                                                (_model.apiResultg10Copy
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.totalCount''',
+                                              );
+                                              safeSetState(() {});
+                                            }
+                                          }
+                                        }
+
+                                        safeSetState(() {});
+                                      },
                                 text: '',
                                 icon: Icon(
                                   Icons.chevron_left_rounded,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
+                                  color: FFAppState().currentNewsPage == 1
+                                      ? Color(0xFF808080)
+                                      : FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
                                   size: 16.0,
                                 ),
                                 options: FFButtonOptions(
@@ -952,6 +883,8 @@ class _LatestPropertiesListPageWidgetState
                                       ),
                                   elevation: 0.0,
                                   borderRadius: BorderRadius.circular(8.0),
+                                  disabledColor: Color(0xFFF2F2F2),
+                                  disabledTextColor: Color(0xFF808080),
                                   hoverColor:
                                       FlutterFlowTheme.of(context).primary,
                                   hoverTextColor: FlutterFlowTheme.of(context)
@@ -973,83 +906,107 @@ class _LatestPropertiesListPageWidgetState
                             child: Align(
                               alignment: AlignmentDirectional(0.0, 0.0),
                               child: FFButtonWidget(
-                                onPressed: () async {
-                                  _model.apiResultz0z = await RBNewsAPIGroup
-                                      .latestPropertyListCall
-                                      .call(
-                                    authToken: FFAppState().authTokenAPI,
-                                    pageNumber: FFAppState().currentNewsPage,
-                                    searchText: _model.textController.text,
-                                  );
-
-                                  if ((_model.apiResultz0z?.succeeded ??
-                                      true)) {
-                                    FFAppState().totalNewsDataSize =
-                                        getJsonField(
-                                      (_model.apiResultz0z?.jsonBody ?? ''),
-                                      r'''$.totalCount''',
-                                    );
-                                    safeSetState(() {});
-                                    FFAppState().totalNewsPage =
-                                        functions.getDivideVars(
-                                            FFAppState().totalNewsDataSize, 10);
-                                    safeSetState(() {});
-                                    if (FFAppState().currentNewsPage !=
-                                        FFAppState().totalNewsPage) {
-                                      FFAppState().currentNewsPage =
-                                          FFAppState().currentNewsPage + 1;
-                                      safeSetState(() {});
-                                      _model.apiResultg10 = await RBNewsAPIGroup
-                                          .latestPropertyListCall
-                                          .call(
-                                        authToken: FFAppState().authTokenAPI,
-                                        pageNumber:
-                                            FFAppState().currentNewsPage,
-                                        searchText: _model.textController.text,
-                                      );
-
-                                      if ((_model.apiResultg10?.succeeded ??
-                                          true)) {
-                                        FFAppState().totalNewsDataSize =
-                                            getJsonField(
-                                          (_model.apiResultg10?.jsonBody ?? ''),
-                                          r'''$.totalCount''',
+                                onPressed: (FFAppState().currentNewsPage ==
+                                        FFAppState().totalNewsPage)
+                                    ? null
+                                    : () async {
+                                        _model.apiResultz0z =
+                                            await RBNewsAPIGroup
+                                                .latestPropertyListCall
+                                                .call(
+                                          authToken: FFAppState().authTokenAPI,
+                                          pageNumber:
+                                              FFAppState().currentNewsPage,
+                                          searchText:
+                                              _model.textController.text,
+                                          pageSize: FFAppState().pageSize,
                                         );
-                                        safeSetState(() {});
-                                      }
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'No more data found',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                          duration:
-                                              Duration(milliseconds: 4000),
-                                          backgroundColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .secondary,
-                                        ),
-                                      );
-                                    }
-                                  }
 
-                                  safeSetState(() {});
-                                },
+                                        if ((_model.apiResultz0z?.succeeded ??
+                                            true)) {
+                                          FFAppState().totalNewsDataSize =
+                                              getJsonField(
+                                            (_model.apiResultz0z?.jsonBody ??
+                                                ''),
+                                            r'''$.totalCount''',
+                                          );
+                                          safeSetState(() {});
+                                          FFAppState().totalNewsPage =
+                                              functions.getDivideVars(
+                                                  FFAppState()
+                                                      .totalNewsDataSize,
+                                                  FFAppState().pageSize);
+                                          safeSetState(() {});
+                                          if (FFAppState().currentNewsPage !=
+                                              FFAppState().totalNewsPage) {
+                                            FFAppState().currentNewsPage =
+                                                FFAppState().currentNewsPage +
+                                                    1;
+                                            safeSetState(() {});
+                                            _model.apiResultg10 =
+                                                await RBNewsAPIGroup
+                                                    .latestPropertyListCall
+                                                    .call(
+                                              authToken:
+                                                  FFAppState().authTokenAPI,
+                                              pageNumber:
+                                                  FFAppState().currentNewsPage,
+                                              searchText:
+                                                  _model.textController.text,
+                                              pageSize: FFAppState().pageSize,
+                                            );
+
+                                            if ((_model
+                                                    .apiResultg10?.succeeded ??
+                                                true)) {
+                                              FFAppState().totalNewsDataSize =
+                                                  getJsonField(
+                                                (_model.apiResultg10
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.totalCount''',
+                                              );
+                                              safeSetState(() {});
+                                            }
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'No more data found',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                                backgroundColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondary,
+                                              ),
+                                            );
+                                          }
+                                        }
+
+                                        safeSetState(() {});
+                                      },
                                 text: '',
                                 icon: Icon(
                                   Icons.navigate_next_rounded,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
+                                  color: FFAppState().currentNewsPage ==
+                                          FFAppState().totalNewsPage
+                                      ? Color(0xFF808080)
+                                      : FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
                                   size: 16.0,
                                 ),
                                 options: FFButtonOptions(
@@ -1060,7 +1017,7 @@ class _LatestPropertiesListPageWidgetState
                                   iconAlignment: IconAlignment.start,
                                   iconPadding: EdgeInsetsDirectional.fromSTEB(
                                       8.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color: FlutterFlowTheme.of(context).primary,
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
@@ -1070,6 +1027,8 @@ class _LatestPropertiesListPageWidgetState
                                       ),
                                   elevation: 0.0,
                                   borderRadius: BorderRadius.circular(8.0),
+                                  disabledColor: Color(0xFFF2F2F2),
+                                  disabledTextColor: Color(0xFF808080),
                                   hoverColor:
                                       FlutterFlowTheme.of(context).primary,
                                   hoverTextColor: FlutterFlowTheme.of(context)

@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-List<SelectedNewsCategoryDataStruct>? test(
+import 'dart:io';
+
+List<SelectedNewsCategoryDataStruct>? manageNewsCategoryFilter(
   String? filterName,
   int? filterId,
   bool? isChecked,
@@ -47,6 +49,12 @@ List<SelectedNewsCategoryDataStruct>? test(
     }
   }
 
+  FFAppState().update(() {
+    FFAppState().selectedFilterIds = FFAppState()
+        .selectedNewsCategoryTop
+        .map((category) => category.id.toString())
+        .join(',');
+  });
   // Return the updated list
   return selectedCategories;
 

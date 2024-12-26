@@ -9,8 +9,6 @@ export '/pages/horoscope_page/horoscope_page_widget.dart'
 export '/pages/home_page/home_page_widget.dart' show HomePageWidget;
 export '/pages/news_detail_page/news_detail_page_widget.dart'
     show NewsDetailPageWidget;
-export '/pages/property_detail_page/property_detail_page_widget.dart'
-    show PropertyDetailPageWidget;
 export '/pages/user_detail_page/user_detail_page_widget.dart'
     show UserDetailPageWidget;
 export '/pages/all_properties_list_page/all_properties_list_page_widget.dart'

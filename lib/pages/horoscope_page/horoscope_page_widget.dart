@@ -83,9 +83,9 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
         onWillPop: () async => false,
         child: Scaffold(
           key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          backgroundColor: Color(0xFFF8F8F8),
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            backgroundColor: Color(0xFFF8F8F8),
             automaticallyImplyLeading: false,
             title: Row(
               mainAxisSize: MainAxisSize.max,
@@ -115,9 +115,9 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Readex Pro',
                           color: Color(0xFF1A1A1A),
-                          fontSize: 20.0,
+                          fontSize: 24.0,
                           letterSpacing: 0.0,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                   ),
                 ),
@@ -125,7 +125,7 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
             ),
             actions: [],
             centerTitle: true,
-            elevation: 2.0,
+            elevation: 0.0,
           ),
           body: SafeArea(
             top: true,
@@ -208,7 +208,7 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                 scrollDirection: Axis.vertical,
                                 itemCount: zodiacList.length,
                                 separatorBuilder: (_, __) =>
-                                    SizedBox(height: 20.0),
+                                    SizedBox(height: 12.0),
                                 itemBuilder: (context, zodiacListIndex) {
                                   final zodiacListItem =
                                       zodiacList[zodiacListIndex];
@@ -221,9 +221,21 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                     child: Container(
                                       width: MediaQuery.sizeOf(context).width *
                                           1.0,
+                                      height: 90.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 1.0,
+                                            color: Color(0x11B0B0B0),
+                                            offset: Offset(
+                                              0.0,
+                                              1.0,
+                                            ),
+                                            spreadRadius: 0.0,
+                                          )
+                                        ],
                                         borderRadius:
                                             BorderRadius.circular(12.0),
                                       ),
@@ -233,9 +245,7 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                             CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16.0, 16.0, 16.0, 16.0),
+                                            padding: EdgeInsets.all(6.0),
                                             child: InkWell(
                                               splashColor: Colors.transparent,
                                               focusColor: Colors.transparent,
@@ -261,39 +271,28 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   Container(
-                                                    width: 85.0,
-                                                    height: 85.0,
+                                                    width: 78.0,
+                                                    height: 78.0,
                                                     decoration: BoxDecoration(
-                                                      color: Color(0xFFF1F3FE),
+                                                      color: Color(0xFFEEF1FF),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              14.0),
+                                                              12.0),
                                                     ),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.all(24.0),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
-                                                        child: Image.network(
-                                                          getJsonField(
-                                                            zodiacListItem,
-                                                            r'''$.zodiacSignIcon''',
-                                                          ).toString(),
-                                                          width: 80.0,
-                                                          height: 80.0,
-                                                          fit: BoxFit.cover,
-                                                          errorBuilder: (context,
-                                                                  error,
-                                                                  stackTrace) =>
-                                                              Image.asset(
-                                                            'assets/images/error_image.png',
-                                                            width: 80.0,
-                                                            height: 80.0,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.0, 0.0),
+                                                    child: Container(
+                                                      width: 32.0,
+                                                      height: 32.0,
+                                                      child: custom_widgets
+                                                          .ImageNetworkWidget(
+                                                        width: 32.0,
+                                                        height: 32.0,
+                                                        url: getJsonField(
+                                                          zodiacListItem,
+                                                          r'''$.zodiacSignIcon''',
+                                                        ).toString(),
                                                       ),
                                                     ),
                                                   ),
@@ -322,44 +321,39 @@ class _HoroscopePageWidgetState extends State<HoroscopePageWidget>
                                                                     'Readex Pro',
                                                                 color: Color(
                                                                     0xFF4D4D4D),
+                                                                fontSize: 16.0,
                                                                 letterSpacing:
                                                                     0.0,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .bold,
+                                                                        .w500,
                                                               ),
                                                         ),
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  -1.0, 0.0),
-                                                          child: Container(
+                                                        Container(
+                                                          width:
+                                                              double.infinity,
+                                                          height: 40.0,
+                                                          child: custom_widgets
+                                                              .HtmlViewer(
                                                             width:
                                                                 double.infinity,
-                                                            height: 50.0,
-                                                            child:
-                                                                custom_widgets
-                                                                    .HtmlViewer(
-                                                              width: double
-                                                                  .infinity,
-                                                              height: 50.0,
-                                                              htmlContent:
-                                                                  getJsonField(
-                                                                zodiacListItem,
-                                                                r'''$.zodiacSignDescription''',
-                                                              ).toString(),
-                                                            ),
+                                                            height: 40.0,
+                                                            htmlContent:
+                                                                getJsonField(
+                                                              zodiacListItem,
+                                                              r'''$.zodiacSignDescription''',
+                                                            ).toString(),
                                                           ),
                                                         ),
                                                       ].divide(SizedBox(
-                                                          height: 5.0)),
+                                                          height: 6.0)),
                                                     ),
                                                   ),
-                                                ].divide(SizedBox(width: 16.0)),
+                                                ].divide(SizedBox(width: 10.0)),
                                               ),
                                             ),
                                           ),
-                                        ],
+                                        ].divide(SizedBox(height: 4.0)),
                                       ),
                                     ),
                                   );

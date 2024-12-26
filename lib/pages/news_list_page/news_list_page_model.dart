@@ -1,10 +1,13 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/components/news_filter_popup_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'news_list_page_widget.dart' show NewsListPageWidget;
 import 'package:flutter/material.dart';
@@ -48,6 +51,15 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
   }
 
   ApiCallResponse? get apiResultudjS => _apiResultudjS;
+
+  // Stores action output result for [Custom Action - manageNewsCategoryFilter] action in Icon widget.
+  List<SelectedNewsCategoryDataStruct>? _testresult;
+  set testresult(List<SelectedNewsCategoryDataStruct>? value) {
+    _testresult = value;
+    debugLogWidgetClass(this);
+  }
+
+  List<SelectedNewsCategoryDataStruct>? get testresult => _testresult;
 
   // Stores action output result for [Backend Call - API (NewsList)] action in Button widget.
   ApiCallResponse? _apiResultz0zCopy;
@@ -160,6 +172,15 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
             name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'testresult': debugSerializeParam(
+            testresult,
+            ParamType.DataStruct,
+            isList: true,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            name: 'SelectedNewsCategoryData',
             nullable: true,
           ),
           'apiResultz0zCopy': debugSerializeParam(

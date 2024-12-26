@@ -1,8 +1,10 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'news_filter_popup_widget.dart' show NewsFilterPopupWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -40,23 +42,23 @@ class NewsFilterPopupModel extends FlutterFlowModel<NewsFilterPopupWidget> {
       .map((e) => e.key)
       .toList();
 
-  // Stores action output result for [Custom Action - selectedNewsCategories] action in Checkbox widget.
-  String? _selectedCatIds;
-  set selectedCatIds(String? value) {
-    _selectedCatIds = value;
+  // Stores action output result for [Custom Action - manageNewsCategoryFilter] action in Checkbox widget.
+  List<SelectedNewsCategoryDataStruct>? _testresult;
+  set testresult(List<SelectedNewsCategoryDataStruct>? value) {
+    _testresult = value;
     debugLogWidgetClass(this);
   }
 
-  String? get selectedCatIds => _selectedCatIds;
+  List<SelectedNewsCategoryDataStruct>? get testresult => _testresult;
 
-  // Stores action output result for [Custom Action - selectedNewsCategories] action in Checkbox widget.
-  String? _selectedCatIdsCopy;
-  set selectedCatIdsCopy(String? value) {
-    _selectedCatIdsCopy = value;
+  // Stores action output result for [Custom Action - manageNewsCategoryFilter] action in Checkbox widget.
+  List<SelectedNewsCategoryDataStruct>? _testresultCopy;
+  set testresultCopy(List<SelectedNewsCategoryDataStruct>? value) {
+    _testresultCopy = value;
     debugLogWidgetClass(this);
   }
 
-  String? get selectedCatIdsCopy => _selectedCatIdsCopy;
+  List<SelectedNewsCategoryDataStruct>? get testresultCopy => _testresultCopy;
 
   // State field(s) for Checkbox widget.
   late LoggableMap<dynamic, bool> _checkboxValueMap2 = LoggableMap({});
@@ -201,20 +203,22 @@ class NewsFilterPopupModel extends FlutterFlowModel<NewsFilterPopupWidget> {
           )
         },
         actionOutputs: {
-          'selectedCatIds': debugSerializeParam(
-            selectedCatIds,
-            ParamType.String,
+          'testresult': debugSerializeParam(
+            testresult,
+            ParamType.DataStruct,
+            isList: true,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsFilterPopup',
-            name: 'String',
+            name: 'SelectedNewsCategoryData',
             nullable: true,
           ),
-          'selectedCatIdsCopy': debugSerializeParam(
-            selectedCatIdsCopy,
-            ParamType.String,
+          'testresultCopy': debugSerializeParam(
+            testresultCopy,
+            ParamType.DataStruct,
+            isList: true,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsFilterPopup',
-            name: 'String',
+            name: 'SelectedNewsCategoryData',
             nullable: true,
           )
         },

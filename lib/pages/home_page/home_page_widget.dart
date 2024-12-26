@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -315,7 +316,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                           ParamType.String,
                                         ),
                                         'newsTitle': serializeParam(
-                                          'સાચવેલી સમાચાર',
+                                          'સાચવેલા સમાચાર',
                                           ParamType.String,
                                         ),
                                       }.withoutNulls,
@@ -358,7 +359,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                         ),
                                       ),
                                       Text(
-                                        'સાચવેલી સમાચાર',
+                                        'સાચવેલા સમાચાર',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -969,12 +970,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                   Expanded(
                                                     child: Padding(
                                                       padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  8.0,
-                                                                  8.0,
-                                                                  8.0,
-                                                                  8.0),
+                                                          EdgeInsets.all(8.0),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -1244,99 +1240,107 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                         borderRadius:
                                             BorderRadius.circular(16.0),
                                       ),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          context.pushNamed(
-                                            'PropertyDetailPage',
-                                            queryParameters: {
-                                              'propertyId': serializeParam(
-                                                getJsonField(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              child: Image.network(
+                                                functions
+                                                    .getImagePath(getJsonField(
                                                   propertyListItem,
-                                                  r'''$.propertyId''',
-                                                ),
-                                                ParamType.int,
-                                              ),
-                                            }.withoutNulls,
-                                          );
-                                        },
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.all(5.0),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                                child: Image.network(
-                                                  getJsonField(
-                                                    propertyListItem,
-                                                    r'''$.propertyImagesURL[0]''',
-                                                  ).toString(),
+                                                  r'''$.propertyImagesURL[0]''',
+                                                ).toString()),
+                                                width: 98.0,
+                                                height: 128.0,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    Image.asset(
+                                                  'assets/images/error_image.png',
                                                   width: 98.0,
                                                   height: 128.0,
                                                   fit: BoxFit.cover,
-                                                  errorBuilder: (context, error,
-                                                          stackTrace) =>
-                                                      Image.asset(
-                                                    'assets/images/error_image.png',
-                                                    width: 98.0,
-                                                    height: 128.0,
-                                                    fit: BoxFit.cover,
-                                                  ),
                                                 ),
                                               ),
                                             ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        8.0, 8.0, 8.0, 8.0),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Color(
-                                                                0xFFF1F3FE),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        16.0),
-                                                          ),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Padding(
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Color(0xFFF1F3FE),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      16.0),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          7.0,
+                                                                          3.0,
+                                                                          0.0,
+                                                                          3.0),
+                                                              child: Text(
+                                                                '•',
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Readex Pro',
+                                                                      color: Color(
+                                                                          0xFF5374FF),
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            Align(
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      0.0, 0.0),
+                                                              child: Padding(
                                                                 padding:
                                                                     EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             7.0,
                                                                             3.0,
-                                                                            0.0,
+                                                                            10.0,
                                                                             3.0),
                                                                 child: Text(
-                                                                  '•',
+                                                                  getJsonField(
+                                                                    propertyListItem,
+                                                                    r'''$.propertyType''',
+                                                                  ).toString(),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .bodyMedium
+                                                                      .labelSmall
                                                                       .override(
                                                                         fontFamily:
                                                                             'Readex Pro',
@@ -1347,103 +1351,56 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                                       ),
                                                                 ),
                                                               ),
-                                                              Align(
-                                                                alignment:
-                                                                    AlignmentDirectional(
-                                                                        0.0,
-                                                                        0.0),
-                                                                child: Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          7.0,
-                                                                          3.0,
-                                                                          10.0,
-                                                                          3.0),
-                                                                  child: Text(
-                                                                    getJsonField(
-                                                                      propertyListItem,
-                                                                      r'''$.propertyType''',
-                                                                    ).toString(),
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .labelSmall
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Readex Pro',
-                                                                          color:
-                                                                              Color(0xFF5374FF),
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                    Text(
-                                                      getJsonField(
-                                                        propertyListItem,
-                                                        r'''$.propertyName''',
-                                                      )
-                                                          .toString()
-                                                          .maybeHandleOverflow(
-                                                            maxChars: 58,
-                                                            replacement: '…',
-                                                          ),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      maxLines: 2,
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            fontFamily:
-                                                                'Readex Pro',
-                                                            color: Color(
-                                                                0xFF4D4D4D),
-                                                            fontSize: 15.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                    Text(
-                                                      getJsonField(
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    getJsonField(
+                                                      propertyListItem,
+                                                      r'''$.propertyName''',
+                                                    )
+                                                        .toString()
+                                                        .maybeHandleOverflow(
+                                                          maxChars: 58,
+                                                          replacement: '…',
+                                                        ),
+                                                    textAlign: TextAlign.start,
+                                                    maxLines: 2,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          color:
+                                                              Color(0xFF4D4D4D),
+                                                          fontSize: 15.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  Container(
+                                                    width: double.infinity,
+                                                    height: 42.0,
+                                                    child: custom_widgets
+                                                        .HtmlViewer(
+                                                      width: double.infinity,
+                                                      height: 42.0,
+                                                      htmlContent: getJsonField(
                                                         propertyListItem,
                                                         r'''$.propertyDescription''',
-                                                      )
-                                                          .toString()
-                                                          .maybeHandleOverflow(
-                                                            maxChars: 58,
-                                                            replacement: '…',
-                                                          ),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      maxLines: 2,
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            fontFamily:
-                                                                'Readex Pro',
-                                                            color: Color(
-                                                                0xFF808080),
-                                                            fontSize: 14.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
+                                                      ).toString(),
                                                     ),
-                                                  ].divide(
-                                                      SizedBox(height: 8.0)),
-                                                ),
+                                                  ),
+                                                ].divide(SizedBox(height: 8.0)),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     );
                                   },
@@ -1598,27 +1555,17 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                  child: Image.network(
-                                                    getJsonField(
+                                                Container(
+                                                  width: 32.0,
+                                                  height: 32.0,
+                                                  child: custom_widgets
+                                                      .ImageNetworkWidget(
+                                                    width: 32.0,
+                                                    height: 32.0,
+                                                    url: getJsonField(
                                                       horoscopeListItem,
                                                       r'''$.zodiacSignIcon''',
                                                     ).toString(),
-                                                    width: 24.0,
-                                                    height: 24.0,
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder: (context,
-                                                            error,
-                                                            stackTrace) =>
-                                                        Image.asset(
-                                                      'assets/images/error_image.png',
-                                                      width: 24.0,
-                                                      height: 24.0,
-                                                      fit: BoxFit.cover,
-                                                    ),
                                                   ),
                                                 ),
                                                 Padding(

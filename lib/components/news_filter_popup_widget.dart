@@ -1,8 +1,10 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,8 +77,8 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    FFAppState().selectedNewsCategory = [];
                     FFAppState().selectedFilterIds = '  ';
+                    FFAppState().selectedNewsCategoryTop = [];
                     safeSetState(() {});
                   },
                   child: Text(
@@ -190,37 +192,22 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                                   ),
                                   child: Checkbox(
                                     value: _model.checkboxValueMap1[
-                                        categoryListArrayItem] ??= FFAppState()
-                                            .selectedNewsCategory
-                                            .contains(getJsonField(
+                                            categoryListArrayItem] ??=
+                                        functions.isFilterChecked(
+                                            getJsonField(
                                               categoryListArrayItem,
                                               r'''$.newsCategoryID''',
-                                            )) ==
-                                        true,
+                                            ),
+                                            FFAppState()
+                                                .selectedNewsCategoryTop
+                                                .toList())!,
                                     onChanged: (newValue) async {
                                       safeSetState(() => _model
                                               .checkboxValueMap1[
                                           categoryListArrayItem] = newValue!);
                                       if (newValue!) {
-                                        _model.selectedCatIds = await actions
-                                            .selectedNewsCategories(
-                                          getJsonField(
-                                            categoryListArrayItem,
-                                            r'''$.newsCategoryID''',
-                                          ).toString(),
-                                          true,
-                                          valueOrDefault<String>(
-                                            getJsonField(
-                                              categoryListArrayItem,
-                                              r'''$.newsCategoryName''',
-                                            )?.toString(),
-                                            '\"\"',
-                                          ),
-                                        );
-                                        _model.selectedCategoryIds =
-                                            _model.selectedCategoryIds;
-                                        safeSetState(() {});
-                                        await actions.test(
+                                        _model.testresult = await actions
+                                            .manageNewsCategoryFilter(
                                           getJsonField(
                                             categoryListArrayItem,
                                             r'''$.newsCategoryName''',
@@ -231,49 +218,21 @@ class _NewsFilterPopupWidgetState extends State<NewsFilterPopupWidget>
                                           ),
                                           true,
                                         );
-                                        await showDialog(
-                                          context: context,
-                                          builder: (alertDialogContext) {
-                                            return AlertDialog(
-                                              title:
-                                                  Text('mapable array count'),
-                                              content: Text(FFAppState()
-                                                  .selectedNewsCategoryTop
-                                                  .length
-                                                  .toString()),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          alertDialogContext),
-                                                  child: Text('Ok'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
 
                                         safeSetState(() {});
                                       } else {
-                                        _model.selectedCatIdsCopy =
-                                            await actions
-                                                .selectedNewsCategories(
+                                        _model.testresultCopy = await actions
+                                            .manageNewsCategoryFilter(
+                                          getJsonField(
+                                            categoryListArrayItem,
+                                            r'''$.newsCategoryName''',
+                                          ).toString(),
                                           getJsonField(
                                             categoryListArrayItem,
                                             r'''$.newsCategoryID''',
-                                          ).toString(),
-                                          false,
-                                          valueOrDefault<String>(
-                                            getJsonField(
-                                              categoryListArrayItem,
-                                              r'''$.newsCategoryName''',
-                                            )?.toString(),
-                                            '\"\"',
                                           ),
+                                          false,
                                         );
-                                        _model.selectedCategoryIds =
-                                            _model.selectedCategoryIds;
-                                        safeSetState(() {});
 
                                         safeSetState(() {});
                                       }

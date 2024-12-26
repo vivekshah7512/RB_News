@@ -27,23 +27,27 @@ class HtmlViewer extends StatelessWidget {
     return SizedBox(
       height: height,
       width: width,
-      child: SingleChildScrollView(
-        child: Html(
-          data: htmlContent,
-          shrinkWrap: false,
-          style: {
-            "body": Style(
-              textAlign: TextAlign.left, // Align text to the left
-              margin: Margins.zero, // Set margin to zero
-              padding: HtmlPaddings.zero,
-              textOverflow: TextOverflow.ellipsis, // Show ellipsis for overflow
-            ),
-          },
-        ),
+      child: Html(
+        data: htmlContent,
+        style: {
+          "body": Style(
+            textAlign: TextAlign.left, // Align text to the left
+            margin: Margins.zero, // Set margin to zero
+            padding: HtmlPaddings.zero,
+            textOverflow: TextOverflow.ellipsis, // Show ellipsis for overflow
+            color: Color(0xFF808080), // Set text color to #808080
+            fontSize: FontSize(14.0), // Set font size to 14
+            maxLines: 2, // Set max lines to 2
+            fontWeight: FontWeight.w500, // Set font type to medium
+          ),
+          "p": Style(
+            margin: Margins.zero, // Remove default margin for <p> tags
+            padding: HtmlPaddings.zero, // Remove padding for <p> tags
+          ),
+        },
       ),
     );
   }
 }
-
 // Set your widget name, define your parameter, and then add the
 // boilerplate code using the green button on the right!

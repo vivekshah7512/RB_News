@@ -1,10 +1,13 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/components/news_filter_popup_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -44,13 +47,17 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().currentNewsPage = 1;
+      FFAppState().totalNewsPage = 1;
+      FFAppState().totalNewsDataSize = 0;
       safeSetState(() {});
       _model.apiResultudj = await RBNewsAPIGroup.newsListCall.call(
         authToken: FFAppState().authTokenAPI,
         userId: FFAppState().userIdAPI.toString(),
         searchText: _model.textController.text,
         pageNumber: FFAppState().currentNewsPage,
-        newsType: 'top',
+        newsType: widget!.newsType,
+        pageSize: FFAppState().pageSize,
+        filterCategoriesIdListString: FFAppState().selectedFilterIds,
       );
 
       if ((_model.apiResultudj?.succeeded ?? true)) {
@@ -59,7 +66,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
               (_model.apiResultudj?.jsonBody ?? ''),
               r'''$.totalCount''',
             ),
-            2);
+            FFAppState().pageSize);
         safeSetState(() {});
       }
     });
@@ -169,7 +176,6 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                   await showModalBottomSheet(
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    enableDrag: false,
                     context: context,
                     builder: (context) {
                       return GestureDetector(
@@ -179,7 +185,10 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                         },
                         child: Padding(
                           padding: MediaQuery.viewInsetsOf(context),
-                          child: NewsFilterPopupWidget(),
+                          child: Container(
+                            height: MediaQuery.sizeOf(context).height * 0.7,
+                            child: NewsFilterPopupWidget(),
+                          ),
                         ),
                       );
                     },
@@ -245,7 +254,10 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                       userId: FFAppState().userIdAPI.toString(),
                                       searchText: _model.textController.text,
                                       pageNumber: FFAppState().currentNewsPage,
-                                      newsType: 'top',
+                                      newsType: widget!.newsType,
+                                      pageSize: FFAppState().pageSize,
+                                      filterCategoriesIdListString:
+                                          FFAppState().selectedFilterIds,
                                     );
 
                                     if ((_model.apiResultudjS?.succeeded ??
@@ -258,7 +270,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                     ''),
                                                 r'''$.totalCount''',
                                               ),
-                                              2);
+                                              FFAppState().pageSize);
                                       safeSetState(() {});
                                     }
 
@@ -295,76 +307,103 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                         ),
                       ),
                     ),
-                    Container(
-                      width: 400.0,
-                      height: 100.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      child: Builder(
-                        builder: (context) {
-                          final filterCategoryArray =
-                              FFAppState().selectedNewsCatStringArray.toList();
-                          _model.debugGeneratorVariables[
-                                  'filterCategoryArray${filterCategoryArray.length > 100 ? ' (first 100)' : ''}'] =
-                              debugSerializeParam(
-                            filterCategoryArray.take(100),
-                            ParamType.String,
-                            isList: true,
-                            link:
-                                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
-                            name: 'String',
-                            nullable: false,
-                          );
-                          debugLogWidgetClass(_model);
+                    if (FFAppState().selectedNewsCategoryTop.length != 0)
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 16.0, 16.0, 16.0),
+                        child: Container(
+                          width: 400.0,
+                          height: 30.0,
+                          decoration: BoxDecoration(),
+                          child: Builder(
+                            builder: (context) {
+                              final filterCategoryArray =
+                                  FFAppState().selectedNewsCategoryTop.toList();
+                              _model.debugGeneratorVariables[
+                                      'filterCategoryArray${filterCategoryArray.length > 100 ? ' (first 100)' : ''}'] =
+                                  debugSerializeParam(
+                                filterCategoryArray.take(100),
+                                ParamType.DataStruct,
+                                isList: true,
+                                link:
+                                    'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+                                name: 'SelectedNewsCategoryData',
+                                nullable: false,
+                              );
+                              debugLogWidgetClass(_model);
 
-                          return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            primary: false,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: filterCategoryArray.length,
-                            itemBuilder: (context, filterCategoryArrayIndex) {
-                              final filterCategoryArrayItem =
-                                  filterCategoryArray[filterCategoryArrayIndex];
-                              return Container(
-                                height: 70.0,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text(
-                                      valueOrDefault<String>(
-                                        FFAppState()
-                                            .selectedNewsCatStringArray
-                                            .elementAtOrNull(
-                                                filterCategoryArrayIndex),
-                                        'All',
+                              return ListView.separated(
+                                padding: EdgeInsets.zero,
+                                primary: false,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: filterCategoryArray.length,
+                                separatorBuilder: (_, __) =>
+                                    SizedBox(width: 15.0),
+                                itemBuilder:
+                                    (context, filterCategoryArrayIndex) {
+                                  final filterCategoryArrayItem =
+                                      filterCategoryArray[
+                                          filterCategoryArrayIndex];
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFF1F3FE),
+                                      borderRadius: BorderRadius.circular(16.0),
+                                      border: Border.all(
+                                        color: Color(0xFF5374FF),
                                       ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            letterSpacing: 0.0,
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8.0, 0.0, 8.0, 0.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            filterCategoryArrayItem.name,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Readex Pro',
+                                                  color: Color(0xFF5374FF),
+                                                  letterSpacing: 0.0,
+                                                ),
                                           ),
+                                          InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              _model.testresult = await actions
+                                                  .manageNewsCategoryFilter(
+                                                filterCategoryArrayItem.name,
+                                                filterCategoryArrayItem.id,
+                                                false,
+                                              );
+                                              FFAppState().currentNewsPage = 1;
+                                              safeSetState(() {});
+
+                                              safeSetState(() {});
+                                            },
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Color(0xFF5374FF),
+                                              size: 22.0,
+                                            ),
+                                          ),
+                                        ].divide(SizedBox(width: 6.0)),
+                                      ),
                                     ),
-                                    Icon(
-                                      Icons.close,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 24.0,
-                                    ),
-                                  ],
-                                ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
+                          ),
+                        ),
                       ),
-                    ),
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
@@ -374,9 +413,10 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                           userId: FFAppState().userIdAPI.toString(),
                           searchText: _model.textController.text,
                           pageNumber: FFAppState().currentNewsPage,
-                          newsType: 'top',
+                          newsType: widget!.newsType,
                           filterCategoriesIdListString:
                               FFAppState().selectedFilterIds,
+                          pageSize: FFAppState().pageSize,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -484,34 +524,29 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                               BorderRadius.circular(12.0),
                                         ),
                                         child: Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                          padding: EdgeInsets.all(6.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(8.0),
-                                                  bottomRight:
-                                                      Radius.circular(8.0),
-                                                  topLeft: Radius.circular(8.0),
-                                                  topRight:
-                                                      Radius.circular(8.0),
-                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
                                                 child: Image.network(
                                                   getJsonField(
                                                     newsListArrayItem,
                                                     r'''$.newsImage''',
                                                   ).toString(),
-                                                  width:
-                                                      MediaQuery.sizeOf(context)
-                                                              .width *
-                                                          0.282,
-                                                  height:
-                                                      MediaQuery.sizeOf(context)
-                                                              .height *
-                                                          0.167,
+                                                  width: 98.0,
+                                                  height: 128.0,
                                                   fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      Image.asset(
+                                                    'assets/images/error_image.png',
+                                                    width: 98.0,
+                                                    height: 128.0,
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                 ),
                                               ),
                                               Expanded(
@@ -523,168 +558,130 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Color(
-                                                                  0xFFF1F3FE),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          16.0),
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              children: [
-                                                                Padding(
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Color(
+                                                                0xFFF1F3FE),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        16.0),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            7.0,
+                                                                            3.0,
+                                                                            0.0,
+                                                                            3.0),
+                                                                child: Text(
+                                                                  '•',
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Readex Pro',
+                                                                        color: Color(
+                                                                            0xFF5374FF),
+                                                                        fontSize:
+                                                                            16.0,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        0.0,
+                                                                        0.0),
+                                                                child: Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           7.0,
                                                                           3.0,
-                                                                          0.0,
+                                                                          10.0,
                                                                           3.0),
                                                                   child: Text(
-                                                                    '•',
+                                                                    getJsonField(
+                                                                      newsListArrayItem,
+                                                                      r'''$.newsCategoryName''',
+                                                                    ).toString(),
+                                                                    maxLines: 1,
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .bodyMedium
+                                                                        .labelSmall
                                                                         .override(
                                                                           fontFamily:
                                                                               'Readex Pro',
                                                                           color:
-                                                                              Color(0xFF5374FF),
+                                                                              FlutterFlowTheme.of(context).primary,
                                                                           letterSpacing:
                                                                               0.0,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
                                                                         ),
                                                                   ),
                                                                 ),
-                                                                Align(
-                                                                  alignment:
-                                                                      AlignmentDirectional(
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            7.0,
-                                                                            3.0,
-                                                                            10.0,
-                                                                            3.0),
-                                                                    child: Text(
-                                                                      getJsonField(
-                                                                        newsListArrayItem,
-                                                                        r'''$.newsCategoryName''',
-                                                                      ).toString(),
-                                                                      style: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .labelSmall
-                                                                          .override(
-                                                                            fontFamily:
-                                                                                'Readex Pro',
-                                                                            color:
-                                                                                Color(0xFF5374FF),
-                                                                            letterSpacing:
-                                                                                0.0,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  4.0,
-                                                                  0.0,
-                                                                  4.0,
-                                                                  0.0),
-                                                      child: Text(
-                                                        getJsonField(
-                                                          newsListArrayItem,
-                                                          r'''$.newsTitle''',
-                                                        )
-                                                            .toString()
-                                                            .maybeHandleOverflow(
-                                                              maxChars: 58,
-                                                              replacement: '…',
-                                                            ),
-                                                        maxLines: 2,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  color: Color(
-                                                                      0xFF4D4D4D),
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                      ),
+                                                    Text(
+                                                      getJsonField(
+                                                        newsListArrayItem,
+                                                        r'''$.newsTitle''',
+                                                      ).toString(),
+                                                      maxLines: 2,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            color: Color(
+                                                                0xFF4D4D4D),
+                                                            fontSize: 16.0,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  4.0,
-                                                                  0.0,
-                                                                  4.0,
-                                                                  0.0),
-                                                      child: Text(
-                                                        getJsonField(
+                                                    Container(
+                                                      width: double.infinity,
+                                                      height: 40.0,
+                                                      child: custom_widgets
+                                                          .HtmlViewer(
+                                                        width: double.infinity,
+                                                        height: 40.0,
+                                                        htmlContent:
+                                                            getJsonField(
                                                           newsListArrayItem,
                                                           r'''$.newsDescription''',
-                                                        )
-                                                            .toString()
-                                                            .maybeHandleOverflow(
-                                                              maxChars: 49,
-                                                              replacement: '…',
-                                                            ),
-                                                        maxLines: 2,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                ),
+                                                        ).toString(),
                                                       ),
                                                     ),
                                                   ].divide(
-                                                      SizedBox(height: 5.0)),
+                                                      SizedBox(height: 4.0)),
                                                 ),
                                               ),
-                                            ].divide(SizedBox(width: 16.0)),
+                                            ].divide(SizedBox(width: 10.0)),
                                           ),
                                         ),
                                       ),
@@ -735,64 +732,92 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                             child: Align(
                               alignment: AlignmentDirectional(0.0, 0.0),
                               child: FFButtonWidget(
-                                onPressed: () async {
-                                  _model.apiResultz0zCopy =
-                                      await RBNewsAPIGroup.newsListCall.call(
-                                    authToken: FFAppState().authTokenAPI,
-                                    userId: FFAppState().userIdAPI.toString(),
-                                    pageNumber: 1,
-                                    newsType: 'top',
-                                    searchText: _model.textController.text,
-                                  );
-
-                                  if ((_model.apiResultg10Copy?.succeeded ??
-                                      true)) {
-                                    FFAppState().totalNewsDataSize =
-                                        getJsonField(
-                                      (_model.apiResultz0zCopy?.jsonBody ?? ''),
-                                      r'''$.totalCount''',
-                                    );
-                                    safeSetState(() {});
-                                    FFAppState().totalNewsPage =
-                                        functions.getDivideVars(
-                                            FFAppState().totalNewsDataSize, 2);
-                                    safeSetState(() {});
-                                    if (FFAppState().currentNewsPage != 1) {
-                                      FFAppState().currentNewsPage =
-                                          FFAppState().currentNewsPage + -1;
-                                      safeSetState(() {});
-                                      _model.apiResultg10Copy =
-                                          await RBNewsAPIGroup.newsListCall
-                                              .call(
-                                        authToken: FFAppState().authTokenAPI,
-                                        userId:
-                                            FFAppState().userIdAPI.toString(),
-                                        pageNumber:
-                                            FFAppState().currentNewsPage,
-                                        newsType: 'top',
-                                        searchText: _model.textController.text,
-                                      );
-
-                                      if ((_model.apiResultg10Copy?.succeeded ??
-                                          true)) {
-                                        FFAppState().totalNewsDataSize =
-                                            getJsonField(
-                                          (_model.apiResultg10Copy?.jsonBody ??
-                                              ''),
-                                          r'''$.totalCount''',
+                                onPressed: (FFAppState().currentNewsPage == 1)
+                                    ? null
+                                    : () async {
+                                        _model.apiResultz0zCopy =
+                                            await RBNewsAPIGroup.newsListCall
+                                                .call(
+                                          authToken: FFAppState().authTokenAPI,
+                                          userId:
+                                              FFAppState().userIdAPI.toString(),
+                                          pageNumber:
+                                              FFAppState().currentNewsPage,
+                                          newsType: widget!.newsType,
+                                          searchText:
+                                              _model.textController.text,
+                                          filterCategoriesIdListString:
+                                              FFAppState().selectedFilterIds,
+                                          pageSize: FFAppState().pageSize,
                                         );
-                                        safeSetState(() {});
-                                      }
-                                    }
-                                  }
 
-                                  safeSetState(() {});
-                                },
+                                        if ((_model
+                                                .apiResultg10Copy?.succeeded ??
+                                            true)) {
+                                          FFAppState().totalNewsDataSize =
+                                              getJsonField(
+                                            (_model.apiResultz0zCopy
+                                                    ?.jsonBody ??
+                                                ''),
+                                            r'''$.totalCount''',
+                                          );
+                                          safeSetState(() {});
+                                          FFAppState().totalNewsPage =
+                                              functions.getDivideVars(
+                                                  FFAppState()
+                                                      .totalNewsDataSize,
+                                                  FFAppState().pageSize);
+                                          safeSetState(() {});
+                                          if (FFAppState().currentNewsPage !=
+                                              1) {
+                                            FFAppState().currentNewsPage =
+                                                FFAppState().currentNewsPage +
+                                                    -1;
+                                            safeSetState(() {});
+                                            _model.apiResultg10Copy =
+                                                await RBNewsAPIGroup
+                                                    .newsListCall
+                                                    .call(
+                                              authToken:
+                                                  FFAppState().authTokenAPI,
+                                              userId: FFAppState()
+                                                  .userIdAPI
+                                                  .toString(),
+                                              pageNumber:
+                                                  FFAppState().currentNewsPage,
+                                              newsType: widget!.newsType,
+                                              searchText:
+                                                  _model.textController.text,
+                                              filterCategoriesIdListString:
+                                                  FFAppState()
+                                                      .selectedFilterIds,
+                                              pageSize: FFAppState().pageSize,
+                                            );
+
+                                            if ((_model.apiResultg10Copy
+                                                    ?.succeeded ??
+                                                true)) {
+                                              FFAppState().totalNewsDataSize =
+                                                  getJsonField(
+                                                (_model.apiResultg10Copy
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.totalCount''',
+                                              );
+                                              safeSetState(() {});
+                                            }
+                                          }
+                                        }
+
+                                        safeSetState(() {});
+                                      },
                                 text: '',
                                 icon: Icon(
                                   Icons.chevron_left_rounded,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
+                                  color: FFAppState().currentNewsPage == 1
+                                      ? Color(0xFF808080)
+                                      : FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
                                   size: 16.0,
                                 ),
                                 options: FFButtonOptions(
@@ -803,7 +828,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                   iconAlignment: IconAlignment.start,
                                   iconPadding: EdgeInsetsDirectional.fromSTEB(
                                       8.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color: Color(0xFF5374FF),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
@@ -813,6 +838,8 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                       ),
                                   elevation: 0.0,
                                   borderRadius: BorderRadius.circular(8.0),
+                                  disabledColor: Color(0xFFF2F2F2),
+                                  disabledTextColor: Color(0xFF808080),
                                   hoverColor:
                                       FlutterFlowTheme.of(context).primary,
                                   hoverTextColor: FlutterFlowTheme.of(context)
@@ -834,87 +861,116 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                             child: Align(
                               alignment: AlignmentDirectional(0.0, 0.0),
                               child: FFButtonWidget(
-                                onPressed: () async {
-                                  _model.apiResultz0z =
-                                      await RBNewsAPIGroup.newsListCall.call(
-                                    authToken: FFAppState().authTokenAPI,
-                                    userId: FFAppState().userIdAPI.toString(),
-                                    pageNumber: 1,
-                                    newsType: 'top',
-                                    searchText: _model.textController.text,
-                                  );
-
-                                  if ((_model.apiResultz0z?.succeeded ??
-                                      true)) {
-                                    FFAppState().totalNewsDataSize =
-                                        getJsonField(
-                                      (_model.apiResultz0z?.jsonBody ?? ''),
-                                      r'''$.totalCount''',
-                                    );
-                                    safeSetState(() {});
-                                    FFAppState().totalNewsPage =
-                                        functions.getDivideVars(
-                                            FFAppState().totalNewsDataSize, 2);
-                                    safeSetState(() {});
-                                    if (FFAppState().currentNewsPage !=
-                                        FFAppState().totalNewsPage) {
-                                      FFAppState().currentNewsPage =
-                                          FFAppState().currentNewsPage + 1;
-                                      safeSetState(() {});
-                                      _model.apiResultg10 = await RBNewsAPIGroup
-                                          .newsListCall
-                                          .call(
-                                        authToken: FFAppState().authTokenAPI,
-                                        userId:
-                                            FFAppState().userIdAPI.toString(),
-                                        pageNumber:
-                                            FFAppState().currentNewsPage,
-                                        newsType: 'top',
-                                        searchText: _model.textController.text,
-                                      );
-
-                                      if ((_model.apiResultg10?.succeeded ??
-                                          true)) {
-                                        FFAppState().totalNewsDataSize =
-                                            getJsonField(
-                                          (_model.apiResultg10?.jsonBody ?? ''),
-                                          r'''$.totalCount''',
+                                onPressed: (FFAppState().currentNewsPage ==
+                                        FFAppState().totalNewsPage)
+                                    ? null
+                                    : () async {
+                                        _model.apiResultz0z =
+                                            await RBNewsAPIGroup.newsListCall
+                                                .call(
+                                          authToken: FFAppState().authTokenAPI,
+                                          userId:
+                                              FFAppState().userIdAPI.toString(),
+                                          pageNumber:
+                                              FFAppState().currentNewsPage,
+                                          newsType: widget!.newsType,
+                                          searchText:
+                                              _model.textController.text,
+                                          filterCategoriesIdListString:
+                                              FFAppState().selectedFilterIds,
+                                          pageSize: FFAppState().pageSize,
                                         );
-                                        safeSetState(() {});
-                                      }
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'No more data found',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                          duration:
-                                              Duration(milliseconds: 4000),
-                                          backgroundColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .secondary,
-                                        ),
-                                      );
-                                    }
-                                  }
 
-                                  safeSetState(() {});
-                                },
+                                        if ((_model.apiResultz0z?.succeeded ??
+                                            true)) {
+                                          FFAppState().totalNewsDataSize =
+                                              getJsonField(
+                                            (_model.apiResultz0z?.jsonBody ??
+                                                ''),
+                                            r'''$.totalCount''',
+                                          );
+                                          safeSetState(() {});
+                                          FFAppState().totalNewsPage =
+                                              functions.getDivideVars(
+                                                  FFAppState()
+                                                      .totalNewsDataSize,
+                                                  FFAppState().pageSize);
+                                          safeSetState(() {});
+                                          if (FFAppState().currentNewsPage !=
+                                              FFAppState().totalNewsPage) {
+                                            FFAppState().currentNewsPage =
+                                                FFAppState().currentNewsPage +
+                                                    1;
+                                            safeSetState(() {});
+                                            _model.apiResultg10 =
+                                                await RBNewsAPIGroup
+                                                    .newsListCall
+                                                    .call(
+                                              authToken:
+                                                  FFAppState().authTokenAPI,
+                                              userId: FFAppState()
+                                                  .userIdAPI
+                                                  .toString(),
+                                              pageNumber:
+                                                  FFAppState().currentNewsPage,
+                                              newsType: widget!.newsType,
+                                              searchText:
+                                                  _model.textController.text,
+                                              filterCategoriesIdListString:
+                                                  FFAppState()
+                                                      .selectedFilterIds,
+                                              pageSize: FFAppState().pageSize,
+                                            );
+
+                                            if ((_model
+                                                    .apiResultg10?.succeeded ??
+                                                true)) {
+                                              FFAppState().totalNewsDataSize =
+                                                  getJsonField(
+                                                (_model.apiResultg10
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.totalCount''',
+                                              );
+                                              safeSetState(() {});
+                                            }
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'No more data found',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color: FlutterFlowTheme
+                                                                .of(context)
+                                                            .secondaryBackground,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                                backgroundColor:
+                                                    Color(0xFF748187),
+                                              ),
+                                            );
+                                          }
+                                        }
+
+                                        safeSetState(() {});
+                                      },
                                 text: '',
                                 icon: Icon(
                                   Icons.navigate_next_rounded,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
+                                  color: FFAppState().currentNewsPage ==
+                                          FFAppState().totalNewsPage
+                                      ? Color(0xFF808080)
+                                      : FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
                                   size: 16.0,
                                 ),
                                 options: FFButtonOptions(
@@ -925,7 +981,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                   iconAlignment: IconAlignment.start,
                                   iconPadding: EdgeInsetsDirectional.fromSTEB(
                                       8.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color: Color(0xFF5374FF),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
@@ -935,6 +991,8 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                       ),
                                   elevation: 0.0,
                                   borderRadius: BorderRadius.circular(8.0),
+                                  disabledColor: Color(0xFFF2F2F2),
+                                  disabledTextColor: Color(0xFF808080),
                                   hoverColor:
                                       FlutterFlowTheme.of(context).primary,
                                   hoverTextColor: FlutterFlowTheme.of(context)
