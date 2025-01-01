@@ -40,6 +40,7 @@ class RBNewsAPIGroup {
   static PropertyDetailCall propertyDetailCall = PropertyDetailCall();
   static GetStaticLinkCall getStaticLinkCall = GetStaticLinkCall();
   static EditProfileCall editProfileCall = EditProfileCall();
+  static ResendOTPCall resendOTPCall = ResendOTPCall();
 }
 
 class LoginAPICall {
@@ -733,6 +734,31 @@ class EditProfileCall {
         'userId': userId,
         'userPhoneNumber': userPhoneNumber,
         'userName': userName,
+      },
+      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class ResendOTPCall {
+  Future<ApiCallResponse> call({
+    String? email = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Resend OTP',
+      apiUrl: '${baseUrl}/api/account/resend-otp',
+      callType: ApiCallType.POST,
+      headers: {},
+      params: {
+        'email': email,
       },
       bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
       returnBody: true,

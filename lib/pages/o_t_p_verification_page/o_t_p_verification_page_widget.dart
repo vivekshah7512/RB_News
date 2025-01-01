@@ -1,17 +1,17 @@
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'o_t_p_verification_page_model.dart';
 export 'o_t_p_verification_page_model.dart';
@@ -48,12 +48,16 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.timerController.onStartTimer();
-      FFAppState().TimerSeconds = 1;
       FFAppState().IsStartedTIMER = false;
+      while (FFAppState().TimerSeconds > 0) {
+        _model.updatedTimer = await actions.startDecrementingTimer(
+          FFAppState().TimerSeconds,
+        );
+        FFAppState().TimerSeconds = _model.updatedTimer!;
+        FFAppState().update(() {});
+        await Future.delayed(const Duration(milliseconds: 1000));
+      }
     });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -66,20 +70,27 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, DebugModalRoute.of(context)!);
+    final route = DebugModalRoute.of(context);
+    if (route != null) {
+      routeObserver.subscribe(this, route);
+    }
     debugLogGlobalProperty(context);
   }
 
   @override
   void didPopNext() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
   void didPush() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
@@ -273,37 +284,28 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (FFAppState().resendTimerVisible == 0)
-                            FlutterFlowTimer(
-                              initialTime: _model.timerInitialTimeMs,
-                              getDisplayTime: (value) =>
-                                  StopWatchTimer.getDisplayTime(
-                                value,
-                                hours: false,
-                                milliSecond: false,
-                              ),
-                              controller: _model.timerController,
-                              updateStateInterval: Duration(milliseconds: 1000),
-                              onChanged: (value, displayTime, shouldUpdate) {
-                                _model.timerMilliseconds = value;
-                                _model.timerValue = displayTime;
-                                if (shouldUpdate) safeSetState(() {});
-                              },
-                              onEnded: () async {
-                                FFAppState().resendTimerVisible = 1;
-                                safeSetState(() {});
-                              },
-                              textAlign: TextAlign.center,
+                          CircularPercentIndicator(
+                            percent: functions.convertProgressBarValue(
+                                FFAppState().TimerSeconds),
+                            radius: 17.5,
+                            lineWidth: 3.0,
+                            animation: true,
+                            animateFromLastPercent: true,
+                            progressColor: FlutterFlowTheme.of(context).primary,
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).accent4,
+                            center: Text(
+                              '${FFAppState().TimerSeconds.toString()}',
                               style: FlutterFlowTheme.of(context)
                                   .headlineSmall
                                   .override(
                                     fontFamily: 'Outfit',
-                                    color: Color(0xFF808080),
-                                    fontSize: 16.0,
+                                    fontSize: 12.0,
                                     letterSpacing: 0.0,
                                   ),
                             ),
-                          if (FFAppState().resendTimerVisible == 1)
+                          ),
+                          if (FFAppState().TimerSeconds == 0)
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -312,11 +314,6 @@ class _OTPVerificationPageWidgetState extends State<OTPVerificationPageWidget>
                               onTap: () async {
                                 FFAppState().resendTimerVisible = 0;
                                 safeSetState(() {});
-                                _model.timerController.timer
-                                    .setPresetTime(mSec: 60000, add: false);
-                                _model.timerController.onResetTimer();
-
-                                _model.timerController.onStartTimer();
                               },
                               child: Text(
                                 'કોડ ફરીથી મોકલો',

@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'home_page_widget.dart' show HomePageWidget;
@@ -15,6 +16,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class HomePageModel extends FlutterFlowModel<HomePageWidget> {
+  ///  Local state fields for this page.
+
+  int _currentIndex = 0;
+  set currentIndex(int value) {
+    _currentIndex = value;
+    debugLogWidgetClass(this);
+  }
+
+  int get currentIndex => _currentIndex;
+
+  int _timerValue = 60;
+  set timerValue(int value) {
+    _timerValue = value;
+    debugLogWidgetClass(this);
+  }
+
+  int get timerValue => _timerValue;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Backend Call - API (GuestUser)] action in HomePage widget.
@@ -60,6 +79,28 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
             nullable: false,
           )
         }.withoutNulls,
+        localStates: {
+          'currentIndex': debugSerializeParam(
+            currentIndex,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HomePage',
+            searchReference:
+                'reference=Qh0KFQoMY3VycmVudEluZGV4EgVhOG5ubnIECAEgAVABWgxjdXJyZW50SW5kZXhiCEhvbWVQYWdl',
+            name: 'int',
+            nullable: false,
+          ),
+          'timerValue': debugSerializeParam(
+            timerValue,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HomePage',
+            searchReference:
+                'reference=QhsKEwoKdGltZXJWYWx1ZRIFeHh4bXRyBAgBIAFQAVoKdGltZXJWYWx1ZWIISG9tZVBhZ2U=',
+            name: 'int',
+            nullable: false,
+          )
+        },
         widgetStates: {
           'searchTextFieldText': debugSerializeParam(
             searchTextFieldTextController?.text,

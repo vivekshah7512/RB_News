@@ -1,38 +1,36 @@
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'o_t_p_verification_page_widget.dart' show OTPVerificationPageWidget;
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class OTPVerificationPageModel
     extends FlutterFlowModel<OTPVerificationPageWidget> {
   ///  State fields for stateful widgets in this page.
 
+  // Stores action output result for [Custom Action - startDecrementingTimer] action in OTPVerificationPage widget.
+  int? _updatedTimer;
+  set updatedTimer(int? value) {
+    _updatedTimer = value;
+    debugLogWidgetClass(this);
+  }
+
+  int? get updatedTimer => _updatedTimer;
+
   // State field(s) for PinCode widget.
   TextEditingController? pinCodeController;
   String? Function(BuildContext, String?)? pinCodeControllerValidator;
-  // State field(s) for Timer widget.
-  final timerInitialTimeMs = 60000;
-  int timerMilliseconds = 60000;
-  String timerValue = StopWatchTimer.getDisplayTime(
-    60000,
-    hours: false,
-    milliSecond: false,
-  );
-  FlutterFlowTimerController timerController =
-      FlutterFlowTimerController(StopWatchTimer(mode: StopWatchMode.countDown));
-
   // Stores action output result for [Backend Call - API (OTP Varification)] action in Button widget.
   ApiCallResponse? _apiResultup6CopyCopy;
   set apiResultup6CopyCopy(ApiCallResponse? value) {
@@ -58,7 +56,6 @@ class OTPVerificationPageModel
   @override
   void dispose() {
     pinCodeController?.dispose();
-    timerController.dispose();
   }
 
   @override
@@ -106,6 +103,14 @@ class OTPVerificationPageModel
           )
         },
         actionOutputs: {
+          'updatedTimer': debugSerializeParam(
+            updatedTimer,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=OTPVerificationPage',
+            name: 'int',
+            nullable: true,
+          ),
           'apiResultup6CopyCopy': debugSerializeParam(
             apiResultup6CopyCopy,
             ParamType.ApiResponse,

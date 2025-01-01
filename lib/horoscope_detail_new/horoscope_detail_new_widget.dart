@@ -47,20 +47,27 @@ class _HoroscopeDetailNewWidgetState extends State<HoroscopeDetailNewWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, DebugModalRoute.of(context)!);
+    final route = DebugModalRoute.of(context);
+    if (route != null) {
+      routeObserver.subscribe(this, route);
+    }
     debugLogGlobalProperty(context);
   }
 
   @override
   void didPopNext() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
   void didPush() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
@@ -406,7 +413,6 @@ class _HoroscopeDetailNewWidgetState extends State<HoroscopeDetailNewWidget>
                                     columnHoroscopeDetailResponse.jsonBody,
                                     r'''$.data.description''',
                                   ).toString(),
-                                  trimLines: 3,
                                   trimCollapsedText: 'વધુ વાંચો',
                                   trimExpandedText: 'ઓછું વાંચો',
                                   colorClickableText:

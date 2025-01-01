@@ -81,20 +81,27 @@ class _AllPropertiesListPageWidgetState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, DebugModalRoute.of(context)!);
+    final route = DebugModalRoute.of(context);
+    if (route != null) {
+      routeObserver.subscribe(this, route);
+    }
     debugLogGlobalProperty(context);
   }
 
   @override
   void didPopNext() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
   void didPush() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
@@ -368,7 +375,7 @@ class _AllPropertiesListPageWidgetState
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
                                       context.pushNamed(
-                                        'PropertyDetailNew',
+                                        'PropertyDetailListPage',
                                         queryParameters: {
                                           'propertyId': serializeParam(
                                             getJsonField(
@@ -377,14 +384,19 @@ class _AllPropertiesListPageWidgetState
                                             ),
                                             ParamType.int,
                                           ),
-                                          'propertyAllImages': serializeParam(
+                                          'propertyListArray': serializeParam(
                                             getJsonField(
-                                              allPropertyListItem,
-                                              r'''$.propertyImagesURL''',
+                                              listViewPropertyListResponse
+                                                  .jsonBody,
+                                              r'''$.data''',
                                               true,
                                             ),
-                                            ParamType.String,
+                                            ParamType.JSON,
                                             isList: true,
+                                          ),
+                                          'currentPageIndex': serializeParam(
+                                            allPropertyListIndex,
+                                            ParamType.int,
                                           ),
                                         }.withoutNulls,
                                       );
@@ -637,7 +649,13 @@ class _AllPropertiesListPageWidgetState
                                                           getJsonField(
                                                             allPropertyListItem,
                                                             r'''$.propertyLocation''',
-                                                          ).toString(),
+                                                          )
+                                                              .toString()
+                                                              .maybeHandleOverflow(
+                                                                maxChars: 25,
+                                                                replacement:
+                                                                    '…',
+                                                              ),
                                                           maxLines: 1,
                                                           style: FlutterFlowTheme
                                                                   .of(context)

@@ -1,10 +1,10 @@
 import '/backend/api_requests/api_calls.dart';
 import '/backend/schema/structs/index.dart';
-import '/components/news_filter_popup_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/news_filter_popup/news_filter_popup_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -88,20 +88,27 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, DebugModalRoute.of(context)!);
+    final route = DebugModalRoute.of(context);
+    if (route != null) {
+      routeObserver.subscribe(this, route);
+    }
     debugLogGlobalProperty(context);
   }
 
   @override
   void didPopNext() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
   void didPush() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
@@ -493,15 +500,29 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
+                                      _model.selectedRowIndex =
+                                          newsListArrayIndex;
+                                      safeSetState(() {});
+
                                       context.pushNamed(
-                                        'NewsDetailPage',
+                                        'NewsPagesListViewPage',
                                         queryParameters: {
-                                          'newsId': serializeParam(
+                                          'newsListPageArray': serializeParam(
                                             getJsonField(
-                                              newsListArrayItem,
-                                              r'''$.newsId''',
-                                            ).toString(),
-                                            ParamType.String,
+                                              listViewNewsListResponse.jsonBody,
+                                              r'''$.data''',
+                                              true,
+                                            ),
+                                            ParamType.JSON,
+                                            isList: true,
+                                          ),
+                                          'currentPage': serializeParam(
+                                            newsListArrayIndex,
+                                            ParamType.int,
+                                          ),
+                                          'isFromList': serializeParam(
+                                            true,
+                                            ParamType.bool,
                                           ),
                                         }.withoutNulls,
                                       );

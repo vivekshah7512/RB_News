@@ -44,6 +44,21 @@ class FFAppState extends ChangeNotifier {
     _safeInit(() {
       _userName = prefs.getString('ff_userName') ?? _userName;
     });
+    _safeInit(() {
+      _navIcons = LoggableList(
+        prefs.getStringList('ff_navIcons') ?? _navIcons,
+      );
+    });
+    _safeInit(() {
+      _navTitles = LoggableList(
+        prefs.getStringList('ff_navTitles') ?? _navTitles,
+      );
+    });
+    _safeInit(() {
+      _navActiveIcons = LoggableList(
+        prefs.getStringList('ff_navActiveIcons') ?? _navActiveIcons,
+      );
+    });
   }
 
   void update(VoidCallback callback) {
@@ -53,7 +68,7 @@ class FFAppState extends ChangeNotifier {
 
   late SharedPreferences prefs;
 
-  int _TimerSeconds = 1;
+  int _TimerSeconds = 60;
   int get TimerSeconds => _TimerSeconds;
   set TimerSeconds(int value) {
     _TimerSeconds = value;
@@ -383,6 +398,139 @@ class FFAppState extends ChangeNotifier {
     debugLogAppState(this);
   }
 
+  late LoggableList<String> _navIcons = LoggableList([
+    'assets/images/home_inactive.svg',
+    'assets/images/news_inactive.svg',
+    'assets/images/property_inactive.svg',
+    'assets/images/horoscopes_inactive.svg',
+    'assets/images/user_inactive.svg'
+  ]);
+  List<String> get navIcons =>
+      _navIcons?..logger = () => debugLogAppState(this);
+  set navIcons(List<String> value) {
+    if (value != null) {
+      _navIcons = LoggableList(value);
+    }
+
+    prefs.setStringList('ff_navIcons', value);
+    debugLogAppState(this);
+  }
+
+  void addToNavIcons(String value) {
+    navIcons.add(value);
+    prefs.setStringList('ff_navIcons', _navIcons);
+  }
+
+  void removeFromNavIcons(String value) {
+    navIcons.remove(value);
+    prefs.setStringList('ff_navIcons', _navIcons);
+  }
+
+  void removeAtIndexFromNavIcons(int index) {
+    navIcons.removeAt(index);
+    prefs.setStringList('ff_navIcons', _navIcons);
+  }
+
+  void updateNavIconsAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    navIcons[index] = updateFn(_navIcons[index]);
+    prefs.setStringList('ff_navIcons', _navIcons);
+  }
+
+  void insertAtIndexInNavIcons(int index, String value) {
+    navIcons.insert(index, value);
+    prefs.setStringList('ff_navIcons', _navIcons);
+  }
+
+  late LoggableList<String> _navTitles =
+      LoggableList(['ઘર', 'સમાચાર', 'મિલકત', 'રાશિફળ', 'વપરાશકર્તા']);
+  List<String> get navTitles =>
+      _navTitles?..logger = () => debugLogAppState(this);
+  set navTitles(List<String> value) {
+    if (value != null) {
+      _navTitles = LoggableList(value);
+    }
+
+    prefs.setStringList('ff_navTitles', value);
+    debugLogAppState(this);
+  }
+
+  void addToNavTitles(String value) {
+    navTitles.add(value);
+    prefs.setStringList('ff_navTitles', _navTitles);
+  }
+
+  void removeFromNavTitles(String value) {
+    navTitles.remove(value);
+    prefs.setStringList('ff_navTitles', _navTitles);
+  }
+
+  void removeAtIndexFromNavTitles(int index) {
+    navTitles.removeAt(index);
+    prefs.setStringList('ff_navTitles', _navTitles);
+  }
+
+  void updateNavTitlesAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    navTitles[index] = updateFn(_navTitles[index]);
+    prefs.setStringList('ff_navTitles', _navTitles);
+  }
+
+  void insertAtIndexInNavTitles(int index, String value) {
+    navTitles.insert(index, value);
+    prefs.setStringList('ff_navTitles', _navTitles);
+  }
+
+  late LoggableList<String> _navActiveIcons = LoggableList([
+    'assets/images/home_active.svg',
+    'assets/images/news_active.svg',
+    'assets/images/property_active.svg',
+    'assets/images/horoscopes_active.svg',
+    'assets/images/user_active.svg'
+  ]);
+  List<String> get navActiveIcons =>
+      _navActiveIcons?..logger = () => debugLogAppState(this);
+  set navActiveIcons(List<String> value) {
+    if (value != null) {
+      _navActiveIcons = LoggableList(value);
+    }
+
+    prefs.setStringList('ff_navActiveIcons', value);
+    debugLogAppState(this);
+  }
+
+  void addToNavActiveIcons(String value) {
+    navActiveIcons.add(value);
+    prefs.setStringList('ff_navActiveIcons', _navActiveIcons);
+  }
+
+  void removeFromNavActiveIcons(String value) {
+    navActiveIcons.remove(value);
+    prefs.setStringList('ff_navActiveIcons', _navActiveIcons);
+  }
+
+  void removeAtIndexFromNavActiveIcons(int index) {
+    navActiveIcons.removeAt(index);
+    prefs.setStringList('ff_navActiveIcons', _navActiveIcons);
+  }
+
+  void updateNavActiveIconsAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    navActiveIcons[index] = updateFn(_navActiveIcons[index]);
+    prefs.setStringList('ff_navActiveIcons', _navActiveIcons);
+  }
+
+  void insertAtIndexInNavActiveIcons(int index, String value) {
+    navActiveIcons.insert(index, value);
+    prefs.setStringList('ff_navActiveIcons', _navActiveIcons);
+  }
+
   Map<String, DebugDataField> toDebugSerializableMap() => {
         'TimerSeconds': debugSerializeParam(
           TimerSeconds,
@@ -656,6 +804,39 @@ class FFAppState extends ChangeNotifier {
           searchReference:
               'reference=ChoKFAoIcGFnZVNpemUSCG5mM2xtaHhjcgIIAVoIcGFnZVNpemU=',
           name: 'int',
+          nullable: false,
+        ),
+        'navIcons': debugSerializeParam(
+          navIcons,
+          ParamType.String,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=ChwKFAoIbmF2SWNvbnMSCGd2aHAzZWM1cgQSAggDWghuYXZJY29ucw==',
+          name: 'String',
+          nullable: false,
+        ),
+        'navTitles': debugSerializeParam(
+          navTitles,
+          ParamType.String,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=Ch0KFQoJbmF2VGl0bGVzEghpMndwOTAxenIEEgIIA1oJbmF2VGl0bGVz',
+          name: 'String',
+          nullable: false,
+        ),
+        'navActiveIcons': debugSerializeParam(
+          navActiveIcons,
+          ParamType.String,
+          isList: true,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CiIKGgoObmF2QWN0aXZlSWNvbnMSCGRkM3F6dHBrcgQSAggDWg5uYXZBY3RpdmVJY29ucw==',
+          name: 'String',
           nullable: false,
         )
       };

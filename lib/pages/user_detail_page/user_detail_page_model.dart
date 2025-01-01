@@ -33,6 +33,14 @@ class UserDetailPageModel extends FlutterFlowModel<UserDetailPageWidget> {
 
   String? get privacyPolicyLink => _privacyPolicyLink;
 
+  int _currentIndex = 4;
+  set currentIndex(int value) {
+    _currentIndex = value;
+    debugLogWidgetClass(this);
+  }
+
+  int get currentIndex => _currentIndex;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Backend Call - API (Get Static Link)] action in UserDetailPage widget.
@@ -77,6 +85,16 @@ class UserDetailPageModel extends FlutterFlowModel<UserDetailPageWidget> {
                 'reference=QiYKGgoRcHJpdmFjeVBvbGljeUxpbmsSBXZmZ2U5KgISAHIECAMgAFABWhFwcml2YWN5UG9saWN5TGlua2IOVXNlckRldGFpbFBhZ2U=',
             name: 'String',
             nullable: true,
+          ),
+          'currentIndex': debugSerializeParam(
+            currentIndex,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=UserDetailPage',
+            searchReference:
+                'reference=Qh0KFQoMY3VycmVudEluZGV4EgVwZTh5dXIECAEgAVABWgxjdXJyZW50SW5kZXhiDlVzZXJEZXRhaWxQYWdl',
+            name: 'int',
+            nullable: false,
           )
         },
         actionOutputs: {

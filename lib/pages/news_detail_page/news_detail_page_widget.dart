@@ -74,20 +74,27 @@ class _NewsDetailPageWidgetState extends State<NewsDetailPageWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, DebugModalRoute.of(context)!);
+    final route = DebugModalRoute.of(context);
+    if (route != null) {
+      routeObserver.subscribe(this, route);
+    }
     debugLogGlobalProperty(context);
   }
 
   @override
   void didPopNext() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
   void didPush() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
@@ -266,7 +273,6 @@ class _NewsDetailPageWidgetState extends State<NewsDetailPageWidget>
                                 (_model.apiResultoqq?.jsonBody ?? ''),
                                 r'''$.data.newsDescription''',
                               ).toString(),
-                              trimLines: 3,
                               trimCollapsedText: 'વધુ વાંચો',
                               trimExpandedText: 'ઓછું વાંચો',
                               colorClickableText:
@@ -452,7 +458,7 @@ class _NewsDetailPageWidgetState extends State<NewsDetailPageWidget>
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      showModalBottomSheet(
+                                      await showModalBottomSheet(
                                         isScrollControlled: true,
                                         backgroundColor: Colors.transparent,
                                         context: context,

@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-
-import 'auth/custom_auth/auth_util.dart';
-import 'auth/custom_auth/custom_auth_user_provider.dart';
-
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
@@ -25,8 +21,6 @@ void main() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
   debugLogAppConstant();
-
-  await authManager.initialize();
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
@@ -96,9 +90,6 @@ Stack trace: ${filteredStackTrace.join("\n")}''';
     EasyDebounce.fire('fbcc19a787981a30d86b10103c2f3951604b2ae6');
     EasyDebounce.cancel('fbcc19a787981a30d86b10103c2f3951604b2ae6');
 
-    EasyDebounce.fire('c0186d2c21d5d9300ee148206df9fbd1850b8d41');
-    EasyDebounce.cancel('c0186d2c21d5d9300ee148206df9fbd1850b8d41');
-
     EasyDebounce.fire('508f3c74205c87928b71f49040062e732f9c20b0');
     EasyDebounce.cancel('508f3c74205c87928b71f49040062e732f9c20b0');
   });
@@ -139,7 +130,7 @@ class _MyAppState extends State<MyApp> {
           .map((e) => getRoute(e))
           .toList();
 
-  late Stream<RBNewsAuthUser> userStream;
+  bool displaySplashImage = true;
 
   @override
   void initState() {
@@ -147,17 +138,9 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-    userStream = rBNewsAuthUserStream()
-      ..listen((user) {
-        _appStateNotifier.update(user);
-        debugLogAuthenticatedUser();
-      });
 
-    Future.delayed(
-      Duration(milliseconds: 1500),
-      () => _appStateNotifier.stopShowingSplashImage(),
-    );
-
+    Future.delayed(Duration(milliseconds: 1500),
+        () => safeSetState(() => _appStateNotifier.stopShowingSplashImage()));
     _router.routerDelegate.addListener(() {
       if (mounted) {
         debugLogGlobalProperty(
@@ -230,8 +213,8 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'HomePage': HomePageWidget(),
-      'NewsListPage': NewsListPageWidget(),
-      'AllPropertiesListPage': AllPropertiesListPageWidget(),
+      'NewsPagesListViewPage': NewsPagesListViewPageWidget(),
+      'PropertyDetailListPage': PropertyDetailListPageWidget(),
       'HoroscopePage': HoroscopePageWidget(),
       'UserDetailPage': UserDetailPageWidget(),
     };
@@ -259,7 +242,11 @@ class _NavBarPageState extends State<NavBarPage> {
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: FaIcon(
+              icon: Icon(
+                FFIcons.khomeActive,
+                size: 24.0,
+              ),
+              activeIcon: FaIcon(
                 FontAwesomeIcons.home,
                 size: 24.0,
               ),
@@ -268,7 +255,11 @@ class _NavBarPageState extends State<NavBarPage> {
             ),
             BottomNavigationBarItem(
               icon: FaIcon(
-                FontAwesomeIcons.stickyNote,
+                FontAwesomeIcons.home,
+                size: 24.0,
+              ),
+              activeIcon: FaIcon(
+                FontAwesomeIcons.home,
                 size: 24.0,
               ),
               label: 'સમાચાર',
@@ -276,7 +267,11 @@ class _NavBarPageState extends State<NavBarPage> {
             ),
             BottomNavigationBarItem(
               icon: FaIcon(
-                FontAwesomeIcons.building,
+                FontAwesomeIcons.home,
+                size: 24.0,
+              ),
+              activeIcon: FaIcon(
+                FontAwesomeIcons.home,
                 size: 24.0,
               ),
               label: 'મિલકત',

@@ -81,20 +81,27 @@ class _LatestPropertiesListPageWidgetState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, DebugModalRoute.of(context)!);
+    final route = DebugModalRoute.of(context);
+    if (route != null) {
+      routeObserver.subscribe(this, route);
+    }
     debugLogGlobalProperty(context);
   }
 
   @override
   void didPopNext() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
   void didPush() {
-    safeSetState(() => _model.isRouteVisible = true);
-    debugLogWidgetClass(_model);
+    if (mounted && DebugFlutterFlowModelContext.maybeOf(context) == null) {
+      setState(() => _model.isRouteVisible = true);
+      debugLogWidgetClass(_model);
+    }
   }
 
   @override
@@ -371,7 +378,7 @@ class _LatestPropertiesListPageWidgetState
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
                                       context.pushNamed(
-                                        'PropertyDetailNew',
+                                        'PropertyDetailListPage',
                                         queryParameters: {
                                           'propertyId': serializeParam(
                                             getJsonField(
@@ -380,14 +387,19 @@ class _LatestPropertiesListPageWidgetState
                                             ),
                                             ParamType.int,
                                           ),
-                                          'propertyAllImages': serializeParam(
+                                          'propertyListArray': serializeParam(
                                             getJsonField(
-                                              latestPropertyListItem,
-                                              r'''$.propertyImagesURL''',
+                                              listViewLatestPropertyListResponse
+                                                  .jsonBody,
+                                              r'''$.data''',
                                               true,
                                             ),
-                                            ParamType.String,
+                                            ParamType.JSON,
                                             isList: true,
+                                          ),
+                                          'currentPageIndex': serializeParam(
+                                            latestPropertyListIndex,
+                                            ParamType.int,
                                           ),
                                         }.withoutNulls,
                                       );

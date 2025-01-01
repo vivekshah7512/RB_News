@@ -12,8 +12,6 @@ import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:debug_panel_proto/debug_panel_proto.dart';
 
-import '/auth/custom_auth/auth_util.dart';
-
 bool kEnableDebugLogging = true;
 
 /// A inherited widget that provides the root model of the current page, as well
@@ -183,42 +181,6 @@ void debugLogAppConstant() {
             'data': AppConstantDebugData(
                     values: FFAppConstants.toDebugSerializableMap())
                 .serializedBufferString,
-          });
-}
-
-void debugLogAuthenticatedUser() {
-  debouncedDebugLogging(
-      'c0186d2c21d5d9300ee148206df9fbd1850b8d41',
-      () => {
-            'event_type': 'variable',
-            'data_source': 'authenticatedUser',
-            'data': AuthenticatedUserDebugData(values: {
-              'isUserLoggedIn': debugSerializeParam(
-                loggedIn,
-                ParamType.bool,
-                nullable: false,
-              ),
-              'currentUserUid': debugSerializeParam(
-                currentUserUid,
-                ParamType.String,
-                nullable: false,
-              ),
-              'currentAuthenticationToken': debugSerializeParam(
-                currentAuthenticationToken,
-                ParamType.String,
-                nullable: true,
-              ),
-              'currentAuthRefreshToken': debugSerializeParam(
-                currentAuthRefreshToken,
-                ParamType.String,
-                nullable: true,
-              ),
-              'currentAuthTokenExpiration': debugSerializeParam(
-                currentAuthTokenExpiration,
-                ParamType.DateTime,
-                nullable: true,
-              ),
-            }).serializedBufferString,
           });
 }
 

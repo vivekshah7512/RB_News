@@ -406,7 +406,6 @@ class _HoroscopesDetailPageWidgetState extends State<HoroscopesDetailPageWidget>
                                         stackHoroscopeDetailResponse.jsonBody,
                                         r'''$.data.description''',
                                       ).toString(),
-                                      trimLines: 3,
                                       trimCollapsedText: 'વધુ વાંચો',
                                       trimExpandedText: 'ઓછું વાંચો',
                                       colorClickableText:

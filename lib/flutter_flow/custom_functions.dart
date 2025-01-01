@@ -9,7 +9,6 @@ import 'lat_lng.dart';
 import 'place.dart';
 import 'uploaded_file.dart';
 import '/backend/schema/structs/index.dart';
-import '/auth/custom_auth/auth_util.dart';
 
 String? formateAPIDate(String? apiDate) {
   if (apiDate == null) {
@@ -268,4 +267,24 @@ String formatAmount(double amount) {
   String formattedAmount = numberFormat.format(integerAmount);
 
   return formattedAmount;
+}
+
+String startIncrementingTimer(int currentSecond) {
+  // Logic to increment timer
+  int seconds = currentSecond;
+
+  if (seconds > 0) {
+    seconds--; // Decrease the value by 1
+    return '$seconds'; // Return the current timer value as a string
+  } else {
+    return '0'; // Return 0 when the timer reaches 0
+  }
+}
+
+double updateProgressTimer(double timerValue) {
+  return (timerValue / 60);
+}
+
+double convertProgressBarValue(int timerValue) {
+  return timerValue / 60;
 }

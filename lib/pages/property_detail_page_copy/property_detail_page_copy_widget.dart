@@ -362,7 +362,6 @@ class _PropertyDetailPageCopyWidgetState
                                         .jsonBody,
                                     r'''$.data.propertyDescription''',
                                   ).toString(),
-                                  trimLines: 3,
                                   trimCollapsedText: 'વધુ વાંચો',
                                   trimExpandedText: 'ઓછું વાંચો',
                                   colorClickableText:

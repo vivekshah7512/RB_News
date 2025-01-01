@@ -1,10 +1,10 @@
 import '/backend/api_requests/api_calls.dart';
 import '/backend/schema/structs/index.dart';
-import '/components/news_filter_popup_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/news_filter_popup/news_filter_popup_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -27,6 +27,14 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
   }
 
   int? get page => _page;
+
+  int? _selectedRowIndex = 0;
+  set selectedRowIndex(int? value) {
+    _selectedRowIndex = value;
+    debugLogWidgetClass(this);
+  }
+
+  int? get selectedRowIndex => _selectedRowIndex;
 
   ///  State fields for stateful widgets in this page.
 
@@ -143,6 +151,16 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
             searchReference:
                 'reference=QhMKDQoEcGFnZRIFdnc0dGVyAggBUAFaBHBhZ2ViDE5ld3NMaXN0UGFnZQ==',
+            name: 'int',
+            nullable: true,
+          ),
+          'selectedRowIndex': debugSerializeParam(
+            selectedRowIndex,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            searchReference:
+                'reference=Qh8KGQoQc2VsZWN0ZWRSb3dJbmRleBIFZnMxb2VyAggBUAFaEHNlbGVjdGVkUm93SW5kZXhiDE5ld3NMaXN0UGFnZQ==',
             name: 'int',
             nullable: true,
           )

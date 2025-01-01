@@ -12,6 +12,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class HoroscopePageModel extends FlutterFlowModel<HoroscopePageWidget> {
+  ///  Local state fields for this page.
+
+  int _currentIndex = 3;
+  set currentIndex(int value) {
+    _currentIndex = value;
+    debugLogWidgetClass(this);
+  }
+
+  int get currentIndex => _currentIndex;
+
   final Map<String, DebugDataField> debugGeneratorVariables = {};
   final Map<String, DebugDataField> debugBackendQueries = {};
   final Map<String, FlutterFlowModel> widgetBuilderComponents = {};
@@ -25,6 +35,18 @@ class HoroscopePageModel extends FlutterFlowModel<HoroscopePageWidget> {
 
   @override
   WidgetClassDebugData toWidgetClassDebugData() => WidgetClassDebugData(
+        localStates: {
+          'currentIndex': debugSerializeParam(
+            currentIndex,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HoroscopePage',
+            searchReference:
+                'reference=Qh0KFQoMY3VycmVudEluZGV4EgUwdjJ5MnIECAEgAVABWgxjdXJyZW50SW5kZXhiDUhvcm9zY29wZVBhZ2U=',
+            name: 'int',
+            nullable: false,
+          )
+        },
         generatorVariables: debugGeneratorVariables,
         backendQueries: debugBackendQueries,
         componentStates: {

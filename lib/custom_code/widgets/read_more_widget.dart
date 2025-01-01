@@ -13,58 +13,44 @@ import 'package:flutter_html/flutter_html.dart';
 
 class ReadMoreWidget extends StatefulWidget {
   final String textContent; // Text content (plain or HTML)
-  final int trimLines;
-  final String trimCollapsedText;
-  final String trimExpandedText;
-  final Color colorClickableText;
+  final int trimCharacters; // Number of characters for "Read More"
+  final String trimCollapsedText; // Text for collapsed state
+  final String trimExpandedText; // Text for expanded state
+  final Color colorClickableText; // Color for "Read More/Less"
   final double? width; // Optional width
   final bool isHtml; // Flag to indicate if the text is HTML
 
-  ReadMoreWidget({
+  const ReadMoreWidget({
     required this.textContent,
-    required this.trimLines,
+    this.trimCharacters = 125, // Default is 125 characters
     required this.trimCollapsedText,
     required this.trimExpandedText,
     required this.colorClickableText,
     this.width,
     this.isHtml = false, // Default is plain text
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _ReadMoreWidgetState createState() => _ReadMoreWidgetState();
 }
 
 class _ReadMoreWidgetState extends State<ReadMoreWidget> {
-  bool isExpanded = false;
-  bool showReadMore = false; // Flag to control visibility of Read More
+  bool isExpanded = false; // Tracks expanded/collapsed state
+  late String displayText;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkTextOverflow());
+    _initializeText();
   }
 
-  void _checkTextOverflow() {
-    // Create a TextPainter to measure text size
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: widget.textContent,
-        style: TextStyle(
-          fontSize: 16.0, // Match font size used in the widget
-          color: Color(0xFF808080),
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-      maxLines: widget.trimLines,
-    );
-
-    textPainter.layout(maxWidth: widget.width ?? double.infinity);
-
-    // Check if text overflows the trimLines
-    if (textPainter.didExceedMaxLines) {
-      setState(() {
-        showReadMore = true;
-      });
+  void _initializeText() {
+    if (widget.textContent.length > widget.trimCharacters) {
+      displayText =
+          widget.textContent.substring(0, widget.trimCharacters) + "...";
+    } else {
+      displayText = widget.textContent;
     }
   }
 
@@ -79,51 +65,43 @@ class _ReadMoreWidgetState extends State<ReadMoreWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Render content
               widget.isHtml
                   ? Html(
-                      data: widget.textContent,
+                      data: isExpanded ? widget.textContent : displayText,
                       style: {
                         'body': Style(
-                          fontSize: FontSize(16.0), // Text size 16px
-                          color: Color(0xFF808080), // Text color #808080
-                          fontWeight: FontWeight.w400, // Text weight 400
-                          maxLines: isExpanded ? null : widget.trimLines,
-                          textOverflow: TextOverflow.ellipsis,
-                        ),
-                        'p': Style(
-                          margin: Margins
-                              .zero, // Remove default margin for <p> tags
-                          padding:
-                              HtmlPaddings.zero, // Remove padding for <p> tags
+                          fontSize: FontSize(16.0),
+                          color: const Color(0xFF808080),
+                          fontWeight: FontWeight.w400,
                         ),
                       },
                     )
                   : Text(
-                      widget.textContent,
-                      style: TextStyle(
-                        fontSize: 16.0, // Text size 16px
-                        color: Color(0xFF808080), // Text color #808080
-                        fontWeight: FontWeight.w400, // Text weight 400
+                      isExpanded ? widget.textContent : displayText,
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Color(0xFF808080),
+                        fontWeight: FontWeight.w400,
                       ),
-                      maxLines: isExpanded ? null : widget.trimLines,
-                      overflow: TextOverflow.ellipsis,
                     ),
-              if (showReadMore)
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      isExpanded = !isExpanded;
-                    });
-                  },
-                  child: Text(
-                    isExpanded
-                        ? widget.trimExpandedText
-                        : widget.trimCollapsedText,
-                    style: TextStyle(
-                      fontSize: 16.0, // Text size 16px
-                      color: widget.colorClickableText,
-                      fontWeight: FontWeight.bold,
+              if (widget.textContent.length > widget.trimCharacters)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    child: Text(
+                      isExpanded
+                          ? widget.trimExpandedText
+                          : widget.trimCollapsedText,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: widget.colorClickableText,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -134,5 +112,6 @@ class _ReadMoreWidgetState extends State<ReadMoreWidget> {
     );
   }
 }
+
 // Set your widget name, define your parameter, and then add the
 // boilerplate code using the green button on the right!
