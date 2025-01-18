@@ -181,10 +181,10 @@ function getUserFcmTokensCollection(userDocPath) {
 
 function getDocIdBound(index, numBatches) {
   if (index <= 0) {
-    return "user_data/(";
+    return "users/(";
   }
   if (index >= numBatches) {
-    return "user_data/}";
+    return "users/}";
   }
   const numUidChars = 62;
   const twoCharOptions = Math.pow(numUidChars, 2);
@@ -194,7 +194,7 @@ function getDocIdBound(index, numBatches) {
   var secondCharIdx = Math.floor(twoCharIdx % numUidChars);
   const firstChar = getCharForIndex(firstCharIdx);
   const secondChar = getCharForIndex(secondCharIdx);
-  return "user_data/" + firstChar + secondChar;
+  return "users/" + firstChar + secondChar;
 }
 
 function getCharForIndex(charIdx) {
@@ -206,8 +206,3 @@ function getCharForIndex(charIdx) {
     return String.fromCharCode("a".charCodeAt(0) + charIdx - 36);
   }
 }
-exports.onUserDeleted = functions.auth.user().onDelete(async (user) => {
-  let firestore = admin.firestore();
-  let userRef = firestore.doc("user_data/" + user.uid);
-  await firestore.collection("user_data").doc(user.uid).delete();
-});

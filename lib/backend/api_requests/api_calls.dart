@@ -41,6 +41,7 @@ class RBNewsAPIGroup {
   static GetStaticLinkCall getStaticLinkCall = GetStaticLinkCall();
   static EditProfileCall editProfileCall = EditProfileCall();
   static ResendOTPCall resendOTPCall = ResendOTPCall();
+  static AdvertisementCall advertisementCall = AdvertisementCall();
 }
 
 class LoginAPICall {
@@ -51,6 +52,7 @@ class LoginAPICall {
     String? deviceInfo = '',
     String? latitude = '',
     String? longitude = '',
+    String? deviceToken = '',
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -62,7 +64,7 @@ class LoginAPICall {
       params: {
         'email': email,
         'device_type': deviceType,
-        'device_token': "kjhkjhgk=kjfffjkg+shg1fh5",
+        'device_token': deviceToken,
         'device_id': deviceId,
         'device_info': deviceInfo,
         'latitude': latitude,
@@ -89,6 +91,7 @@ class RegistrationCall {
     String? longitude = '',
     String? fullname = '',
     String? phoneNumber = '',
+    String? deviceToken = '',
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -100,7 +103,7 @@ class RegistrationCall {
       params: {
         'email': email,
         'device_type': deviceType,
-        'device_token': "kjhkjhgk=kjfffjkg+shg1fh5",
+        'device_token': deviceToken,
         'device_id': deviceId,
         'device_info': deviceInfo,
         'latitude': latitude,
@@ -205,6 +208,7 @@ class GuestUserCall {
     String? deviceInfo = '',
     String? deviceId = '',
     String? deviceType = '',
+    String? deviceToken = '',
   }) async {
     final baseUrl = RBNewsAPIGroup.getBaseUrl();
 
@@ -216,10 +220,10 @@ class GuestUserCall {
       params: {
         'device_type': deviceType,
         'device_id': deviceId,
-        'device_token': "urgyug+fasgr1cgsf=",
         'device_info': deviceInfo,
         'longitude': longitude,
         'latitude': latitude,
+        'device_token': deviceToken,
       },
       bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
       returnBody: true,
@@ -278,7 +282,7 @@ class NewsListCall {
         r'''$.data''',
         true,
       ) as List?;
-  int? totalPageCount(dynamic response) => castToType<int>(getJsonField(
+  int? totalPageCountAPI(dynamic response) => castToType<int>(getJsonField(
         response,
         r'''$.totalCount''',
       ));
@@ -771,6 +775,33 @@ class ResendOTPCall {
   }
 }
 
+class AdvertisementCall {
+  Future<ApiCallResponse> call({
+    String? dateInput = '',
+    String? authToken = '',
+  }) async {
+    final baseUrl = RBNewsAPIGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Advertisement',
+      apiUrl: '${baseUrl}/api/details/get-advertisement-details',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+      },
+      params: {
+        'dateInput': dateInput,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
 /// End RB News API Group Code
 
 class ApiPagingParams {
@@ -790,6 +821,9 @@ class ApiPagingParams {
 }
 
 String _toEncodable(dynamic item) {
+  if (item is DocumentReference) {
+    return item.path;
+  }
   return item;
 }
 

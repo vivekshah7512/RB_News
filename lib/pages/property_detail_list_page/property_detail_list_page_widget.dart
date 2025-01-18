@@ -7,10 +7,11 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'property_detail_list_page_model.dart';
 export 'property_detail_list_page_model.dart';
 
@@ -156,9 +157,10 @@ class _PropertyDetailListPageWidgetState
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: SpinKitFadingFour(
-                  color: FlutterFlowTheme.of(context).primary,
-                  size: 50.0,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    FlutterFlowTheme.of(context).primary,
+                  ),
                 ),
               ),
             ),
@@ -287,7 +289,7 @@ class _PropertyDetailListPageWidgetState
                                         ),
                                         Align(
                                           alignment:
-                                              AlignmentDirectional(0.0, 1.0),
+                                              AlignmentDirectional(0.0, 1.01),
                                           child: Container(
                                             width: MediaQuery.sizeOf(context)
                                                     .width *
@@ -319,10 +321,6 @@ class _PropertyDetailListPageWidgetState
                                                   .fromSTEB(
                                                       24.0, 0.0, 24.0, 42.0),
                                               child: Container(
-                                                width:
-                                                    MediaQuery.sizeOf(context)
-                                                            .width *
-                                                        1.0,
                                                 height: 60.0,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xE6FFFFFF),
@@ -411,15 +409,21 @@ class _PropertyDetailListPageWidgetState
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            12.0),
+                                                                            8.0),
                                                                 border:
                                                                     Border.all(
-                                                                  color: Color(
-                                                                      0xFF5374FF),
+                                                                  color: _model
+                                                                              .selectedImageId ==
+                                                                          propertyImagesIndex
+                                                                      ? FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primary
+                                                                      : Color(
+                                                                          0xE6FFFFFF),
                                                                   width: _model
                                                                               .selectedImageId ==
                                                                           propertyImagesIndex
-                                                                      ? 4.0
+                                                                      ? 2.0
                                                                       : 0.0,
                                                                 ),
                                                               ),
@@ -429,7 +433,7 @@ class _PropertyDetailListPageWidgetState
                                                                         double>(
                                                                   _model.selectedImageId ==
                                                                           propertyImagesIndex
-                                                                      ? 4.0
+                                                                      ? 2.0
                                                                       : 0.0,
                                                                   0.0,
                                                                 )),
@@ -528,7 +532,7 @@ class _PropertyDetailListPageWidgetState
                                                               .bodyMedium
                                                               .override(
                                                                 fontFamily:
-                                                                    'Readex Pro',
+                                                                    'BalooBhaiGujarati',
                                                                 color: Color(
                                                                     0xFF5374FF),
                                                                 fontSize: 16.0,
@@ -537,6 +541,8 @@ class _PropertyDetailListPageWidgetState
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
+                                                                useGoogleFonts:
+                                                                    false,
                                                               ),
                                                         ),
                                                       ),
@@ -562,7 +568,7 @@ class _PropertyDetailListPageWidgetState
                                                                 .labelSmall
                                                                 .override(
                                                                   fontFamily:
-                                                                      'Readex Pro',
+                                                                      'BalooBhaiGujarati',
                                                                   color: Color(
                                                                       0xFF5374FF),
                                                                   letterSpacing:
@@ -570,6 +576,8 @@ class _PropertyDetailListPageWidgetState
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
+                                                                  useGoogleFonts:
+                                                                      false,
                                                                 ),
                                                           ),
                                                         ),
@@ -592,11 +600,13 @@ class _PropertyDetailListPageWidgetState
                                                     FlutterFlowTheme.of(context)
                                                         .titleLarge
                                                         .override(
-                                                          fontFamily: 'Outfit',
+                                                          fontFamily:
+                                                              'BalooBhaiGujarati',
                                                           color:
                                                               Color(0xFF1A1A1A),
                                                           fontSize: 20.0,
                                                           letterSpacing: 0.0,
+                                                          useGoogleFonts: false,
                                                         ),
                                               ),
                                             ),
@@ -628,11 +638,12 @@ class _PropertyDetailListPageWidgetState
                                                         .bodySmall
                                                         .override(
                                                           fontFamily:
-                                                              'Readex Pro',
+                                                              'BalooBhaiGujarati',
                                                           color:
                                                               Color(0xFF808080),
                                                           fontSize: 14.0,
                                                           letterSpacing: 0.0,
+                                                          useGoogleFonts: false,
                                                         ),
                                                   ),
                                                 ].divide(SizedBox(width: 10.0)),
@@ -650,15 +661,10 @@ class _PropertyDetailListPageWidgetState
                                                     propertyListLocalArrayItem,
                                                     r'''$.propertyDescription''',
                                                   ).toString(),
-                                                  trimCollapsedText:
-                                                      'વધુ વાંચો',
-                                                  trimExpandedText:
-                                                      'ઓછું વાંચો',
                                                   colorClickableText:
                                                       FlutterFlowTheme.of(
                                                               context)
                                                           .primary,
-                                                  isHtml: true,
                                                 ),
                                               ),
                                             ),
@@ -675,11 +681,13 @@ class _PropertyDetailListPageWidgetState
                                                             context)
                                                         .titleLarge
                                                         .override(
-                                                          fontFamily: 'Outfit',
+                                                          fontFamily:
+                                                              'BalooBhaiGujarati',
                                                           color:
                                                               Color(0xFF1A1A1A),
                                                           fontSize: 24.0,
                                                           letterSpacing: 0.0,
+                                                          useGoogleFonts: false,
                                                         ),
                                                   ),
                                                   Text(
@@ -693,9 +701,11 @@ class _PropertyDetailListPageWidgetState
                                                             context)
                                                         .titleLarge
                                                         .override(
-                                                          fontFamily: 'Outfit',
+                                                          fontFamily:
+                                                              'BalooBhaiGujarati',
                                                           fontSize: 24.0,
                                                           letterSpacing: 0.0,
+                                                          useGoogleFonts: false,
                                                         ),
                                                   ),
                                                 ].divide(SizedBox(width: 3.0)),
@@ -716,12 +726,13 @@ class _PropertyDetailListPageWidgetState
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily:
-                                                            'Readex Pro',
+                                                            'BalooBhaiGujarati',
                                                         color:
                                                             Color(0xFF808080),
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FontWeight.w500,
+                                                        useGoogleFonts: false,
                                                       ),
                                                 ),
                                                 Row(
@@ -732,26 +743,76 @@ class _PropertyDetailListPageWidgetState
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                      child: Image.asset(
-                                                        'assets/images/share_property.png',
-                                                        width: 40.0,
-                                                        height: 40.0,
-                                                        fit: BoxFit.cover,
+                                                    Builder(
+                                                      builder: (context) =>
+                                                          InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          await Share.share(
+                                                            functions.combineWithNewLine(
+                                                                getJsonField(
+                                                                  propertyListLocalArrayItem,
+                                                                  r'''$.propertyName''',
+                                                                ).toString(),
+                                                                getJsonField(
+                                                                  propertyListLocalArrayItem,
+                                                                  r'''$.shareLink''',
+                                                                ).toString()),
+                                                            sharePositionOrigin:
+                                                                getWidgetBoundingBox(
+                                                                    context),
+                                                          );
+                                                        },
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.0),
+                                                          child: Image.asset(
+                                                            'assets/images/share_property.png',
+                                                            width: 40.0,
+                                                            height: 40.0,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                      child: Image.asset(
-                                                        'assets/images/call.png',
-                                                        width: 40.0,
-                                                        height: 40.0,
-                                                        fit: BoxFit.cover,
+                                                    InkWell(
+                                                      splashColor:
+                                                          Colors.transparent,
+                                                      focusColor:
+                                                          Colors.transparent,
+                                                      hoverColor:
+                                                          Colors.transparent,
+                                                      highlightColor:
+                                                          Colors.transparent,
+                                                      onTap: () async {
+                                                        await launchUrl(Uri(
+                                                          scheme: 'tel',
+                                                          path:
+                                                              '+91${getJsonField(
+                                                            propertyListLocalArrayItem,
+                                                            r'''$.contactNumber''',
+                                                          ).toString()}',
+                                                        ));
+                                                      },
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                        child: Image.asset(
+                                                          'assets/images/call.png',
+                                                          width: 40.0,
+                                                          height: 40.0,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
                                                   ],

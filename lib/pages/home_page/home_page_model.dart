@@ -1,8 +1,8 @@
 import '/backend/api_requests/api_calls.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/custom_components/login_popup/login_popup_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -10,7 +10,7 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'home_page_widget.dart' show HomePageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +36,15 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
 
   ///  State fields for stateful widgets in this page.
 
+  // Stores action output result for [Custom Action - getFirebaseToken] action in HomePage widget.
+  String? _fcmToken;
+  set fcmToken(String? value) {
+    _fcmToken = value;
+    debugLogWidgetClass(this);
+  }
+
+  String? get fcmToken => _fcmToken;
+
   // Stores action output result for [Backend Call - API (GuestUser)] action in HomePage widget.
   ApiCallResponse? _apiResultrfs;
   set apiResultrfs(ApiCallResponse? value) {
@@ -45,11 +54,14 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
 
   ApiCallResponse? get apiResultrfs => _apiResultrfs;
 
-  // State field(s) for SearchTextField widget.
-  FocusNode? searchTextFieldFocusNode;
-  TextEditingController? searchTextFieldTextController;
-  String? Function(BuildContext, String?)?
-      searchTextFieldTextControllerValidator;
+  // Stores action output result for [Custom Action - areNotificationsEnabled] action in Image widget.
+  bool? _result;
+  set result(bool? value) {
+    _result = value;
+    debugLogWidgetClass(this);
+  }
+
+  bool? get result => _result;
 
   final Map<String, DebugDataField> debugGeneratorVariables = {};
   final Map<String, DebugDataField> debugBackendQueries = {};
@@ -60,10 +72,7 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   }
 
   @override
-  void dispose() {
-    searchTextFieldFocusNode?.dispose();
-    searchTextFieldTextController?.dispose();
-  }
+  void dispose() {}
 
   @override
   WidgetClassDebugData toWidgetClassDebugData() => WidgetClassDebugData(
@@ -101,23 +110,29 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
             nullable: false,
           )
         },
-        widgetStates: {
-          'searchTextFieldText': debugSerializeParam(
-            searchTextFieldTextController?.text,
+        actionOutputs: {
+          'fcmToken': debugSerializeParam(
+            fcmToken,
             ParamType.String,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HomePage',
             name: 'String',
             nullable: true,
-          )
-        },
-        actionOutputs: {
+          ),
           'apiResultrfs': debugSerializeParam(
             apiResultrfs,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HomePage',
             name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'result': debugSerializeParam(
+            result,
+            ParamType.bool,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=HomePage',
+            name: 'bool',
             nullable: true,
           )
         },

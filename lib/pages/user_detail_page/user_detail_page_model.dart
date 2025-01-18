@@ -1,15 +1,14 @@
 import '/backend/api_requests/api_calls.dart';
-import '/components/logout_alert_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/pages/edit_profile_popup/edit_profile_popup_widget.dart';
+import '/pages/custom_components/edit_profile_popup/edit_profile_popup_widget.dart';
+import '/pages/custom_components/logout_alert/logout_alert_widget.dart';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'user_detail_page_widget.dart' show UserDetailPageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

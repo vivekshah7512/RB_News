@@ -8,7 +8,7 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -128,37 +128,41 @@ class _LatestPropertiesListPageWidgetState
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: Color(0xFFF8F8F8),
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          backgroundColor: Color(0xFFF8F8F8),
           automaticallyImplyLeading: false,
           title: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              FlutterFlowIconButton(
-                borderColor: Color(0xFFE6E6E6),
-                borderRadius: 12.0,
-                borderWidth: 1.0,
-                buttonSize: 40.0,
-                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                icon: Icon(
-                  Icons.arrow_back_ios_new,
-                  color: Color(0xFF808080),
-                  size: 24.0,
-                ),
-                onPressed: () async {
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
                   context.safePop();
                 },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: SvgPicture.asset(
+                    'assets/images/back.svg',
+                    width: 40.0,
+                    height: 40.0,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               Text(
                 widget!.propertyTitle,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      fontFamily: 'Readex Pro',
+                      fontFamily: 'BalooBhaiGujarati',
                       color: Color(0xFF1A1A1A),
                       fontSize: 20.0,
                       letterSpacing: 0.0,
                       fontWeight: FontWeight.w600,
+                      useGoogleFonts: false,
                     ),
               ),
               Opacity(
@@ -183,13 +187,14 @@ class _LatestPropertiesListPageWidgetState
           ),
           actions: [],
           centerTitle: true,
-          elevation: 2.0,
+          elevation: 0.0,
         ),
-        body: SafeArea(
-          top: true,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
+        body: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
+              child: SingleChildScrollView(
+                controller: _model.columnController,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -218,12 +223,15 @@ class _LatestPropertiesListPageWidgetState
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 0.0, 5.0, 0.0),
-                                child: Icon(
-                                  Icons.search,
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  size: 24.0,
+                                    12.0, 0.0, 12.0, 0.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: SvgPicture.asset(
+                                    'assets/images/search-normal.svg',
+                                    width: 20.0,
+                                    height: 20.0,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               Expanded(
@@ -266,8 +274,9 @@ class _LatestPropertiesListPageWidgetState
                                     hintStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
+                                          fontFamily: 'BalooBhaiGujarati',
                                           letterSpacing: 0.0,
+                                          useGoogleFonts: false,
                                         ),
                                     enabledBorder: InputBorder.none,
                                     focusedBorder: InputBorder.none,
@@ -277,8 +286,9 @@ class _LatestPropertiesListPageWidgetState
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Readex Pro',
+                                        fontFamily: 'BalooBhaiGujarati',
                                         letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                   minLines: 1,
                                   validator: _model.textControllerValidator
@@ -304,12 +314,17 @@ class _LatestPropertiesListPageWidgetState
                           // Customize what your widget looks like when it's loading.
                           if (!snapshot.hasData) {
                             return Center(
-                              child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
-                                child: SpinKitFadingFour(
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  size: 50.0,
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 320.0, 0.0, 0.0),
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
                                 ),
                               ),
                             );
@@ -506,7 +521,7 @@ class _LatestPropertiesListPageWidgetState
                                                                           .bodyMedium
                                                                           .override(
                                                                             fontFamily:
-                                                                                'Readex Pro',
+                                                                                'BalooBhaiGujarati',
                                                                             color:
                                                                                 Color(0xFF5374FF),
                                                                             fontSize:
@@ -515,6 +530,8 @@ class _LatestPropertiesListPageWidgetState
                                                                                 0.0,
                                                                             fontWeight:
                                                                                 FontWeight.bold,
+                                                                            useGoogleFonts:
+                                                                                false,
                                                                           ),
                                                                     ),
                                                                   ),
@@ -539,10 +556,11 @@ class _LatestPropertiesListPageWidgetState
                                                                         style: FlutterFlowTheme.of(context)
                                                                             .labelSmall
                                                                             .override(
-                                                                              fontFamily: 'Readex Pro',
+                                                                              fontFamily: 'BalooBhaiGujarati',
                                                                               color: Color(0xFF5374FF),
                                                                               letterSpacing: 0.0,
                                                                               fontWeight: FontWeight.w500,
+                                                                              useGoogleFonts: false,
                                                                             ),
                                                                       ),
                                                                     ),
@@ -609,13 +627,15 @@ class _LatestPropertiesListPageWidgetState
                                                           .bodyMedium
                                                           .override(
                                                             fontFamily:
-                                                                'Readex Pro',
+                                                                'BalooBhaiGujarati',
                                                             color: Color(
                                                                 0xFF4D4D4D),
                                                             fontSize: 16.0,
                                                             letterSpacing: 0.0,
                                                             fontWeight:
                                                                 FontWeight.w600,
+                                                            useGoogleFonts:
+                                                                false,
                                                           ),
                                                     ),
                                                     Align(
@@ -673,13 +693,15 @@ class _LatestPropertiesListPageWidgetState
                                                                 .bodySmall
                                                                 .override(
                                                                   fontFamily:
-                                                                      'Readex Pro',
+                                                                      'BalooBhaiGujarati',
                                                                   color: Color(
                                                                       0xFF808080),
                                                                   fontSize:
                                                                       14.0,
                                                                   letterSpacing:
                                                                       0.0,
+                                                                  useGoogleFonts:
+                                                                      false,
                                                                 ),
                                                           ),
                                                         ].divide(SizedBox(
@@ -697,7 +719,7 @@ class _LatestPropertiesListPageWidgetState
                                                               .bodyMedium
                                                               .override(
                                                                 fontFamily:
-                                                                    'Readex Pro',
+                                                                    'BalooBhaiGujarati',
                                                                 color: Color(
                                                                     0xFF1A1A1A),
                                                                 fontSize: 16.0,
@@ -706,6 +728,8 @@ class _LatestPropertiesListPageWidgetState
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500,
+                                                                useGoogleFonts:
+                                                                    false,
                                                               ),
                                                         ),
                                                         Padding(
@@ -734,7 +758,7 @@ class _LatestPropertiesListPageWidgetState
                                                                 .bodyMedium
                                                                 .override(
                                                                   fontFamily:
-                                                                      'Readex Pro',
+                                                                      'BalooBhaiGujarati',
                                                                   color: Color(
                                                                       0xFF1A1A1A),
                                                                   fontSize:
@@ -744,6 +768,8 @@ class _LatestPropertiesListPageWidgetState
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
+                                                                  useGoogleFonts:
+                                                                      false,
                                                                 ),
                                                           ),
                                                         ),
@@ -760,6 +786,7 @@ class _LatestPropertiesListPageWidgetState
                                     ),
                                   );
                                 },
+                                controller: _model.listViewController,
                               );
                             },
                           );
@@ -769,294 +796,341 @@ class _LatestPropertiesListPageWidgetState
                   ].divide(SizedBox(height: 0.0)),
                 ),
               ),
-              Align(
-                alignment: AlignmentDirectional(0.0, 1.0),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                  child: Container(
-                    width: 159.0,
-                    height: 55.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x33000000),
-                          offset: Offset(
-                            0.0,
-                            2.0,
-                          ),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(
-                        color: FlutterFlowTheme.of(context).alternate,
-                      ),
+            ),
+            Align(
+              alignment: AlignmentDirectional(0.0, 1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
+                child: Container(
+                  width: 159.0,
+                  height: 55.0,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 4.0,
+                        color: Color(0x33000000),
+                        offset: Offset(
+                          0.0,
+                          2.0,
+                        ),
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(
+                      color: FlutterFlowTheme.of(context).alternate,
                     ),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: FFButtonWidget(
-                                onPressed: (FFAppState().currentNewsPage == 1)
-                                    ? null
-                                    : () async {
-                                        _model.apiResultz0zCopy =
-                                            await RBNewsAPIGroup
-                                                .latestPropertyListCall
-                                                .call(
-                                          authToken: FFAppState().authTokenAPI,
-                                          pageNumber:
-                                              FFAppState().currentNewsPage,
-                                          searchText:
-                                              _model.textController.text,
-                                          pageSize: FFAppState().pageSize,
-                                        );
+                  ),
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: (FFAppState().currentNewsPage == 1)
+                                  ? null
+                                  : () async {
+                                      _model.apiResultz0zCopy =
+                                          await RBNewsAPIGroup
+                                              .latestPropertyListCall
+                                              .call(
+                                        authToken: FFAppState().authTokenAPI,
+                                        pageNumber:
+                                            FFAppState().currentNewsPage,
+                                        searchText: _model.textController.text,
+                                        pageSize: FFAppState().pageSize,
+                                      );
 
-                                        if ((_model
-                                                .apiResultz0zCopy?.succeeded ??
-                                            true)) {
-                                          FFAppState().totalNewsPage =
-                                              functions.getDivideVars(
-                                                  getJsonField(
-                                                    (_model.apiResultz0zCopy
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                    r'''$.totalCount''',
-                                                  ),
-                                                  FFAppState().pageSize);
-                                          safeSetState(() {});
-                                          if (FFAppState().currentNewsPage !=
-                                              1) {
-                                            FFAppState().currentNewsPage =
-                                                FFAppState().currentNewsPage +
-                                                    -1;
-                                            safeSetState(() {});
-                                            _model.apiResultg10Copy =
-                                                await RBNewsAPIGroup
-                                                    .latestPropertyListCall
-                                                    .call(
-                                              authToken:
-                                                  FFAppState().authTokenAPI,
-                                              pageNumber:
-                                                  FFAppState().currentNewsPage,
-                                              searchText:
-                                                  _model.textController.text,
-                                              pageSize: FFAppState().pageSize,
-                                            );
-
-                                            if ((_model.apiResultg10Copy
-                                                    ?.succeeded ??
-                                                true)) {
-                                              FFAppState().totalNewsDataSize =
-                                                  getJsonField(
-                                                (_model.apiResultg10Copy
-                                                        ?.jsonBody ??
-                                                    ''),
-                                                r'''$.totalCount''',
-                                              );
-                                              safeSetState(() {});
-                                            }
-                                          }
-                                        }
-
-                                        safeSetState(() {});
-                                      },
-                                text: '',
-                                icon: Icon(
-                                  Icons.chevron_left_rounded,
-                                  color: FFAppState().currentNewsPage == 1
-                                      ? Color(0xFF808080)
-                                      : FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                  size: 16.0,
-                                ),
-                                options: FFButtonOptions(
-                                  width: 40.0,
-                                  height: 40.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  iconAlignment: IconAlignment.start,
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      8.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).alternate,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                        letterSpacing: 0.0,
-                                      ),
-                                  elevation: 0.0,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  disabledColor: Color(0xFFF2F2F2),
-                                  disabledTextColor: Color(0xFF808080),
-                                  hoverColor:
-                                      FlutterFlowTheme.of(context).primary,
-                                  hoverTextColor: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            '${FFAppState().currentNewsPage.toString()} / ${FFAppState().totalNewsPage.toString()}',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
-                          ),
-                          Expanded(
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: FFButtonWidget(
-                                onPressed: (FFAppState().currentNewsPage ==
-                                        FFAppState().totalNewsPage)
-                                    ? null
-                                    : () async {
-                                        _model.apiResultz0z =
-                                            await RBNewsAPIGroup
-                                                .latestPropertyListCall
-                                                .call(
-                                          authToken: FFAppState().authTokenAPI,
-                                          pageNumber:
-                                              FFAppState().currentNewsPage,
-                                          searchText:
-                                              _model.textController.text,
-                                          pageSize: FFAppState().pageSize,
-                                        );
-
-                                        if ((_model.apiResultz0z?.succeeded ??
-                                            true)) {
-                                          FFAppState().totalNewsDataSize =
-                                              getJsonField(
-                                            (_model.apiResultz0z?.jsonBody ??
-                                                ''),
-                                            r'''$.totalCount''',
-                                          );
-                                          safeSetState(() {});
-                                          FFAppState().totalNewsPage =
-                                              functions.getDivideVars(
-                                                  FFAppState()
-                                                      .totalNewsDataSize,
-                                                  FFAppState().pageSize);
-                                          safeSetState(() {});
-                                          if (FFAppState().currentNewsPage !=
-                                              FFAppState().totalNewsPage) {
-                                            FFAppState().currentNewsPage =
-                                                FFAppState().currentNewsPage +
-                                                    1;
-                                            safeSetState(() {});
-                                            _model.apiResultg10 =
-                                                await RBNewsAPIGroup
-                                                    .latestPropertyListCall
-                                                    .call(
-                                              authToken:
-                                                  FFAppState().authTokenAPI,
-                                              pageNumber:
-                                                  FFAppState().currentNewsPage,
-                                              searchText:
-                                                  _model.textController.text,
-                                              pageSize: FFAppState().pageSize,
-                                            );
-
-                                            if ((_model
-                                                    .apiResultg10?.succeeded ??
-                                                true)) {
-                                              FFAppState().totalNewsDataSize =
-                                                  getJsonField(
-                                                (_model.apiResultg10
-                                                        ?.jsonBody ??
-                                                    ''),
-                                                r'''$.totalCount''',
-                                              );
-                                              safeSetState(() {});
-                                            }
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'No more data found',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        letterSpacing: 0.0,
-                                                      ),
+                                      if ((_model.apiResultz0zCopy?.succeeded ??
+                                          true)) {
+                                        FFAppState().totalNewsPage =
+                                            functions.getDivideVars(
+                                                getJsonField(
+                                                  (_model.apiResultz0zCopy
+                                                          ?.jsonBody ??
+                                                      ''),
+                                                  r'''$.totalCount''',
                                                 ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                                backgroundColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondary,
-                                              ),
+                                                FFAppState().pageSize);
+                                        safeSetState(() {});
+                                        if (FFAppState().currentNewsPage != 1) {
+                                          FFAppState().currentNewsPage =
+                                              FFAppState().currentNewsPage + -1;
+                                          safeSetState(() {});
+                                          _model.apiResultg10Copy =
+                                              await RBNewsAPIGroup
+                                                  .latestPropertyListCall
+                                                  .call(
+                                            authToken:
+                                                FFAppState().authTokenAPI,
+                                            pageNumber:
+                                                FFAppState().currentNewsPage,
+                                            searchText:
+                                                _model.textController.text,
+                                            pageSize: FFAppState().pageSize,
+                                          );
+
+                                          if ((_model.apiResultg10Copy
+                                                  ?.succeeded ??
+                                              true)) {
+                                            FFAppState().totalNewsDataSize =
+                                                getJsonField(
+                                              (_model.apiResultg10Copy
+                                                      ?.jsonBody ??
+                                                  ''),
+                                              r'''$.totalCount''',
+                                            );
+                                            safeSetState(() {});
+                                            await _model.columnController
+                                                ?.animateTo(
+                                              0,
+                                              duration:
+                                                  Duration(milliseconds: 100),
+                                              curve: Curves.ease,
                                             );
                                           }
                                         }
+                                      }
 
-                                        safeSetState(() {});
-                                      },
-                                text: '',
-                                icon: Icon(
-                                  Icons.navigate_next_rounded,
-                                  color: FFAppState().currentNewsPage ==
-                                          FFAppState().totalNewsPage
-                                      ? Color(0xFF808080)
-                                      : FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                  size: 16.0,
-                                ),
-                                options: FFButtonOptions(
-                                  width: 40.0,
-                                  height: 40.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  iconAlignment: IconAlignment.start,
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      8.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                        letterSpacing: 0.0,
-                                      ),
-                                  elevation: 0.0,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  disabledColor: Color(0xFFF2F2F2),
-                                  disabledTextColor: Color(0xFF808080),
-                                  hoverColor:
-                                      FlutterFlowTheme.of(context).primary,
-                                  hoverTextColor: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                ),
+                                      safeSetState(() {});
+                                    },
+                              text: '',
+                              icon: Icon(
+                                Icons.chevron_left_rounded,
+                                color: FFAppState().currentNewsPage == 1
+                                    ? Color(0xFF808080)
+                                    : FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                size: 16.0,
+                              ),
+                              options: FFButtonOptions(
+                                width: 40.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconAlignment: IconAlignment.start,
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).alternate,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'BalooBhaiGujarati',
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                      useGoogleFonts: false,
+                                    ),
+                                elevation: 0.0,
+                                borderRadius: BorderRadius.circular(8.0),
+                                disabledColor: Color(0xFFF2F2F2),
+                                disabledTextColor: Color(0xFF808080),
+                                hoverColor:
+                                    FlutterFlowTheme.of(context).primary,
+                                hoverTextColor: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
                               ),
                             ),
                           ),
-                        ].divide(SizedBox(width: 10.0)),
-                      ),
+                        ),
+                        Text(
+                          '${FFAppState().currentNewsPage.toString()} / ${FFAppState().totalNewsPage.toString()}',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'BalooBhaiGujarati',
+                                    letterSpacing: 0.0,
+                                    useGoogleFonts: false,
+                                  ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: (FFAppState().currentNewsPage ==
+                                      FFAppState().totalNewsPage)
+                                  ? null
+                                  : () async {
+                                      _model.apiResultz0z = await RBNewsAPIGroup
+                                          .latestPropertyListCall
+                                          .call(
+                                        authToken: FFAppState().authTokenAPI,
+                                        pageNumber:
+                                            FFAppState().currentNewsPage,
+                                        searchText: _model.textController.text,
+                                        pageSize: FFAppState().pageSize,
+                                      );
+
+                                      if ((_model.apiResultz0z?.succeeded ??
+                                          true)) {
+                                        FFAppState().totalNewsDataSize =
+                                            getJsonField(
+                                          (_model.apiResultz0z?.jsonBody ?? ''),
+                                          r'''$.totalCount''',
+                                        );
+                                        safeSetState(() {});
+                                        FFAppState().totalNewsPage =
+                                            functions.getDivideVars(
+                                                FFAppState().totalNewsDataSize,
+                                                FFAppState().pageSize);
+                                        safeSetState(() {});
+                                        if (FFAppState().currentNewsPage !=
+                                            FFAppState().totalNewsPage) {
+                                          FFAppState().currentNewsPage =
+                                              FFAppState().currentNewsPage + 1;
+                                          safeSetState(() {});
+                                          _model.apiResultg10 =
+                                              await RBNewsAPIGroup
+                                                  .latestPropertyListCall
+                                                  .call(
+                                            authToken:
+                                                FFAppState().authTokenAPI,
+                                            pageNumber:
+                                                FFAppState().currentNewsPage,
+                                            searchText:
+                                                _model.textController.text,
+                                            pageSize: FFAppState().pageSize,
+                                          );
+
+                                          if ((_model.apiResultg10?.succeeded ??
+                                              true)) {
+                                            FFAppState().totalNewsDataSize =
+                                                getJsonField(
+                                              (_model.apiResultg10?.jsonBody ??
+                                                  ''),
+                                              r'''$.totalCount''',
+                                            );
+                                            safeSetState(() {});
+                                            await _model.columnController
+                                                ?.animateTo(
+                                              0,
+                                              duration:
+                                                  Duration(milliseconds: 100),
+                                              curve: Curves.ease,
+                                            );
+                                          }
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'No more data found',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'BalooBhaiGujarati',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          letterSpacing: 0.0,
+                                                          useGoogleFonts: false,
+                                                        ),
+                                              ),
+                                              duration:
+                                                  Duration(milliseconds: 4000),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondary,
+                                            ),
+                                          );
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
+                              text: '',
+                              icon: Icon(
+                                Icons.navigate_next_rounded,
+                                color: FFAppState().currentNewsPage ==
+                                        FFAppState().totalNewsPage
+                                    ? Color(0xFF808080)
+                                    : FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                size: 16.0,
+                              ),
+                              options: FFButtonOptions(
+                                width: 40.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconAlignment: IconAlignment.start,
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'BalooBhaiGujarati',
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                      useGoogleFonts: false,
+                                    ),
+                                elevation: 0.0,
+                                borderRadius: BorderRadius.circular(8.0),
+                                disabledColor: Color(0xFFF2F2F2),
+                                disabledTextColor: Color(0xFF808080),
+                                hoverColor:
+                                    FlutterFlowTheme.of(context).primary,
+                                hoverTextColor: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ].divide(SizedBox(width: 10.0)),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Align(
+              alignment: AlignmentDirectional(0.0, 1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 15.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
+                      child: Text(
+                        'Developed By ',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'BalooBhaiGujarati',
+                              letterSpacing: 0.0,
+                              useGoogleFonts: false,
+                            ),
+                      ),
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        await launchURL('http://theuniqueitsolution.com');
+                      },
+                      child: Text(
+                        'Unique IT Solution',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'BalooBhaiGujarati',
+                              color: Color(0xFF5374FF),
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.bold,
+                              useGoogleFonts: false,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

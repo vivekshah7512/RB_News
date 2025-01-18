@@ -1,10 +1,9 @@
 import '/backend/api_requests/api_calls.dart';
 import '/backend/schema/structs/index.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/pages/news_filter_popup/news_filter_popup_widget.dart';
+import '/pages/custom_components/news_filter_popup/news_filter_popup_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -12,7 +11,7 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'news_list_page_widget.dart' show NewsListPageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +35,14 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
 
   int? get selectedRowIndex => _selectedRowIndex;
 
+  bool _isListEmpty = false;
+  set isListEmpty(bool value) {
+    _isListEmpty = value;
+    debugLogWidgetClass(this);
+  }
+
+  bool get isListEmpty => _isListEmpty;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Backend Call - API (NewsList)] action in NewsListPage widget.
@@ -47,11 +54,14 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
 
   ApiCallResponse? get apiResultudj => _apiResultudj;
 
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
-  // Stores action output result for [Backend Call - API (NewsList)] action in TextField widget.
+  // State field(s) for Column widget.
+  ScrollController? columnController;
+  // State field(s) for TextFieldSearch widget.
+  FocusNode? textFieldSearchFocusNode;
+  TextEditingController? textFieldSearchTextController;
+  String? Function(BuildContext, String?)?
+      textFieldSearchTextControllerValidator;
+  // Stores action output result for [Backend Call - API (NewsList)] action in TextFieldSearch widget.
   ApiCallResponse? _apiResultudjS;
   set apiResultudjS(ApiCallResponse? value) {
     _apiResultudjS = value;
@@ -60,6 +70,10 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
 
   ApiCallResponse? get apiResultudjS => _apiResultudjS;
 
+  // State field(s) for Row widget.
+  ScrollController? rowController;
+  // State field(s) for ListView widget.
+  ScrollController? listViewController;
   // Stores action output result for [Custom Action - manageNewsCategoryFilter] action in Icon widget.
   List<SelectedNewsCategoryDataStruct>? _testresult;
   set testresult(List<SelectedNewsCategoryDataStruct>? value) {
@@ -69,6 +83,26 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
 
   List<SelectedNewsCategoryDataStruct>? get testresult => _testresult;
 
+  // Stores action output result for [Backend Call - API (NewsList)] action in Icon widget.
+  ApiCallResponse? _apiResultOnCancelFilter;
+  set apiResultOnCancelFilter(ApiCallResponse? value) {
+    _apiResultOnCancelFilter = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultOnCancelFilter => _apiResultOnCancelFilter;
+
+  // Stores action output result for [Backend Call - API (NewsList)] action in Text widget.
+  ApiCallResponse? _apiResultOnCancelAll;
+  set apiResultOnCancelAll(ApiCallResponse? value) {
+    _apiResultOnCancelAll = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultOnCancelAll => _apiResultOnCancelAll;
+
+  // State field(s) for ListViewNews widget.
+  ScrollController? listViewNews;
   // Stores action output result for [Backend Call - API (NewsList)] action in Button widget.
   ApiCallResponse? _apiResultz0zCopy;
   set apiResultz0zCopy(ApiCallResponse? value) {
@@ -110,13 +144,23 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
   final Map<String, FlutterFlowModel> widgetBuilderComponents = {};
   @override
   void initState(BuildContext context) {
+    columnController = ScrollController();
+    rowController = ScrollController();
+    listViewController = ScrollController();
+    listViewNews = ScrollController();
+
     debugLogWidgetClass(this);
   }
 
   @override
   void dispose() {
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
+    columnController?.dispose();
+    textFieldSearchFocusNode?.dispose();
+    textFieldSearchTextController?.dispose();
+
+    rowController?.dispose();
+    listViewController?.dispose();
+    listViewNews?.dispose();
   }
 
   @override
@@ -141,6 +185,26 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
                 'reference=SjsKEwoJbmV3c1RpdGxlEgZqMGIyYmMqHhIc4Kqs4Kqn4Kq+IOCquOCqruCqvuCqmuCqvuCqsHIECAMgAVABWgluZXdzVGl0bGU=',
             name: 'String',
             nullable: false,
+          ),
+          'searchKeyword': debugSerializeParam(
+            widget?.searchKeyword,
+            ParamType.String,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            searchReference:
+                'reference=SiYKFwoNc2VhcmNoS2V5d29yZBIGMHJseThqKgUSAyAgIHIECAMgAFABWg1zZWFyY2hLZXl3b3Jk',
+            name: 'String',
+            nullable: false,
+          ),
+          'searchForNews': debugSerializeParam(
+            widget?.searchForNews,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            searchReference:
+                'reference=SiQKFwoNc2VhcmNoRm9yTmV3cxIGeXRicjN1KgMSATByBAgBIABQAVoNc2VhcmNoRm9yTmV3cw==',
+            name: 'int',
+            nullable: false,
           )
         }.withoutNulls,
         localStates: {
@@ -163,11 +227,21 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
                 'reference=Qh8KGQoQc2VsZWN0ZWRSb3dJbmRleBIFZnMxb2VyAggBUAFaEHNlbGVjdGVkUm93SW5kZXhiDE5ld3NMaXN0UGFnZQ==',
             name: 'int',
             nullable: true,
+          ),
+          'isListEmpty': debugSerializeParam(
+            isListEmpty,
+            ParamType.bool,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            searchReference:
+                'reference=QiUKFAoLaXNMaXN0RW1wdHkSBTFmNWprKgcSBWZhbHNlcgQIBSABUAFaC2lzTGlzdEVtcHR5YgxOZXdzTGlzdFBhZ2U=',
+            name: 'bool',
+            nullable: false,
           )
         },
         widgetStates: {
-          'textFieldText': debugSerializeParam(
-            textController?.text,
+          'textFieldSearchText': debugSerializeParam(
+            textFieldSearchTextController?.text,
             ParamType.String,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
@@ -199,6 +273,22 @@ class NewsListPageModel extends FlutterFlowModel<NewsListPageWidget> {
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
             name: 'SelectedNewsCategoryData',
+            nullable: true,
+          ),
+          'apiResultOnCancelFilter': debugSerializeParam(
+            apiResultOnCancelFilter,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultOnCancelAll': debugSerializeParam(
+            apiResultOnCancelAll,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+            name: 'ApiCallResponse',
             nullable: true,
           ),
           'apiResultz0zCopy': debugSerializeParam(

@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -22,12 +23,12 @@ class ReadMoreWidget extends StatefulWidget {
 
   const ReadMoreWidget({
     required this.textContent,
-    this.trimCharacters = 125, // Default is 125 characters
-    required this.trimCollapsedText,
-    required this.trimExpandedText,
+    this.trimCharacters = 175,
+    this.trimCollapsedText = 'વધુ વાંચો',
+    this.trimExpandedText = 'ઓછું વાંચો',
     required this.colorClickableText,
     this.width,
-    this.isHtml = false, // Default is plain text
+    this.isHtml = true, // Default is true (HTML content)
     Key? key,
   }) : super(key: key);
 
@@ -85,25 +86,27 @@ class _ReadMoreWidgetState extends State<ReadMoreWidget> {
                       ),
                     ),
               if (widget.textContent.length > widget.trimCharacters)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    child: Text(
-                      isExpanded
-                          ? widget.trimExpandedText
-                          : widget.trimCollapsedText,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: widget.colorClickableText,
-                        fontWeight: FontWeight.bold,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                      child: Text(
+                        isExpanded
+                            ? widget.trimExpandedText
+                            : widget.trimCollapsedText,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: widget.colorClickableText,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
             ],
           ),
@@ -112,6 +115,5 @@ class _ReadMoreWidgetState extends State<ReadMoreWidget> {
     );
   }
 }
-
 // Set your widget name, define your parameter, and then add the
 // boilerplate code using the green button on the right!

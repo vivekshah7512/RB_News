@@ -8,6 +8,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'lat_lng.dart';
 import 'place.dart';
 import 'uploaded_file.dart';
+import '/backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/backend/schema/structs/index.dart';
 
 String? formateAPIDate(String? apiDate) {
@@ -156,18 +158,18 @@ String? horoscopeDateRangeFormat(String dateTimeString) {
 
     // Map month number to month name
     List<String> monthNames = [
-      "Jan",
-      "Feb",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "જાન્યુઆરી",
+      "Fફેબ્રુઆરીe",
+      "માર્ચ",
+      "એપ્રિલ",
+      "મે",
+      "જૂન",
+      "જુલાઈ",
+      "ઑગસ્ટ",
+      "સપ્ટેમ્બર",
+      "ઑક્ટોબર",
+      "નવેમ્બર",
+      "ડિસેમ્બર"
     ];
     String monthName = monthNames[month - 1]; // Month is 1-based
 
@@ -287,4 +289,34 @@ double updateProgressTimer(double timerValue) {
 
 double convertProgressBarValue(int timerValue) {
   return timerValue / 60;
+}
+
+String combineWithNewLine(
+  String titel,
+  String shareLink,
+) {
+  return '*$titel*\n$shareLink';
+}
+
+String? dateHeaderString(
+  List<dynamic> jsonArray,
+  int index,
+) {
+  if (index > 0 && index < jsonArray.length) {
+    return jsonArray[index - 1]['modifiedDate'];
+  } else {
+    return jsonArray[index]['modifiedDate'];
+  }
+}
+
+bool checkDataIsNull(List<dynamic> apiResponse) {
+  // Check if the data array is empty
+  if (apiResponse.isEmpty) {
+    return false; // No data available
+  }
+  return true; // Data is available
+}
+
+int? getCurrentYear() {
+  return DateTime.now().year;
 }

@@ -1,15 +1,15 @@
 import '/backend/api_requests/api_calls.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/custom_components/login_popup/login_popup_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -43,12 +43,16 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
       if (FFAppState().authTokenAPI == '') {
         await actions.getDeviceInfo();
         await actions.getCurrentLatLng();
+        _model.fcmToken = await actions.getFirebaseToken();
+        FFAppState().deviceToken = _model.fcmToken!;
+        safeSetState(() {});
         _model.apiResultrfs = await RBNewsAPIGroup.guestUserCall.call(
           deviceId: FFAppState().deviceId,
           deviceType: FFAppState().deviceType,
           deviceInfo: FFAppState().deviceInfo,
           latitude: FFAppState().latitude,
           longitude: FFAppState().longitude,
+          deviceToken: FFAppState().deviceToken,
         );
 
         if ((_model.apiResultrfs?.succeeded ?? true)) {
@@ -64,12 +68,6 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
         }
       }
     });
-
-    _model.searchTextFieldTextController ??= TextEditingController()
-      ..addListener(() {
-        debugLogWidgetClass(_model);
-      });
-    _model.searchTextFieldFocusNode ??= FocusNode();
   }
 
   @override
@@ -135,9 +133,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: SpinKitFadingFour(
-                  color: FlutterFlowTheme.of(context).primary,
-                  size: 50.0,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    FlutterFlowTheme.of(context).primary,
+                  ),
                 ),
               ),
             ),
@@ -174,11 +173,11 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: Color(0xFFF8F8F8),
-            body: SafeArea(
-              top: true,
-              child: Stack(
-                children: [
-                  Container(
+            body: Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
+                  child: Container(
                     width: double.infinity,
                     height: double.infinity,
                     decoration: BoxDecoration(
@@ -191,143 +190,165 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                       child: Stack(
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                12.0, 25.0, 12.0, 25.0),
+                            padding: EdgeInsets.all(12.0),
                             child: SingleChildScrollView(
                               primary: false,
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(0.0, -1.0),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.asset(
-                                            'assets/images/actionbar_logo.png',
-                                            width: 137.0,
-                                            height: 24.0,
-                                            fit: BoxFit.contain,
-                                            alignment: Alignment(0.0, 0.0),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 28.0, 0.0, 0.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(0.0, -1.0),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/actionbar_logo.png',
+                                              width: 137.0,
+                                              height: 24.0,
+                                              fit: BoxFit.contain,
+                                              alignment: Alignment(0.0, 0.0),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(-0.99, -1.0),
-                                        child: FlutterFlowIconButton(
-                                          borderColor: Color(0xFFE6E6E6),
-                                          borderRadius: 12.0,
-                                          borderWidth: 1.0,
-                                          buttonSize: 40.0,
-                                          fillColor: Colors.white,
-                                          icon: Icon(
-                                            Icons.notifications_outlined,
-                                            color: Color(0xFF808080),
-                                            size: 24.0,
-                                          ),
-                                          onPressed: () {
-                                            print('IconButton pressed ...');
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.result = await actions
+                                                .areNotificationsEnabled();
+                                            if (_model.result!) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'Notifications are already enabled.',
+                                                    style: GoogleFonts.getFont(
+                                                      'Readex Pro',
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .secondaryBackground,
+                                                      fontSize: 14.0,
+                                                    ),
+                                                  ),
+                                                  duration: Duration(
+                                                      milliseconds: 2500),
+                                                  backgroundColor:
+                                                      Color(0xFF748187),
+                                                ),
+                                              );
+                                            } else {
+                                              await actions
+                                                  .openNotificationSettings();
+                                            }
+
+                                            safeSetState(() {});
                                           },
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: SvgPicture.asset(
+                                              'assets/images/notification.svg',
+                                              width: 40.0,
+                                              height: 40.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 20.0, 0.0, 20.0),
                                     child: Container(
-                                      width: double.infinity,
-                                      child: TextFormField(
-                                        controller: _model
-                                            .searchTextFieldTextController,
-                                        focusNode:
-                                            _model.searchTextFieldFocusNode,
-                                        autofocus: false,
-                                        obscureText: false,
-                                        decoration: InputDecoration(
-                                          isDense: true,
-                                          labelStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    letterSpacing: 0.0,
-                                                  ),
-                                          hintText:
-                                              'શોધો  સમાચાર, મિલકત, રાશિફળ',
-                                          hintStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    letterSpacing: 0.0,
-                                                  ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0xFFE6E6E6),
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .error,
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          focusedErrorBorder:
-                                              OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .error,
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          filled: true,
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .secondaryBackground,
-                                          prefixIcon: Icon(
-                                            Icons.search_rounded,
-                                          ),
+                                      width: MediaQuery.sizeOf(context).width *
+                                          1.0,
+                                      height: 50.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: Color(0xFFE0E0E0),
+                                          width: 1.0,
                                         ),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Readex Pro',
-                                              letterSpacing: 0.0,
+                                      ),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed(
+                                            'NewsListPage',
+                                            queryParameters: {
+                                              'newsType': serializeParam(
+                                                'all',
+                                                ParamType.String,
+                                              ),
+                                              'newsTitle': serializeParam(
+                                                'બધા સમાચાર',
+                                                ParamType.String,
+                                              ),
+                                              'searchKeyword': serializeParam(
+                                                '',
+                                                ParamType.String,
+                                              ),
+                                              'searchForNews': serializeParam(
+                                                1,
+                                                ParamType.int,
+                                              ),
+                                            }.withoutNulls,
+                                          );
+                                        },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      10.0, 0.0, 10.0, 0.0),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                child: SvgPicture.asset(
+                                                  'assets/images/search-normal.svg',
+                                                  width: 20.0,
+                                                  height: 20.0,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
-                                        textAlign: TextAlign.start,
-                                        cursorColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                        validator: _model
-                                            .searchTextFieldTextControllerValidator
-                                            .asValidator(context),
+                                            Text(
+                                              'સમાચાર શોધો',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily:
+                                                        'BalooBhaiGujarati',
+                                                    color: Color(0xFF808080),
+                                                    letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.w500,
+                                                    useGoogleFonts: false,
+                                                  ),
+                                            ),
+                                          ].divide(SizedBox(width: 0.0)),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -357,7 +378,31 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               }.withoutNulls,
                                             );
                                           } else {
-                                            context.pushNamed('LoginPage');
+                                            await showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              enableDrag: false,
+                                              context: context,
+                                              builder: (context) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    FocusScope.of(context)
+                                                        .unfocus();
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        MediaQuery.viewInsetsOf(
+                                                            context),
+                                                    child: LoginPopupWidget(),
+                                                  ),
+                                                );
+                                              },
+                                            ).then(
+                                                (value) => safeSetState(() {}));
                                           }
                                         },
                                         child: Container(
@@ -371,10 +416,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                             boxShadow: [
                                               BoxShadow(
                                                 blurRadius: 3.0,
-                                                color: Color(0x33000000),
+                                                color: Color(0x0FB0B0B0),
                                                 offset: Offset(
                                                   0.0,
-                                                  1.0,
+                                                  4.0,
                                                 ),
                                               )
                                             ],
@@ -447,10 +492,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                             boxShadow: [
                                               BoxShadow(
                                                 blurRadius: 3.0,
-                                                color: Color(0x33000000),
+                                                color: Color(0x0FB0B0B0),
                                                 offset: Offset(
                                                   0.0,
-                                                  1.0,
+                                                  4.0,
                                                 ),
                                               )
                                             ],
@@ -537,10 +582,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               boxShadow: [
                                                 BoxShadow(
                                                   blurRadius: 3.0,
-                                                  color: Color(0x33000000),
+                                                  color: Color(0x0FB0B0B0),
                                                   offset: Offset(
                                                     0.0,
-                                                    1.0,
+                                                    4.0,
                                                   ),
                                                 )
                                               ],
@@ -617,10 +662,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               boxShadow: [
                                                 BoxShadow(
                                                   blurRadius: 3.0,
-                                                  color: Color(0x33000000),
+                                                  color: Color(0x0FB0B0B0),
                                                   offset: Offset(
                                                     0.0,
-                                                    1.0,
+                                                    4.0,
                                                   ),
                                                 )
                                               ],
@@ -711,10 +756,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               boxShadow: [
                                                 BoxShadow(
                                                   blurRadius: 3.0,
-                                                  color: Color(0x33000000),
+                                                  color: Color(0x0FB0B0B0),
                                                   offset: Offset(
                                                     0.0,
-                                                    1.0,
+                                                    4.0,
                                                   ),
                                                 )
                                               ],
@@ -779,10 +824,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               boxShadow: [
                                                 BoxShadow(
                                                   blurRadius: 3.0,
-                                                  color: Color(0x33000000),
+                                                  color: Color(0x0FB0B0B0),
                                                   offset: Offset(
                                                     0.0,
-                                                    1.0,
+                                                    4.0,
                                                   ),
                                                 )
                                               ],
@@ -846,11 +891,12 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
-                                                fontFamily: 'Readex Pro',
+                                                fontFamily: 'BalooBhaiGujarati',
                                                 color: Color(0xFF1A1A1A),
                                                 fontSize: 20.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
+                                                useGoogleFonts: false,
                                               ),
                                         ),
                                         InkWell(
@@ -866,6 +912,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                   'top',
                                                   ParamType.String,
                                                 ),
+                                                'newsTitle': serializeParam(
+                                                  'મુખ્ય સમાચાર',
+                                                  ParamType.String,
+                                                ),
                                               }.withoutNulls,
                                             );
                                           },
@@ -874,17 +924,20 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                             children: [
                                               Text(
                                                 'વધુ જુઓ ',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFF5374FF),
-                                                      fontSize: 16.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'BalooBhaiGujarati',
+                                                          color:
+                                                              Color(0xFF5374FF),
+                                                          fontSize: 16.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          useGoogleFonts: false,
+                                                        ),
                                               ),
                                               FaIcon(
                                                 FontAwesomeIcons.angleRight,
@@ -914,11 +967,14 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               child: SizedBox(
                                                 width: 50.0,
                                                 height: 50.0,
-                                                child: SpinKitFadingFour(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                  size: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                  ),
                                                 ),
                                               ),
                                             );
@@ -997,7 +1053,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                         Colors.transparent,
                                                     onTap: () async {
                                                       context.pushNamed(
-                                                        'NewsPagesListViewPage',
+                                                        'NewsDetailCarouselPage',
                                                         queryParameters: {
                                                           'newsListPageArray':
                                                               serializeParam(
@@ -1010,15 +1066,15 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                             ParamType.JSON,
                                                             isList: true,
                                                           ),
-                                                          'currentPage':
-                                                              serializeParam(
-                                                            newsListIndex,
-                                                            ParamType.int,
-                                                          ),
                                                           'isFromList':
                                                               serializeParam(
                                                             true,
                                                             ParamType.bool,
+                                                          ),
+                                                          'currentNewsPageInitalIDX':
+                                                              serializeParam(
+                                                            newsListIndex,
+                                                            ParamType.int,
                                                           ),
                                                         }.withoutNulls,
                                                       );
@@ -1029,17 +1085,15 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                               .width *
                                                           1.0,
                                                       decoration: BoxDecoration(
-                                                        color: FlutterFlowTheme
-                                                                .of(context)
-                                                            .secondaryBackground,
+                                                        color: Colors.white,
                                                         boxShadow: [
                                                           BoxShadow(
                                                             blurRadius: 3.0,
                                                             color: Color(
-                                                                0xFFB0B0B0),
+                                                                0x0FB0B0B0),
                                                             offset: Offset(
                                                               0.0,
-                                                              1.0,
+                                                              4.0,
                                                             ),
                                                           )
                                                         ],
@@ -1132,9 +1186,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                                                 child: Text(
                                                                                   '•',
                                                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                        fontFamily: 'Readex Pro',
+                                                                                        fontFamily: 'BalooBhaiGujarati',
                                                                                         color: Color(0xFF5374FF),
                                                                                         letterSpacing: 0.0,
+                                                                                        useGoogleFonts: false,
                                                                                       ),
                                                                                 ),
                                                                               ),
@@ -1148,9 +1203,10 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                                                       r'''$.newsCategoryName''',
                                                                                     ).toString(),
                                                                                     style: FlutterFlowTheme.of(context).labelSmall.override(
-                                                                                          fontFamily: 'Readex Pro',
+                                                                                          fontFamily: 'BalooBhaiGujarati',
                                                                                           color: Color(0xFF5374FF),
                                                                                           letterSpacing: 0.0,
+                                                                                          useGoogleFonts: false,
                                                                                         ),
                                                                                   ),
                                                                                 ),
@@ -1182,7 +1238,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                                         .bodyMedium
                                                                         .override(
                                                                           fontFamily:
-                                                                              'Readex Pro',
+                                                                              'BalooBhaiGujarati',
                                                                           color:
                                                                               Color(0xFF4D4D4D),
                                                                           fontSize:
@@ -1191,6 +1247,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                                               0.0,
                                                                           fontWeight:
                                                                               FontWeight.bold,
+                                                                          useGoogleFonts:
+                                                                              false,
                                                                         ),
                                                                   ),
                                                                   Container(
@@ -1241,11 +1299,12 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
-                                                fontFamily: 'Readex Pro',
+                                                fontFamily: 'BalooBhaiGujarati',
                                                 color: Color(0xFF1A1A1A),
                                                 fontSize: 20.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
+                                                useGoogleFonts: false,
                                               ),
                                         ),
                                         InkWell(
@@ -1273,17 +1332,20 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                             children: [
                                               Text(
                                                 'વધુ જુઓ ',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFF5374FF),
-                                                      fontSize: 16.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'BalooBhaiGujarati',
+                                                          color:
+                                                              Color(0xFF5374FF),
+                                                          fontSize: 16.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          useGoogleFonts: false,
+                                                        ),
                                               ),
                                               FaIcon(
                                                 FontAwesomeIcons.angleRight,
@@ -1336,196 +1398,239 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                               (context, propertyListIndex) {
                                             final propertyListItem =
                                                 propertyList[propertyListIndex];
-                                            return Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    blurRadius: 3.0,
-                                                    color: Color(0xFFB0B0B0),
-                                                    offset: Offset(
-                                                      0.0,
-                                                      1.0,
+                                            return InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                context.pushNamed(
+                                                  'PropertyDetailListPage',
+                                                  queryParameters: {
+                                                    'propertyId':
+                                                        serializeParam(
+                                                      getJsonField(
+                                                        propertyListItem,
+                                                        r'''$.propertyId''',
+                                                      ),
+                                                      ParamType.int,
                                                     ),
-                                                  )
-                                                ],
-                                                borderRadius:
-                                                    BorderRadius.circular(16.0),
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.all(5.0),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12.0),
-                                                      child: Image.network(
-                                                        functions.getImagePath(
-                                                            getJsonField(
-                                                          propertyListItem,
-                                                          r'''$.propertyImagesURL[0]''',
-                                                        ).toString()),
-                                                        width: 98.0,
-                                                        height: 128.0,
-                                                        fit: BoxFit.cover,
-                                                        errorBuilder: (context,
-                                                                error,
-                                                                stackTrace) =>
-                                                            Image.asset(
-                                                          'assets/images/error_image.png',
+                                                    'propertyListArray':
+                                                        serializeParam(
+                                                      getJsonField(
+                                                        homePageDashboardDataResponse
+                                                            .jsonBody,
+                                                        r'''$.data.propertiesList''',
+                                                        true,
+                                                      ),
+                                                      ParamType.JSON,
+                                                      isList: true,
+                                                    ),
+                                                    'currentPageIndex':
+                                                        serializeParam(
+                                                      propertyListIndex,
+                                                      ParamType.int,
+                                                    ),
+                                                  }.withoutNulls,
+                                                );
+                                              },
+                                              child: Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      blurRadius: 3.0,
+                                                      color: Color(0x0FB0B0B0),
+                                                      offset: Offset(
+                                                        0.0,
+                                                        4.0,
+                                                      ),
+                                                    )
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16.0),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.all(5.0),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12.0),
+                                                        child: Image.network(
+                                                          functions
+                                                              .getImagePath(
+                                                                  getJsonField(
+                                                            propertyListItem,
+                                                            r'''$.propertyImagesURL[0]''',
+                                                          ).toString()),
                                                           width: 98.0,
                                                           height: 128.0,
                                                           fit: BoxFit.cover,
+                                                          errorBuilder: (context,
+                                                                  error,
+                                                                  stackTrace) =>
+                                                              Image.asset(
+                                                            'assets/images/error_image.png',
+                                                            width: 98.0,
+                                                            height: 128.0,
+                                                            fit: BoxFit.cover,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Color(
-                                                                      0xFFF1F3FE),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              16.0),
-                                                                ),
-                                                                child: Row(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          7.0,
-                                                                          3.0,
-                                                                          0.0,
-                                                                          3.0),
-                                                                      child:
-                                                                          Text(
-                                                                        '•',
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .override(
-                                                                              fontFamily: 'Readex Pro',
-                                                                              color: Color(0xFF5374FF),
-                                                                              letterSpacing: 0.0,
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          AlignmentDirectional(
-                                                                              0.0,
-                                                                              0.0),
-                                                                      child:
-                                                                          Padding(
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              children: [
+                                                                Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Color(
+                                                                        0xFFF1F3FE),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            16.0),
+                                                                  ),
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    children: [
+                                                                      Padding(
                                                                         padding: EdgeInsetsDirectional.fromSTEB(
                                                                             7.0,
                                                                             3.0,
-                                                                            10.0,
+                                                                            0.0,
                                                                             3.0),
                                                                         child:
                                                                             Text(
-                                                                          getJsonField(
-                                                                            propertyListItem,
-                                                                            r'''$.propertyType''',
-                                                                          ).toString(),
+                                                                          '•',
                                                                           style: FlutterFlowTheme.of(context)
-                                                                              .labelSmall
+                                                                              .bodyMedium
                                                                               .override(
-                                                                                fontFamily: 'Readex Pro',
+                                                                                fontFamily: 'BalooBhaiGujarati',
                                                                                 color: Color(0xFF5374FF),
                                                                                 letterSpacing: 0.0,
+                                                                                useGoogleFonts: false,
                                                                               ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ],
+                                                                      Align(
+                                                                        alignment: AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0),
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                                                              7.0,
+                                                                              3.0,
+                                                                              10.0,
+                                                                              3.0),
+                                                                          child:
+                                                                              Text(
+                                                                            getJsonField(
+                                                                              propertyListItem,
+                                                                              r'''$.propertyType''',
+                                                                            ).toString(),
+                                                                            style: FlutterFlowTheme.of(context).labelSmall.override(
+                                                                                  fontFamily: 'BalooBhaiGujarati',
+                                                                                  color: Color(0xFF5374FF),
+                                                                                  letterSpacing: 0.0,
+                                                                                  useGoogleFonts: false,
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Text(
-                                                            getJsonField(
-                                                              propertyListItem,
-                                                              r'''$.propertyName''',
-                                                            )
-                                                                .toString()
-                                                                .maybeHandleOverflow(
-                                                                  maxChars: 58,
-                                                                  replacement:
-                                                                      '…',
-                                                                ),
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            maxLines: 2,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  color: Color(
-                                                                      0xFF4D4D4D),
-                                                                  fontSize:
-                                                                      15.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                          ),
-                                                          Container(
-                                                            width:
-                                                                double.infinity,
-                                                            height: 42.0,
-                                                            child:
-                                                                custom_widgets
-                                                                    .HtmlViewer(
+                                                              ],
+                                                            ),
+                                                            Text(
+                                                              getJsonField(
+                                                                propertyListItem,
+                                                                r'''$.propertyName''',
+                                                              )
+                                                                  .toString()
+                                                                  .maybeHandleOverflow(
+                                                                    maxChars:
+                                                                        58,
+                                                                    replacement:
+                                                                        '…',
+                                                                  ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              maxLines: 2,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'BalooBhaiGujarati',
+                                                                    color: Color(
+                                                                        0xFF4D4D4D),
+                                                                    fontSize:
+                                                                        15.0,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    useGoogleFonts:
+                                                                        false,
+                                                                  ),
+                                                            ),
+                                                            Container(
                                                               width: double
                                                                   .infinity,
                                                               height: 42.0,
-                                                              htmlContent:
-                                                                  getJsonField(
-                                                                propertyListItem,
-                                                                r'''$.propertyDescription''',
-                                                              ).toString(),
+                                                              child:
+                                                                  custom_widgets
+                                                                      .HtmlViewer(
+                                                                width: double
+                                                                    .infinity,
+                                                                height: 42.0,
+                                                                htmlContent:
+                                                                    getJsonField(
+                                                                  propertyListItem,
+                                                                  r'''$.propertyDescription''',
+                                                                ).toString(),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ].divide(SizedBox(
-                                                            height: 8.0)),
+                                                          ].divide(SizedBox(
+                                                              height: 8.0)),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           },
@@ -1546,11 +1651,12 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
-                                                fontFamily: 'Readex Pro',
+                                                fontFamily: 'BalooBhaiGujarati',
                                                 color: Color(0xFF1A1A1A),
                                                 fontSize: 20.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
+                                                useGoogleFonts: false,
                                               ),
                                         ),
                                         InkWell(
@@ -1566,17 +1672,20 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                             children: [
                                               Text(
                                                 'વધુ જુઓ ',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFF5374FF),
-                                                      fontSize: 16.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'BalooBhaiGujarati',
+                                                          color:
+                                                              Color(0xFF5374FF),
+                                                          fontSize: 16.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          useGoogleFonts: false,
+                                                        ),
                                               ),
                                               FaIcon(
                                                 FontAwesomeIcons.angleRight,
@@ -1654,8 +1763,28 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                         ).toString(),
                                                         ParamType.String,
                                                       ),
+                                                      'currentZodiacIndex':
+                                                          serializeParam(
+                                                        horoscopeListIndex,
+                                                        ParamType.int,
+                                                      ),
+                                                      'zodiacListArray':
+                                                          serializeParam(
+                                                        getJsonField(
+                                                          homePageDashboardDataResponse
+                                                              .jsonBody,
+                                                          r'''$.data.zodiacSignList''',
+                                                          true,
+                                                        ),
+                                                        ParamType.JSON,
+                                                        isList: true,
+                                                      ),
                                                     }.withoutNulls,
                                                   );
+
+                                                  FFAppState()
+                                                          .zodiacLDetailIndex =
+                                                      horoscopeListIndex;
                                                 },
                                                 child: ClipRRect(
                                                   borderRadius:
@@ -1731,7 +1860,7 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                                 .bodyMedium
                                                                 .override(
                                                                   fontFamily:
-                                                                      'Readex Pro',
+                                                                      'BalooBhaiGujarati',
                                                                   color: FlutterFlowTheme.of(
                                                                           context)
                                                                       .primaryText,
@@ -1742,6 +1871,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
+                                                                  useGoogleFonts:
+                                                                      false,
                                                                 ),
                                                           ),
                                                         ),
@@ -1764,8 +1895,56 @@ class _HomePageWidgetState extends State<HomePageWidget> with RouteAware {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                Align(
+                  alignment: AlignmentDirectional(0.0, 1.0),
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 3.0, 0.0, 0.0),
+                          child: Text(
+                            'Developed By ',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'BalooBhaiGujarati',
+                                  letterSpacing: 0.0,
+                                  useGoogleFonts: false,
+                                ),
+                          ),
+                        ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            await launchURL('http://theuniqueitsolution.com');
+                          },
+                          child: Text(
+                            'Unique IT Solution',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'BalooBhaiGujarati',
+                                  color: Color(0xFF5374FF),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.bold,
+                                  useGoogleFonts: false,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );

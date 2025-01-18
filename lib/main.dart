@@ -1,13 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'backend/firebase/firebase_config.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'flutter_flow/nav/nav.dart';
@@ -16,11 +19,16 @@ import 'index.dart';
 import 'dart:async';
 import 'package:easy_debounce/easy_debounce.dart';
 
+import 'notification/PushNotificationsManager.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
   debugLogAppConstant();
+
+  await initFirebase();
+  await Firebase.initializeApp();
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
@@ -33,7 +41,7 @@ void main() async {
   ErrorWidget.builder = (FlutterErrorDetails details) {
     try {
       final match = RegExp(
-              r'The relevant error-causing widget was:\s+([a-zA-Z0-9]+)(.|\n)*When the exception was thrown, this was the stack:((.|\n)*)')
+          r'The relevant error-causing widget was:\s+([a-zA-Z0-9]+)(.|\n)*When the exception was thrown, this was the stack:((.|\n)*)')
           .firstMatch(details.toString());
       if (match == null) {
         return originalErrorWidgetBuilder(details);
@@ -94,6 +102,10 @@ Stack trace: ${filteredStackTrace.join("\n")}''';
     EasyDebounce.cancel('508f3c74205c87928b71f49040062e732f9c20b0');
   });
 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // Lock to portrait mode
+  ]);
+
   runApp(ChangeNotifierProvider(
     create: (context) => appState,
     child: MyApp(),
@@ -140,7 +152,7 @@ class _MyAppState extends State<MyApp> {
     _router = createRouter(_appStateNotifier);
 
     Future.delayed(Duration(milliseconds: 1500),
-        () => safeSetState(() => _appStateNotifier.stopShowingSplashImage()));
+            () => safeSetState(() => _appStateNotifier.stopShowingSplashImage()));
     _router.routerDelegate.addListener(() {
       if (mounted) {
         debugLogGlobalProperty(
@@ -158,11 +170,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   void setThemeMode(ThemeMode mode) => safeSetState(() {
-        _themeMode = mode;
-      });
+    _themeMode = mode;
+  });
 
   @override
   Widget build(BuildContext context) {
+    PushNotificationsManager(context).init();
     return MaterialApp.router(
       title: 'RB News',
       localizationsDelegates: [
@@ -199,7 +212,8 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'HomePage';
+  // String _currentPageName = 'HomePage';
+  String _currentPageName = 'NewsDetailCarouselPage';
   late Widget? _currentPage;
 
   @override
@@ -213,9 +227,9 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'HomePage': HomePageWidget(),
-      'NewsPagesListViewPage': NewsPagesListViewPageWidget(),
+      'NewsDetailCarouselPage': NewsDetailCarouselPageWidget(),
       'PropertyDetailListPage': PropertyDetailListPageWidget(),
-      'HoroscopePage': HoroscopePageWidget(),
+      'HoroscopeDetailNew': HoroscopeDetailNewWidget(),
       'UserDetailPage': UserDetailPageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -225,6 +239,7 @@ class _NavBarPageState extends State<NavBarPage> {
       bottomNavigationBar: Visibility(
         visible: responsiveVisibility(
           context: context,
+          tablet: false,
           tabletLandscape: false,
           desktop: false,
         ),
@@ -242,53 +257,71 @@ class _NavBarPageState extends State<NavBarPage> {
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(
-                FFIcons.khomeActive,
-                size: 24.0,
+              icon: SvgPicture.asset(
+                'assets/images/home_inactive.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
-              activeIcon: FaIcon(
-                FontAwesomeIcons.home,
-                size: 24.0,
+              activeIcon: SvgPicture.asset(
+                'assets/images/home_active.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
               label: 'ઘર',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.home,
-                size: 24.0,
+              icon: SvgPicture.asset(
+                'assets/images/news_inactive.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
-              activeIcon: FaIcon(
-                FontAwesomeIcons.home,
-                size: 24.0,
+              activeIcon: SvgPicture.asset(
+                'assets/images/news_active.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
               label: 'સમાચાર',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.home,
-                size: 24.0,
+              icon: SvgPicture.asset(
+                'assets/images/property_inactive.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
-              activeIcon: FaIcon(
-                FontAwesomeIcons.home,
-                size: 24.0,
+              activeIcon: SvgPicture.asset(
+                'assets/images/property_active.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
               label: 'મિલકત',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.star_border,
-                size: 24.0,
+              icon: SvgPicture.asset(
+                'assets/images/horoscopes_inactive.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/images/horoscopes_active.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
               label: 'રાશિફળ',
               tooltip: '',
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.user,
-                size: 24.0,
+              icon: SvgPicture.asset(
+                'assets/images/user_inactive.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/images/user_active.svg',
+                width: 24.0, // Set the desired width
+                height: 24.0, // Set the desired height
               ),
               label: 'વપરાશકર્તા',
               tooltip: '',

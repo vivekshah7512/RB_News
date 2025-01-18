@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -24,28 +25,38 @@ class HtmlViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: width,
-      child: Html(
-        data: htmlContent,
-        style: {
-          "body": Style(
-            textAlign: TextAlign.left, // Align text to the left
-            margin: Margins.zero, // Set margin to zero
-            padding: HtmlPaddings.zero,
-            textOverflow: TextOverflow.ellipsis, // Show ellipsis for overflow
-            color: Color(0xFF808080), // Set text color to #808080
-            fontSize: FontSize(14.0), // Set font size to 14
-            maxLines: 2, // Set max lines to 2
-            fontWeight: FontWeight.w500, // Set font type to medium
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: 22.0, // Minimum height for single-line content
+            maxHeight: 40.0, // Maximum height for two lines
           ),
-          "p": Style(
-            margin: Margins.zero, // Remove default margin for <p> tags
-            padding: HtmlPaddings.zero, // Remove padding for <p> tags
+          child: SizedBox(
+            width: double.infinity, // Set width to infinite
+            child: Html(
+              data: htmlContent,
+              style: {
+                "body": Style(
+                  textAlign: TextAlign.left,
+                  margin: Margins.zero,
+                  padding: HtmlPaddings.zero,
+                  textOverflow:
+                      TextOverflow.ellipsis, // Show ellipsis if overflow
+                  color: Color(0xFF808080),
+                  fontSize: FontSize(14.0),
+                  maxLines: 2, // Limit to 2 lines maximum
+                  fontWeight: FontWeight.w500,
+                ),
+                "p": Style(
+                  margin: Margins.zero,
+                  padding: HtmlPaddings.zero,
+                ),
+              },
+            ),
           ),
-        },
-      ),
+        );
+      },
     );
   }
 }

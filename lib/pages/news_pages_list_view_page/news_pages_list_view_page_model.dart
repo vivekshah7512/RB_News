@@ -1,20 +1,26 @@
 import '/backend/api_requests/api_calls.dart';
-import '/components/comments_list_page_widget.dart';
-import '/components/login_alert_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/custom_components/advertisement_popup/advertisement_popup_widget.dart';
+import '/pages/custom_components/comments_list_page/comments_list_page_widget.dart';
+import '/pages/custom_components/login_popup/login_popup_widget.dart';
+import 'dart:math';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'news_pages_list_view_page_widget.dart' show NewsPagesListViewPageWidget;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NewsPagesListViewPageModel
     extends FlutterFlowModel<NewsPagesListViewPageWidget> {
@@ -93,7 +99,24 @@ class NewsPagesListViewPageModel
 
   String get imageAssetsForSave => _imageAssetsForSave;
 
+  int _commentDotFlag = 0;
+  set commentDotFlag(int value) {
+    _commentDotFlag = value;
+    debugLogWidgetClass(this);
+  }
+
+  int get commentDotFlag => _commentDotFlag;
+
   ///  State fields for stateful widgets in this page.
+
+  // Stores action output result for [Backend Call - API (GuestUser)] action in NewsPagesListViewPage widget.
+  ApiCallResponse? _apiResultrfs;
+  set apiResultrfs(ApiCallResponse? value) {
+    _apiResultrfs = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultrfs => _apiResultrfs;
 
   // Stores action output result for [Backend Call - API (NewsList)] action in NewsPagesListViewPage widget.
   ApiCallResponse? _apiResultNews;
@@ -103,6 +126,15 @@ class NewsPagesListViewPageModel
   }
 
   ApiCallResponse? get apiResultNews => _apiResultNews;
+
+  // Stores action output result for [Backend Call - API (Advertisement)] action in NewsPagesListViewPage widget.
+  ApiCallResponse? _apiResultjr3;
+  set apiResultjr3(ApiCallResponse? value) {
+    _apiResultjr3 = value;
+    debugLogWidgetClass(this);
+  }
+
+  ApiCallResponse? get apiResultjr3 => _apiResultjr3;
 
   // State field(s) for PageView widget.
   PageController? pageViewController;
@@ -155,15 +187,15 @@ class NewsPagesListViewPageModel
             name: 'dynamic',
             nullable: true,
           ),
-          'currentPage': debugSerializeParam(
-            widget?.currentPage,
+          'currentNewsPageInitalIDX': debugSerializeParam(
+            widget?.currentNewsPageInitalIDX,
             ParamType.int,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsPagesListViewPage',
             searchReference:
-                'reference=Sh0KFQoLY3VycmVudFBhZ2USBm50N3lsNHIECAEgAFABWgtjdXJyZW50UGFnZQ==',
+                'reference=Si8KIgoYY3VycmVudE5ld3NQYWdlSW5pdGFsSURYEgZudDd5bDQqAxIBMHIECAEgAFABWhhjdXJyZW50TmV3c1BhZ2VJbml0YWxJRFg=',
             name: 'int',
-            nullable: true,
+            nullable: false,
           ),
           'isFromList': debugSerializeParam(
             widget?.isFromList,
@@ -247,6 +279,16 @@ class NewsPagesListViewPageModel
                 'reference=QiwKGwoSaW1hZ2VBc3NldHNGb3JTYXZlEgVpdzE3cyoHEgVmYWxzZXIECAQgAVABWhJpbWFnZUFzc2V0c0ZvclNhdmViFU5ld3NQYWdlc0xpc3RWaWV3UGFnZQ==',
             name: 'String',
             nullable: false,
+          ),
+          'commentDotFlag': debugSerializeParam(
+            commentDotFlag,
+            ParamType.int,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsPagesListViewPage',
+            searchReference:
+                'reference=Qh8KFwoOY29tbWVudERvdEZsYWcSBWZrZ3k0cgQIASABUAFaDmNvbW1lbnREb3RGbGFnYhVOZXdzUGFnZXNMaXN0Vmlld1BhZ2U=',
+            name: 'int',
+            nullable: false,
           )
         },
         widgetStates: {
@@ -260,8 +302,24 @@ class NewsPagesListViewPageModel
           )
         },
         actionOutputs: {
+          'apiResultrfs': debugSerializeParam(
+            apiResultrfs,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsPagesListViewPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
           'apiResultNews': debugSerializeParam(
             apiResultNews,
+            ParamType.ApiResponse,
+            link:
+                'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsPagesListViewPage',
+            name: 'ApiCallResponse',
+            nullable: true,
+          ),
+          'apiResultjr3': debugSerializeParam(
+            apiResultjr3,
             ParamType.ApiResponse,
             link:
                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsPagesListViewPage',

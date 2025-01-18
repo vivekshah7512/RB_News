@@ -1,11 +1,14 @@
 // ignore_for_file: unnecessary_getters_setters
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
-class UserRootStruct extends BaseStruct {
+class UserRootStruct extends FFFirebaseStruct {
   UserRootStruct({
     String? jwtTokenString,
     bool? isSuccessfull,
@@ -13,12 +16,14 @@ class UserRootStruct extends BaseStruct {
     String? statusMessage,
     String? message,
     List<UserDataStruct>? data,
+    FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _jwtTokenString = jwtTokenString,
         _isSuccessfull = isSuccessfull,
         _statusCode = statusCode,
         _statusMessage = statusMessage,
         _message = message,
-        _data = data != null ? LoggableList(data) : null;
+        _data = data != null ? LoggableList(data) : null,
+        super(firestoreUtilData);
 
   // "jwtTokenString" field.
   String? _jwtTokenString;
@@ -252,6 +257,10 @@ UserRootStruct createUserRootStruct({
   int? statusCode,
   String? statusMessage,
   String? message,
+  Map<String, dynamic> fieldValues = const {},
+  bool clearUnsetFields = true,
+  bool create = false,
+  bool delete = false,
 }) =>
     UserRootStruct(
       jwtTokenString: jwtTokenString,
@@ -259,4 +268,69 @@ UserRootStruct createUserRootStruct({
       statusCode: statusCode,
       statusMessage: statusMessage,
       message: message,
+      firestoreUtilData: FirestoreUtilData(
+        clearUnsetFields: clearUnsetFields,
+        create: create,
+        delete: delete,
+        fieldValues: fieldValues,
+      ),
     );
+
+UserRootStruct? updateUserRootStruct(
+  UserRootStruct? userRoot, {
+  bool clearUnsetFields = true,
+  bool create = false,
+}) =>
+    userRoot
+      ?..firestoreUtilData = FirestoreUtilData(
+        clearUnsetFields: clearUnsetFields,
+        create: create,
+      );
+
+void addUserRootStructData(
+  Map<String, dynamic> firestoreData,
+  UserRootStruct? userRoot,
+  String fieldName, [
+  bool forFieldValue = false,
+]) {
+  firestoreData.remove(fieldName);
+  if (userRoot == null) {
+    return;
+  }
+  if (userRoot.firestoreUtilData.delete) {
+    firestoreData[fieldName] = FieldValue.delete();
+    return;
+  }
+  final clearFields =
+      !forFieldValue && userRoot.firestoreUtilData.clearUnsetFields;
+  if (clearFields) {
+    firestoreData[fieldName] = <String, dynamic>{};
+  }
+  final userRootData = getUserRootFirestoreData(userRoot, forFieldValue);
+  final nestedData = userRootData.map((k, v) => MapEntry('$fieldName.$k', v));
+
+  final mergeFields = userRoot.firestoreUtilData.create || clearFields;
+  firestoreData
+      .addAll(mergeFields ? mergeNestedFields(nestedData) : nestedData);
+}
+
+Map<String, dynamic> getUserRootFirestoreData(
+  UserRootStruct? userRoot, [
+  bool forFieldValue = false,
+]) {
+  if (userRoot == null) {
+    return {};
+  }
+  final firestoreData = mapToFirestore(userRoot.toMap());
+
+  // Add any Firestore field values
+  userRoot.firestoreUtilData.fieldValues
+      .forEach((k, v) => firestoreData[k] = v);
+
+  return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;
+}
+
+List<Map<String, dynamic>> getUserRootListFirestoreData(
+  List<UserRootStruct>? userRoots,
+) =>
+    userRoots?.map((e) => getUserRootFirestoreData(e, true)).toList() ?? [];

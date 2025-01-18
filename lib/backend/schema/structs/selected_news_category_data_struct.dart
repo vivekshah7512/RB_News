@@ -1,16 +1,21 @@
 // ignore_for_file: unnecessary_getters_setters
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
-class SelectedNewsCategoryDataStruct extends BaseStruct {
+class SelectedNewsCategoryDataStruct extends FFFirebaseStruct {
   SelectedNewsCategoryDataStruct({
     int? id,
     String? name,
+    FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _id = id,
-        _name = name;
+        _name = name,
+        super(firestoreUtilData);
 
   // "id" field.
   int? _id;
@@ -109,8 +114,83 @@ class SelectedNewsCategoryDataStruct extends BaseStruct {
 SelectedNewsCategoryDataStruct createSelectedNewsCategoryDataStruct({
   int? id,
   String? name,
+  Map<String, dynamic> fieldValues = const {},
+  bool clearUnsetFields = true,
+  bool create = false,
+  bool delete = false,
 }) =>
     SelectedNewsCategoryDataStruct(
       id: id,
       name: name,
+      firestoreUtilData: FirestoreUtilData(
+        clearUnsetFields: clearUnsetFields,
+        create: create,
+        delete: delete,
+        fieldValues: fieldValues,
+      ),
     );
+
+SelectedNewsCategoryDataStruct? updateSelectedNewsCategoryDataStruct(
+  SelectedNewsCategoryDataStruct? selectedNewsCategoryData, {
+  bool clearUnsetFields = true,
+  bool create = false,
+}) =>
+    selectedNewsCategoryData
+      ?..firestoreUtilData = FirestoreUtilData(
+        clearUnsetFields: clearUnsetFields,
+        create: create,
+      );
+
+void addSelectedNewsCategoryDataStructData(
+  Map<String, dynamic> firestoreData,
+  SelectedNewsCategoryDataStruct? selectedNewsCategoryData,
+  String fieldName, [
+  bool forFieldValue = false,
+]) {
+  firestoreData.remove(fieldName);
+  if (selectedNewsCategoryData == null) {
+    return;
+  }
+  if (selectedNewsCategoryData.firestoreUtilData.delete) {
+    firestoreData[fieldName] = FieldValue.delete();
+    return;
+  }
+  final clearFields = !forFieldValue &&
+      selectedNewsCategoryData.firestoreUtilData.clearUnsetFields;
+  if (clearFields) {
+    firestoreData[fieldName] = <String, dynamic>{};
+  }
+  final selectedNewsCategoryDataData = getSelectedNewsCategoryDataFirestoreData(
+      selectedNewsCategoryData, forFieldValue);
+  final nestedData =
+      selectedNewsCategoryDataData.map((k, v) => MapEntry('$fieldName.$k', v));
+
+  final mergeFields =
+      selectedNewsCategoryData.firestoreUtilData.create || clearFields;
+  firestoreData
+      .addAll(mergeFields ? mergeNestedFields(nestedData) : nestedData);
+}
+
+Map<String, dynamic> getSelectedNewsCategoryDataFirestoreData(
+  SelectedNewsCategoryDataStruct? selectedNewsCategoryData, [
+  bool forFieldValue = false,
+]) {
+  if (selectedNewsCategoryData == null) {
+    return {};
+  }
+  final firestoreData = mapToFirestore(selectedNewsCategoryData.toMap());
+
+  // Add any Firestore field values
+  selectedNewsCategoryData.firestoreUtilData.fieldValues
+      .forEach((k, v) => firestoreData[k] = v);
+
+  return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;
+}
+
+List<Map<String, dynamic>> getSelectedNewsCategoryDataListFirestoreData(
+  List<SelectedNewsCategoryDataStruct>? selectedNewsCategoryDatas,
+) =>
+    selectedNewsCategoryDatas
+        ?.map((e) => getSelectedNewsCategoryDataFirestoreData(e, true))
+        .toList() ??
+    [];

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'serialization_util.dart';
-import '../backend.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -112,8 +112,6 @@ final parametersBuilderMap =
   'OTPVerificationPage': (data) async => ParameterData(
         allParams: {
           'emailAddress': getParameter<String>(data, 'emailAddress'),
-          'timerSeconds': getParameter<bool>(data, 'timerSeconds'),
-          'resendTextState': getParameter<int>(data, 'resendTextState'),
         },
       ),
   'HoroscopePage': ParameterData.none(),
@@ -122,11 +120,67 @@ final parametersBuilderMap =
           'hintFlag': getParameter<int>(data, 'hintFlag'),
         },
       ),
-  'NewsDetailPage': ParameterData.none(),
-  'PropertyDetailPage': ParameterData.none(),
-  'HoroscopesDetailPage': ParameterData.none(),
+  'NewsDetailPage': (data) async => ParameterData(
+        allParams: {
+          'newsId': getParameter<String>(data, 'newsId'),
+        },
+      ),
   'UserDetailPage': ParameterData.none(),
-  'AllPropertiesListPage': ParameterData.none(),
+  'AllPropertiesListPage': (data) async => ParameterData(
+        allParams: {
+          'propertyType': getParameter<String>(data, 'propertyType'),
+          'propertyTitle': getParameter<String>(data, 'propertyTitle'),
+        },
+      ),
+  'NewsListPage': (data) async => ParameterData(
+        allParams: {
+          'newsType': getParameter<String>(data, 'newsType'),
+          'newsTitle': getParameter<String>(data, 'newsTitle'),
+          'searchKeyword': getParameter<String>(data, 'searchKeyword'),
+          'searchForNews': getParameter<int>(data, 'searchForNews'),
+        },
+      ),
+  'LatestPropertiesListPage': (data) async => ParameterData(
+        allParams: {
+          'propertyType': getParameter<String>(data, 'propertyType'),
+          'propertyTitle': getParameter<String>(data, 'propertyTitle'),
+        },
+      ),
+  'HoroscopeDetailNew': (data) async => ParameterData(
+        allParams: {
+          'zodiacSignId': getParameter<String>(data, 'zodiacSignId'),
+          'currentZodiacIndex': getParameter<int>(data, 'currentZodiacIndex'),
+        },
+      ),
+  'PropertyDetailNew': (data) async => ParameterData(
+        allParams: {
+          'propertyId': getParameter<int>(data, 'propertyId'),
+        },
+      ),
+  'NewsPagesListViewPage': (data) async => ParameterData(
+        allParams: {
+          'currentNewsPageInitalIDX':
+              getParameter<int>(data, 'currentNewsPageInitalIDX'),
+          'isFromList': getParameter<bool>(data, 'isFromList'),
+        },
+      ),
+  'PropertyDetailListPage': (data) async => ParameterData(
+        allParams: {
+          'propertyId': getParameter<int>(data, 'propertyId'),
+          'currentPageIndex': getParameter<int>(data, 'currentPageIndex'),
+        },
+      ),
+  'NewsDetailCarouselPage': (data) async => ParameterData(
+        allParams: {
+          'isFromList': getParameter<bool>(data, 'isFromList'),
+          'currentNewsPageInitalIDX':
+              getParameter<int>(data, 'currentNewsPageInitalIDX'),
+          'searchText': getParameter<String>(data, 'searchText'),
+          'newsType': getParameter<String>(data, 'newsType'),
+        },
+      ),
+  'PageNotFoundPage': ParameterData.none(),
+  'NoInternetPage': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

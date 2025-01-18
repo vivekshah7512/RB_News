@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
+import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 
+import '/backend/push_notifications/push_notifications_handler.dart'
+    show PushNotificationsHandler;
 import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -51,7 +52,13 @@ const debugRouteLinkMap = {
   '/newsPagesListViewPage':
       'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsPagesListViewPage',
   '/PropertyDetailListPage':
-      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailListPage'
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PropertyDetailListPage',
+  '/newsDetailCarouselPage':
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsDetailCarouselPage',
+  '/pageNotFoundPage':
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=PageNotFoundPage',
+  '/noInternetPage':
+      'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NoInternetPage'
 };
 
 class AppStateNotifier extends ChangeNotifier {
@@ -118,22 +125,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               'emailAddress',
               ParamType.String,
             ),
-            timerSeconds: params.getParam(
-              'timerSeconds',
-              ParamType.bool,
-            ),
-            resendTextState: params.getParam(
-              'resendTextState',
-              ParamType.int,
-            ),
           ),
         ),
         FFRoute(
           name: 'HoroscopePage',
           path: '/horoscopePage',
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'HoroscopePage')
-              : HoroscopePageWidget(),
+          builder: (context, params) => HoroscopePageWidget(),
         ),
         FFRoute(
           name: 'HomePage',
@@ -193,6 +190,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               'newsTitle',
               ParamType.String,
             ),
+            searchKeyword: params.getParam(
+              'searchKeyword',
+              ParamType.String,
+            ),
+            searchForNews: params.getParam(
+              'searchForNews',
+              ParamType.int,
+            ),
           ),
         ),
         FFRoute(
@@ -212,12 +217,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'HoroscopeDetailNew',
           path: '/horoscopeDetailNew',
-          builder: (context, params) => HoroscopeDetailNewWidget(
-            zodiacSignId: params.getParam(
-              'zodiacSignId',
-              ParamType.String,
-            ),
-          ),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'HoroscopeDetailNew')
+              : NavBarPage(
+                  initialPage: 'HoroscopeDetailNew',
+                  page: HoroscopeDetailNewWidget(
+                    zodiacSignId: params.getParam(
+                      'zodiacSignId',
+                      ParamType.String,
+                    ),
+                    currentZodiacIndex: params.getParam(
+                      'currentZodiacIndex',
+                      ParamType.int,
+                    ),
+                    zodiacListArray: params.getParam<dynamic>(
+                      'zodiacListArray',
+                      ParamType.JSON,
+                      isList: true,
+                    ),
+                  ),
+                ),
         ),
         FFRoute(
           name: 'PropertyDetailNew',
@@ -237,26 +256,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'NewsPagesListViewPage',
           path: '/newsPagesListViewPage',
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'NewsPagesListViewPage')
-              : NavBarPage(
-                  initialPage: 'NewsPagesListViewPage',
-                  page: NewsPagesListViewPageWidget(
-                    newsListPageArray: params.getParam<dynamic>(
-                      'newsListPageArray',
-                      ParamType.JSON,
-                      isList: true,
-                    ),
-                    currentPage: params.getParam(
-                      'currentPage',
-                      ParamType.int,
-                    ),
-                    isFromList: params.getParam(
-                      'isFromList',
-                      ParamType.bool,
-                    ),
-                  ),
-                ),
+          builder: (context, params) => NewsPagesListViewPageWidget(
+            newsListPageArray: params.getParam<dynamic>(
+              'newsListPageArray',
+              ParamType.JSON,
+              isList: true,
+            ),
+            currentNewsPageInitalIDX: params.getParam(
+              'currentNewsPageInitalIDX',
+              ParamType.int,
+            ),
+            isFromList: params.getParam(
+              'isFromList',
+              ParamType.bool,
+            ),
+          ),
         ),
         FFRoute(
           name: 'PropertyDetailListPage',
@@ -281,6 +295,48 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     ),
                   ),
                 ),
+        ),
+        FFRoute(
+          name: 'NewsDetailCarouselPage',
+          path: '/newsDetailCarouselPage',
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'NewsDetailCarouselPage')
+              : NavBarPage(
+                  initialPage: 'NewsDetailCarouselPage',
+                  page: NewsDetailCarouselPageWidget(
+                    newsListPageArray: params.getParam<dynamic>(
+                      'newsListPageArray',
+                      ParamType.JSON,
+                      isList: true,
+                    ),
+                    isFromList: params.getParam(
+                      'isFromList',
+                      ParamType.bool,
+                    ),
+                    currentNewsPageInitalIDX: params.getParam(
+                      'currentNewsPageInitalIDX',
+                      ParamType.int,
+                    ),
+                    searchText: params.getParam(
+                      'searchText',
+                      ParamType.String,
+                    ),
+                    newsType: params.getParam(
+                      'newsType',
+                      ParamType.String,
+                    ),
+                  ),
+                ),
+        ),
+        FFRoute(
+          name: 'PageNotFoundPage',
+          path: '/pageNotFoundPage',
+          builder: (context, params) => PageNotFoundPageWidget(),
+        ),
+        FFRoute(
+          name: 'NoInternetPage',
+          path: '/noInternetPage',
+          builder: (context, params) => NoInternetPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],
@@ -353,6 +409,7 @@ class FFParameters {
     String paramName,
     ParamType type, {
     bool isList = false,
+    List<String>? collectionNamePath,
     StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
@@ -371,6 +428,7 @@ class FFParameters {
       param,
       type,
       isList,
+      collectionNamePath: collectionNamePath,
       structBuilder: structBuilder,
     );
   }

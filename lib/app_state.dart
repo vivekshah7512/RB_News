@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/api_requests/api_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -390,7 +391,7 @@ class FFAppState extends ChangeNotifier {
     selectedNewsCategoryTop.insert(index, value);
   }
 
-  int _pageSize = 10;
+  int _pageSize = 20;
   int get pageSize => _pageSize;
   set pageSize(int value) {
     _pageSize = value;
@@ -529,6 +530,46 @@ class FFAppState extends ChangeNotifier {
   void insertAtIndexInNavActiveIcons(int index, String value) {
     navActiveIcons.insert(index, value);
     prefs.setStringList('ff_navActiveIcons', _navActiveIcons);
+  }
+
+  int _zodiacLDetailIndex = 0;
+  int get zodiacLDetailIndex => _zodiacLDetailIndex;
+  set zodiacLDetailIndex(int value) {
+    _zodiacLDetailIndex = value;
+
+    debugLogAppState(this);
+  }
+
+  bool _isFromLogout = false;
+  bool get isFromLogout => _isFromLogout;
+  set isFromLogout(bool value) {
+    _isFromLogout = value;
+
+    debugLogAppState(this);
+  }
+
+  bool _isNewsPageSwiped = false;
+  bool get isNewsPageSwiped => _isNewsPageSwiped;
+  set isNewsPageSwiped(bool value) {
+    _isNewsPageSwiped = value;
+
+    debugLogAppState(this);
+  }
+
+  bool _isAppOpened = false;
+  bool get isAppOpened => _isAppOpened;
+  set isAppOpened(bool value) {
+    _isAppOpened = value;
+
+    debugLogAppState(this);
+  }
+
+  int _pageSizeAll = 150;
+  int get pageSizeAll => _pageSizeAll;
+  set pageSizeAll(int value) {
+    _pageSizeAll = value;
+
+    debugLogAppState(this);
   }
 
   Map<String, DebugDataField> toDebugSerializableMap() => {
@@ -837,6 +878,56 @@ class FFAppState extends ChangeNotifier {
           searchReference:
               'reference=CiIKGgoObmF2QWN0aXZlSWNvbnMSCGRkM3F6dHBrcgQSAggDWg5uYXZBY3RpdmVJY29ucw==',
           name: 'String',
+          nullable: false,
+        ),
+        'zodiacLDetailIndex': debugSerializeParam(
+          zodiacLDetailIndex,
+          ParamType.int,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CiQKHgoSem9kaWFjTERldGFpbEluZGV4Egg3YjNxZzh2bHICCAFaEnpvZGlhY0xEZXRhaWxJbmRleA==',
+          name: 'int',
+          nullable: false,
+        ),
+        'isFromLogout': debugSerializeParam(
+          isFromLogout,
+          ParamType.bool,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=Ch4KGAoMaXNGcm9tTG9nb3V0Egh6eXZzZjNlbHICCAVaDGlzRnJvbUxvZ291dA==',
+          name: 'bool',
+          nullable: false,
+        ),
+        'isNewsPageSwiped': debugSerializeParam(
+          isNewsPageSwiped,
+          ParamType.bool,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=CiIKHAoQaXNOZXdzUGFnZVN3aXBlZBIIZzBmbHV0dzByAggFWhBpc05ld3NQYWdlU3dpcGVk',
+          name: 'bool',
+          nullable: false,
+        ),
+        'isAppOpened': debugSerializeParam(
+          isAppOpened,
+          ParamType.bool,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=Ch0KFwoLaXNBcHBPcGVuZWQSCG01b2g2MHNucgIIBVoLaXNBcHBPcGVuZWQ=',
+          name: 'bool',
+          nullable: false,
+        ),
+        'pageSizeAll': debugSerializeParam(
+          pageSizeAll,
+          ParamType.int,
+          link:
+              'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=appValues&appValuesTab=state',
+          searchReference:
+              'reference=Ch0KFwoLcGFnZVNpemVBbGwSCGoxZXYwcTY2cgIIAVoLcGFnZVNpemVBbGw=',
+          name: 'int',
           nullable: false,
         )
       };

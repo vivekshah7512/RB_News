@@ -1,17 +1,16 @@
 import '/backend/api_requests/api_calls.dart';
 import '/backend/schema/structs/index.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/pages/news_filter_popup/news_filter_popup_widget.dart';
+import '/pages/custom_components/news_filter_popup/news_filter_popup_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,11 +22,17 @@ class NewsListPageWidget extends StatefulWidget {
     super.key,
     String? newsType,
     String? newsTitle,
+    String? searchKeyword,
+    int? searchForNews,
   })  : this.newsType = newsType ?? 'all',
-        this.newsTitle = newsTitle ?? 'બધા સમાચાર';
+        this.newsTitle = newsTitle ?? 'બધા સમાચાર',
+        this.searchKeyword = searchKeyword ?? '   ',
+        this.searchForNews = searchForNews ?? 0;
 
   final String newsType;
   final String newsTitle;
+  final String searchKeyword;
+  final int searchForNews;
 
   @override
   State<NewsListPageWidget> createState() => _NewsListPageWidgetState();
@@ -49,17 +54,27 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
       FFAppState().currentNewsPage = 1;
       FFAppState().totalNewsPage = 1;
       FFAppState().totalNewsDataSize = 0;
-      safeSetState(() {});
+      FFAppState().update(() {});
       _model.apiResultudj = await RBNewsAPIGroup.newsListCall.call(
         authToken: FFAppState().authTokenAPI,
         userId: FFAppState().userIdAPI.toString(),
-        searchText: _model.textController.text,
+        searchText: widget!.searchKeyword,
         pageNumber: FFAppState().currentNewsPage,
         newsType: widget!.newsType,
         pageSize: FFAppState().pageSize,
         filterCategoriesIdListString: FFAppState().selectedFilterIds,
       );
 
+      if (widget!.searchForNews == 1) {
+        safeSetState(() {
+          _model.textFieldSearchTextController?.text = '';
+          _model.textFieldSearchFocusNode?.requestFocus();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _model.textFieldSearchTextController?.selection =
+                const TextSelection.collapsed(offset: 0);
+          });
+        });
+      }
       if ((_model.apiResultudj?.succeeded ?? true)) {
         FFAppState().totalNewsPage = functions.getDivideVars(
             getJsonField(
@@ -69,13 +84,33 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
             FFAppState().pageSize);
         safeSetState(() {});
       }
+      _model.isListEmpty = getJsonField(
+        (_model.apiResultudj?.jsonBody ?? ''),
+        r'''$.isSuccessfull''',
+      );
+      safeSetState(() {});
+      if (_model.isListEmpty == false) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'No data found',
+              style: TextStyle(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                fontSize: 14.0,
+              ),
+            ),
+            duration: Duration(milliseconds: 2500),
+            backgroundColor: Color(0xFF748187),
+          ),
+        );
+      }
     });
 
-    _model.textController ??= TextEditingController()
+    _model.textFieldSearchTextController ??= TextEditingController()
       ..addListener(() {
         debugLogWidgetClass(_model);
       });
-    _model.textFieldFocusNode ??= FocusNode();
+    _model.textFieldSearchFocusNode ??= FocusNode();
   }
 
   @override
@@ -135,86 +170,110 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: Color(0xFFF8F8F8),
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          backgroundColor: Color(0xFFF8F8F8),
           automaticallyImplyLeading: false,
-          title: Row(
+          title: Column(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FlutterFlowIconButton(
-                borderColor: Color(0xFFE6E6E6),
-                borderRadius: 12.0,
-                borderWidth: 1.0,
-                buttonSize: 40.0,
-                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                icon: Icon(
-                  Icons.arrow_back_ios_new,
-                  color: Color(0xFF808080),
-                  size: 24.0,
-                ),
-                onPressed: () async {
-                  context.pop();
-                },
-              ),
-              Text(
-                widget!.newsTitle,
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      fontFamily: 'Readex Pro',
-                      color: Color(0xFF1A1A1A),
-                      fontSize: 20.0,
-                      letterSpacing: 0.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-              FlutterFlowIconButton(
-                borderColor: Color(0xFFE6E6E6),
-                borderRadius: 12.0,
-                borderWidth: 1.0,
-                buttonSize: 40.0,
-                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                icon: Icon(
-                  Icons.filter_alt_outlined,
-                  color: Color(0xFF808080),
-                  size: 24.0,
-                ),
-                onPressed: () async {
-                  await showModalBottomSheet(
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    builder: (context) {
-                      return GestureDetector(
-                        onTap: () {
-                          FocusScope.of(context).unfocus();
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        child: Padding(
-                          padding: MediaQuery.viewInsetsOf(context),
-                          child: Container(
-                            height: MediaQuery.sizeOf(context).height * 0.7,
-                            child: NewsFilterPopupWidget(),
-                          ),
-                        ),
-                      );
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      FFAppState().selectedNewsCategoryTop = [];
+                      FFAppState().selectedFilterIds = '  ';
+                      safeSetState(() {});
+                      context.safePop();
                     },
-                  ).then((value) => safeSetState(() {}));
-                },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: SvgPicture.asset(
+                        'assets/images/back.svg',
+                        width: 40.0,
+                        height: 40.0,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    widget!.newsTitle,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'BalooBhaiGujarati',
+                          color: Color(0xFF1A1A1A),
+                          fontSize: 20.0,
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.w600,
+                          useGoogleFonts: false,
+                        ),
+                  ),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      await showModalBottomSheet(
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (context) {
+                          return GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).unfocus();
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            child: Padding(
+                              padding: MediaQuery.viewInsetsOf(context),
+                              child: Container(
+                                height: MediaQuery.sizeOf(context).height * 0.8,
+                                child: NewsFilterPopupWidget(
+                                  newsType: widget!.newsType,
+                                  searchKeyword:
+                                      _model.textFieldSearchTextController.text,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ).then((value) => safeSetState(() {}));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: SvgPicture.asset(
+                        'assets/images/filter.svg',
+                        width: 40.0,
+                        height: 40.0,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           actions: [],
           centerTitle: true,
-          elevation: 2.0,
+          toolbarHeight: 60.0,
+          elevation: 0.0,
         ),
-        body: SafeArea(
-          top: true,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
+        body: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
+              child: SingleChildScrollView(
+                controller: _model.columnController,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -222,6 +281,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                           EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 0.0),
                       child: Container(
                         width: MediaQuery.sizeOf(context).width * 1.0,
+                        decoration: BoxDecoration(),
                         child: Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
                           height: 50.0,
@@ -240,18 +300,22 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 0.0, 5.0, 0.0),
-                                child: Icon(
-                                  Icons.search,
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  size: 24.0,
+                                    12.0, 0.0, 12.0, 0.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: SvgPicture.asset(
+                                    'assets/images/search-normal.svg',
+                                    width: 20.0,
+                                    height: 20.0,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  controller: _model.textController,
-                                  focusNode: _model.textFieldFocusNode,
+                                  controller:
+                                      _model.textFieldSearchTextController,
+                                  focusNode: _model.textFieldSearchFocusNode,
                                   onFieldSubmitted: (_) async {
                                     FFAppState().currentNewsPage = 1;
                                     safeSetState(() {});
@@ -259,7 +323,8 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                         await RBNewsAPIGroup.newsListCall.call(
                                       authToken: FFAppState().authTokenAPI,
                                       userId: FFAppState().userIdAPI.toString(),
-                                      searchText: _model.textController.text,
+                                      searchText: _model
+                                          .textFieldSearchTextController.text,
                                       pageNumber: FFAppState().currentNewsPage,
                                       newsType: widget!.newsType,
                                       pageSize: FFAppState().pageSize,
@@ -290,8 +355,9 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                     hintStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
+                                          fontFamily: 'BalooBhaiGujarati',
                                           letterSpacing: 0.0,
+                                          useGoogleFonts: false,
                                         ),
                                     enabledBorder: InputBorder.none,
                                     focusedBorder: InputBorder.none,
@@ -301,11 +367,13 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Readex Pro',
+                                        fontFamily: 'BalooBhaiGujarati',
                                         letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                   minLines: 1,
-                                  validator: _model.textControllerValidator
+                                  validator: _model
+                                      .textFieldSearchTextControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -315,100 +383,221 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                       ),
                     ),
                     if (FFAppState().selectedNewsCategoryTop.length != 0)
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            16.0, 16.0, 16.0, 16.0),
-                        child: Container(
-                          width: 400.0,
-                          height: 30.0,
-                          decoration: BoxDecoration(),
-                          child: Builder(
-                            builder: (context) {
-                              final filterCategoryArray =
-                                  FFAppState().selectedNewsCategoryTop.toList();
-                              _model.debugGeneratorVariables[
-                                      'filterCategoryArray${filterCategoryArray.length > 100 ? ' (first 100)' : ''}'] =
-                                  debugSerializeParam(
-                                filterCategoryArray.take(100),
-                                ParamType.DataStruct,
-                                isList: true,
-                                link:
-                                    'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
-                                name: 'SelectedNewsCategoryData',
-                                nullable: false,
-                              );
-                              debugLogWidgetClass(_model);
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        controller: _model.rowController,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 16.0, 2.0, 16.0),
+                              child: Container(
+                                height: 30.0,
+                                decoration: BoxDecoration(),
+                                child: Builder(
+                                  builder: (context) {
+                                    final filterCategoryArray = FFAppState()
+                                        .selectedNewsCategoryTop
+                                        .toList();
+                                    _model.debugGeneratorVariables[
+                                            'filterCategoryArray${filterCategoryArray.length > 100 ? ' (first 100)' : ''}'] =
+                                        debugSerializeParam(
+                                      filterCategoryArray.take(100),
+                                      ParamType.DataStruct,
+                                      isList: true,
+                                      link:
+                                          'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
+                                      name: 'SelectedNewsCategoryData',
+                                      nullable: false,
+                                    );
+                                    debugLogWidgetClass(_model);
 
-                              return ListView.separated(
-                                padding: EdgeInsets.zero,
-                                primary: false,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: filterCategoryArray.length,
-                                separatorBuilder: (_, __) =>
-                                    SizedBox(width: 15.0),
-                                itemBuilder:
-                                    (context, filterCategoryArrayIndex) {
-                                  final filterCategoryArrayItem =
-                                      filterCategoryArray[
-                                          filterCategoryArrayIndex];
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFF1F3FE),
-                                      borderRadius: BorderRadius.circular(16.0),
-                                      border: Border.all(
-                                        color: Color(0xFF5374FF),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          8.0, 0.0, 8.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            filterCategoryArrayItem.name,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  color: Color(0xFF5374FF),
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.testresult = await actions
-                                                  .manageNewsCategoryFilter(
-                                                filterCategoryArrayItem.name,
-                                                filterCategoryArrayItem.id,
-                                                false,
-                                              );
-                                              FFAppState().currentNewsPage = 1;
-                                              safeSetState(() {});
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Icon(
-                                              Icons.close,
+                                    return ListView.separated(
+                                      padding: EdgeInsets.zero,
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: filterCategoryArray.length,
+                                      separatorBuilder: (_, __) =>
+                                          SizedBox(width: 15.0),
+                                      itemBuilder:
+                                          (context, filterCategoryArrayIndex) {
+                                        final filterCategoryArrayItem =
+                                            filterCategoryArray[
+                                                filterCategoryArrayIndex];
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFF1F3FE),
+                                            borderRadius:
+                                                BorderRadius.circular(16.0),
+                                            border: Border.all(
                                               color: Color(0xFF5374FF),
-                                              size: 22.0,
                                             ),
                                           ),
-                                        ].divide(SizedBox(width: 6.0)),
-                                      ),
-                                    ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8.0, 0.0, 8.0, 0.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  filterCategoryArrayItem.name,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'BalooBhaiGujarati',
+                                                        color:
+                                                            Color(0xFF5374FF),
+                                                        letterSpacing: 0.0,
+                                                        useGoogleFonts: false,
+                                                      ),
+                                                ),
+                                                InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  focusColor:
+                                                      Colors.transparent,
+                                                  hoverColor:
+                                                      Colors.transparent,
+                                                  highlightColor:
+                                                      Colors.transparent,
+                                                  onTap: () async {
+                                                    _model.testresult =
+                                                        await actions
+                                                            .manageNewsCategoryFilter(
+                                                      filterCategoryArrayItem
+                                                          .name,
+                                                      filterCategoryArrayItem
+                                                          .id,
+                                                      false,
+                                                    );
+                                                    _model.apiResultOnCancelFilter =
+                                                        await RBNewsAPIGroup
+                                                            .newsListCall
+                                                            .call(
+                                                      authToken: FFAppState()
+                                                          .authTokenAPI,
+                                                      userId: FFAppState()
+                                                          .userIdAPI
+                                                          .toString(),
+                                                      searchText:
+                                                          widget!.searchKeyword,
+                                                      pageNumber: FFAppState()
+                                                          .currentNewsPage,
+                                                      newsType:
+                                                          widget!.newsType,
+                                                      pageSize:
+                                                          FFAppState().pageSize,
+                                                      filterCategoriesIdListString:
+                                                          FFAppState()
+                                                              .selectedFilterIds,
+                                                    );
+
+                                                    if ((_model
+                                                            .apiResultOnCancelFilter
+                                                            ?.succeeded ??
+                                                        true)) {
+                                                      FFAppState()
+                                                              .totalNewsPage =
+                                                          functions
+                                                              .getDivideVars(
+                                                                  getJsonField(
+                                                                    (_model.apiResultOnCancelFilter
+                                                                            ?.jsonBody ??
+                                                                        ''),
+                                                                    r'''$.totalCount''',
+                                                                  ),
+                                                                  FFAppState()
+                                                                      .pageSize);
+                                                      safeSetState(() {});
+                                                    }
+
+                                                    safeSetState(() {});
+                                                  },
+                                                  child: Icon(
+                                                    Icons.close,
+                                                    color: Color(0xFF5374FF),
+                                                    size: 22.0,
+                                                  ),
+                                                ),
+                                              ].divide(SizedBox(width: 6.0)),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      controller: _model.listViewController,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.0,
+                              child: VerticalDivider(
+                                thickness: 1.5,
+                                color: FlutterFlowTheme.of(context).alternate,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  5.0, 0.0, 16.0, 0.0),
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  FFAppState().selectedFilterIds = '  ';
+                                  FFAppState().selectedNewsCategoryTop = [];
+                                  safeSetState(() {});
+                                  _model.apiResultOnCancelAll =
+                                      await RBNewsAPIGroup.newsListCall.call(
+                                    authToken: FFAppState().authTokenAPI,
+                                    userId: FFAppState().userIdAPI.toString(),
+                                    searchText: widget!.searchKeyword,
+                                    pageNumber: FFAppState().currentNewsPage,
+                                    newsType: widget!.newsType,
+                                    pageSize: FFAppState().pageSize,
+                                    filterCategoriesIdListString:
+                                        FFAppState().selectedFilterIds,
                                   );
+
+                                  if ((_model.apiResultOnCancelAll?.succeeded ??
+                                      true)) {
+                                    FFAppState().totalNewsPage =
+                                        functions.getDivideVars(
+                                            getJsonField(
+                                              (_model.apiResultOnCancelAll
+                                                      ?.jsonBody ??
+                                                  ''),
+                                              r'''$.totalCount''',
+                                            ),
+                                            FFAppState().pageSize);
+                                    safeSetState(() {});
+                                  }
+
+                                  safeSetState(() {});
                                 },
-                              );
-                            },
-                          ),
+                                child: Text(
+                                  'બધા દૂર કરો',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'BalooBhaiGujarati',
+                                        color: Color(0xFF5374FF),
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: false,
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     Padding(
@@ -418,7 +607,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                         future: RBNewsAPIGroup.newsListCall.call(
                           authToken: FFAppState().authTokenAPI,
                           userId: FFAppState().userIdAPI.toString(),
-                          searchText: _model.textController.text,
+                          searchText: _model.textFieldSearchTextController.text,
                           pageNumber: FFAppState().currentNewsPage,
                           newsType: widget!.newsType,
                           filterCategoriesIdListString:
@@ -429,21 +618,26 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                           // Customize what your widget looks like when it's loading.
                           if (!snapshot.hasData) {
                             return Center(
-                              child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
-                                child: SpinKitFadingFour(
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  size: 50.0,
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 300.0, 0.0, 0.0),
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
                                 ),
                               ),
                             );
                           }
-                          final listViewNewsListResponse = snapshot.data!;
+                          final listViewNewsNewsListResponse = snapshot.data!;
                           _model.debugBackendQueries[
                                   'RBNewsAPIGroup.newsListCall_statusCode_ListView_7a4vkb11'] =
                               debugSerializeParam(
-                            listViewNewsListResponse.statusCode,
+                            listViewNewsNewsListResponse.statusCode,
                             ParamType.int,
                             link:
                                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
@@ -453,7 +647,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                           _model.debugBackendQueries[
                                   'RBNewsAPIGroup.newsListCall_responseBody_ListView_7a4vkb11'] =
                               debugSerializeParam(
-                            listViewNewsListResponse.bodyText,
+                            listViewNewsNewsListResponse.bodyText,
                             ParamType.String,
                             link:
                                 'https://app.flutterflow.io/project/r-b-news-k9jlh3?tab=uiBuilder&page=NewsListPage',
@@ -466,7 +660,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                             builder: (context) {
                               final newsListArray = RBNewsAPIGroup.newsListCall
                                       .newsArray(
-                                        listViewNewsListResponse.jsonBody,
+                                        listViewNewsNewsListResponse.jsonBody,
                                       )
                                       ?.toList() ??
                                   [];
@@ -505,24 +699,35 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                       safeSetState(() {});
 
                                       context.pushNamed(
-                                        'NewsPagesListViewPage',
+                                        'NewsDetailCarouselPage',
                                         queryParameters: {
                                           'newsListPageArray': serializeParam(
                                             getJsonField(
-                                              listViewNewsListResponse.jsonBody,
+                                              listViewNewsNewsListResponse
+                                                  .jsonBody,
                                               r'''$.data''',
                                               true,
                                             ),
                                             ParamType.JSON,
                                             isList: true,
                                           ),
-                                          'currentPage': serializeParam(
-                                            newsListArrayIndex,
-                                            ParamType.int,
-                                          ),
                                           'isFromList': serializeParam(
                                             true,
                                             ParamType.bool,
+                                          ),
+                                          'currentNewsPageInitalIDX':
+                                              serializeParam(
+                                            newsListArrayIndex,
+                                            ParamType.int,
+                                          ),
+                                          'searchText': serializeParam(
+                                            _model.textFieldSearchTextController
+                                                .text,
+                                            ParamType.String,
+                                          ),
+                                          'newsType': serializeParam(
+                                            widget!.newsType,
+                                            ParamType.String,
                                           ),
                                         }.withoutNulls,
                                       );
@@ -613,7 +818,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                                       .bodyMedium
                                                                       .override(
                                                                         fontFamily:
-                                                                            'Readex Pro',
+                                                                            'BalooBhaiGujarati',
                                                                         color: Color(
                                                                             0xFF5374FF),
                                                                         fontSize:
@@ -622,6 +827,8 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                                             0.0,
                                                                         fontWeight:
                                                                             FontWeight.w600,
+                                                                        useGoogleFonts:
+                                                                            false,
                                                                       ),
                                                                 ),
                                                               ),
@@ -648,13 +855,15 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                                         .labelSmall
                                                                         .override(
                                                                           fontFamily:
-                                                                              'Readex Pro',
+                                                                              'BalooBhaiGujarati',
                                                                           color:
                                                                               FlutterFlowTheme.of(context).primary,
                                                                           letterSpacing:
                                                                               0.0,
                                                                           fontWeight:
                                                                               FontWeight.w600,
+                                                                          useGoogleFonts:
+                                                                              false,
                                                                         ),
                                                                   ),
                                                                 ),
@@ -675,13 +884,15 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                           .bodyMedium
                                                           .override(
                                                             fontFamily:
-                                                                'Readex Pro',
+                                                                'BalooBhaiGujarati',
                                                             color: Color(
                                                                 0xFF4D4D4D),
                                                             fontSize: 16.0,
                                                             letterSpacing: 0.0,
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                                FontWeight.w600,
+                                                            useGoogleFonts:
+                                                                false,
                                                           ),
                                                     ),
                                                     Container(
@@ -709,6 +920,7 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                     ),
                                   );
                                 },
+                                controller: _model.listViewNews,
                               );
                             },
                           );
@@ -718,10 +930,12 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                   ].divide(SizedBox(height: 0.0)),
                 ),
               ),
+            ),
+            if (_model.isListEmpty == true)
               Align(
                 alignment: AlignmentDirectional(0.0, 1.0),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
                   child: Container(
                     width: 159.0,
                     height: 55.0,
@@ -765,8 +979,9 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                           pageNumber:
                                               FFAppState().currentNewsPage,
                                           newsType: widget!.newsType,
-                                          searchText:
-                                              _model.textController.text,
+                                          searchText: _model
+                                              .textFieldSearchTextController
+                                              .text,
                                           filterCategoriesIdListString:
                                               FFAppState().selectedFilterIds,
                                           pageSize: FFAppState().pageSize,
@@ -807,8 +1022,9 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                               pageNumber:
                                                   FFAppState().currentNewsPage,
                                               newsType: widget!.newsType,
-                                              searchText:
-                                                  _model.textController.text,
+                                              searchText: _model
+                                                  .textFieldSearchTextController
+                                                  .text,
                                               filterCategoriesIdListString:
                                                   FFAppState()
                                                       .selectedFilterIds,
@@ -826,6 +1042,13 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                 r'''$.totalCount''',
                                               );
                                               safeSetState(() {});
+                                              await _model.columnController
+                                                  ?.animateTo(
+                                                0,
+                                                duration:
+                                                    Duration(milliseconds: 100),
+                                                curve: Curves.ease,
+                                              );
                                             }
                                           }
                                         }
@@ -853,9 +1076,10 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
-                                        fontFamily: 'Readex Pro',
+                                        fontFamily: 'BalooBhaiGujarati',
                                         color: Colors.white,
                                         letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                   elevation: 0.0,
                                   borderRadius: BorderRadius.circular(8.0),
@@ -874,8 +1098,9 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
+                                  fontFamily: 'BalooBhaiGujarati',
                                   letterSpacing: 0.0,
+                                  useGoogleFonts: false,
                                 ),
                           ),
                           Expanded(
@@ -895,8 +1120,9 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                           pageNumber:
                                               FFAppState().currentNewsPage,
                                           newsType: widget!.newsType,
-                                          searchText:
-                                              _model.textController.text,
+                                          searchText: _model
+                                              .textFieldSearchTextController
+                                              .text,
                                           filterCategoriesIdListString:
                                               FFAppState().selectedFilterIds,
                                           pageSize: FFAppState().pageSize,
@@ -935,8 +1161,9 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                               pageNumber:
                                                   FFAppState().currentNewsPage,
                                               newsType: widget!.newsType,
-                                              searchText:
-                                                  _model.textController.text,
+                                              searchText: _model
+                                                  .textFieldSearchTextController
+                                                  .text,
                                               filterCategoriesIdListString:
                                                   FFAppState()
                                                       .selectedFilterIds,
@@ -954,6 +1181,13 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                 r'''$.totalCount''',
                                               );
                                               safeSetState(() {});
+                                              await _model.columnController
+                                                  ?.animateTo(
+                                                0,
+                                                duration:
+                                                    Duration(milliseconds: 100),
+                                                curve: Curves.ease,
+                                              );
                                             }
                                           } else {
                                             ScaffoldMessenger.of(context)
@@ -966,11 +1200,12 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily:
-                                                            'Readex Pro',
+                                                            'BalooBhaiGujarati',
                                                         color: FlutterFlowTheme
                                                                 .of(context)
                                                             .secondaryBackground,
                                                         letterSpacing: 0.0,
+                                                        useGoogleFonts: false,
                                                       ),
                                                 ),
                                                 duration: Duration(
@@ -1006,9 +1241,10 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
                                       .override(
-                                        fontFamily: 'Readex Pro',
+                                        fontFamily: 'BalooBhaiGujarati',
                                         color: Colors.white,
                                         letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                   elevation: 0.0,
                                   borderRadius: BorderRadius.circular(8.0),
@@ -1028,8 +1264,50 @@ class _NewsListPageWidgetState extends State<NewsListPageWidget>
                   ),
                 ),
               ),
-            ],
-          ),
+            Align(
+              alignment: AlignmentDirectional(0.0, 1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
+                      child: Text(
+                        'Developed By ',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'BalooBhaiGujarati',
+                              letterSpacing: 0.0,
+                              useGoogleFonts: false,
+                            ),
+                      ),
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        await launchURL('http://theuniqueitsolution.com');
+                      },
+                      child: Text(
+                        'Unique IT Solution',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'BalooBhaiGujarati',
+                              color: Color(0xFF5374FF),
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.bold,
+                              useGoogleFonts: false,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

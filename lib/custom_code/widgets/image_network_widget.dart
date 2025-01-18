@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -27,8 +28,13 @@ class ImageNetworkWidget extends StatelessWidget {
         url,
         width: width ?? 32.0, // Default width if not provided
         height: height ?? 32.0, // Default height if not provided
-        placeholderBuilder: (context) =>
-            CircularProgressIndicator(), // Show loading indicator
+        placeholderBuilder: (context) => Center(
+          child: SizedBox(
+            width: 40, // Set loader width to 40px
+            height: 40, // Set loader height to 40px
+            child: CircularProgressIndicator(),
+          ),
+        ),
       );
     } else {
       // Load PNG or JPG images from network
@@ -40,7 +46,16 @@ class ImageNetworkWidget extends StatelessWidget {
           if (progress == null) {
             return child;
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: SizedBox(
+                width: 40, // Set loader width to 40px
+                height: 40, // Set loader height to 40px
+                child: CircularProgressIndicator(
+                  value: progress.cumulativeBytesLoaded /
+                      (progress.expectedTotalBytes ?? 1),
+                ),
+              ),
+            );
           }
         },
       );

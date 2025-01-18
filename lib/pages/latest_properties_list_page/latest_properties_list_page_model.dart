@@ -10,7 +10,7 @@ import 'latest_properties_list_page_widget.dart'
     show LatestPropertiesListPageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +28,8 @@ class LatestPropertiesListPageModel
 
   ApiCallResponse? get apiResult4pq => _apiResult4pq;
 
+  // State field(s) for Column widget.
+  ScrollController? columnController;
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
@@ -41,6 +43,8 @@ class LatestPropertiesListPageModel
 
   ApiCallResponse? get apiResult4pqsearch => _apiResult4pqsearch;
 
+  // State field(s) for ListView widget.
+  ScrollController? listViewController;
   // Stores action output result for [Backend Call - API (Latest Property List )] action in Button widget.
   ApiCallResponse? _apiResultz0zCopy;
   set apiResultz0zCopy(ApiCallResponse? value) {
@@ -82,13 +86,19 @@ class LatestPropertiesListPageModel
   final Map<String, FlutterFlowModel> widgetBuilderComponents = {};
   @override
   void initState(BuildContext context) {
+    columnController = ScrollController();
+    listViewController = ScrollController();
+
     debugLogWidgetClass(this);
   }
 
   @override
   void dispose() {
+    columnController?.dispose();
     textFieldFocusNode?.dispose();
     textController?.dispose();
+
+    listViewController?.dispose();
   }
 
   @override
